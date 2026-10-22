@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>PSD eNGINNo IFM Mobile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#f2f2f3">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="IFM Mobile">
+<style>
+/* Layout: phone-first single column (max 900px), bottom tab bar, bottom-sheet forms. Tokens follow the iMATOMs Mobile design system. */
+:root{
+  --color-bg:#f2f2f3; --color-surface:#e9e9ea; --color-card:#f7f7f8; --color-text:#1d1f20;
+  --color-accent:#5980a6; --color-divider:rgba(29,31,32,.16);
+  --color-neutral-100:#f5f5f8; --color-neutral-200:#e7e7ea; --color-neutral-300:#d4d4d7;
+  --color-neutral-500:#98989b; --color-neutral-600:#7a7a7d; --color-neutral-700:#5d5d60; --color-neutral-800:#424244;
+  --color-accent-100:#eef6ff; --color-accent-600:#597ea3; --color-accent-700:#416180; --color-accent-800:#2c455d;
+  --font-heading:"Barlow Condensed","Sarabun",system-ui,sans-serif; --font-body:"Barlow","Sarabun",system-ui,sans-serif;
+  --danger:#c0392b; --orange:#e69a3c; --green:#2f9e5b; --yellow:#c9970c; --sky:#5aa9e6; --red:#d0453a; --purple:#8e5bd6; --teal:#1f9c8e;
+  --hard:#e2782f; --soft:#1f9c8e; --sheet-bg:#f7f7f8; --overlay:rgba(20,24,30,.45); --desk:#dfe1e4;
+  color-scheme:light;
+}
+body.theme-dark{
+  --color-bg:#0d1117; --color-surface:#161b22; --color-card:#11161d; --color-text:#e6edf3;
+  --color-accent:#5b8fc4; --color-divider:rgba(230,237,243,.18);
+  --color-neutral-100:#161b22; --color-neutral-200:#21262d; --color-neutral-300:#30363d;
+  --color-neutral-500:#6e7681; --color-neutral-600:#8b949e; --color-neutral-700:#a0a8b3; --color-neutral-800:#c9d1d9;
+  --color-accent-100:#14263a; --color-accent-600:#7aa6d4; --color-accent-700:#8fb8e3; --color-accent-800:#bcd6f0;
+  --danger:#ff6b5b; --green:#4fd17a; --yellow:#eab308; --red:#ff6b5b; --purple:#b48cf0; --teal:#2fc4b2; --hard:#f08a3e; --soft:#2fc4b2;
+  --sheet-bg:#161b22; --overlay:rgba(0,0,0,.65); --desk:#05080c; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--color-bg)}
+body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body.font-sarabun{--font-heading:"Sarabun",system-ui,sans-serif;--font-body:"Sarabun",system-ui,sans-serif}
+h1,h2,h3{font-family:var(--font-heading);font-weight:600;line-height:1.12;letter-spacing:-.01em;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit}
+.tap{cursor:pointer}
+:focus-visible{outline:2px solid var(--color-accent);outline-offset:2px}
+@keyframes orbitA{from{transform:rotate(20deg)}to{transform:rotate(380deg)}}
+@keyframes orbitB{from{transform:rotate(-40deg)}to{transform:rotate(320deg)}}
+@keyframes orbitC{from{transform:rotate(100deg)}to{transform:rotate(460deg)}}
+@keyframes sheetUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+#app-root{width:100%;max-width:900px;margin:0 auto;min-height:100vh;background:var(--color-bg);display:flex;flex-direction:column}
+@media(min-width:901px){body{background:var(--desk)}#app-root{box-shadow:0 0 40px rgba(0,0,0,.08)}}
+
+/* cards */
+.blueprint{position:relative;border:1px solid var(--color-divider);border-radius:6px;background:var(--color-card);min-width:0}
+.blueprint.tap{transition:transform .15s,box-shadow .15s,border-color .15s}
+.blueprint.tap::after{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--bc,var(--color-accent));transform:scaleY(0);transform-origin:top;transition:transform .15s;border-radius:6px 0 0 6px}
+.blueprint.tap:hover,.blueprint.tap:active{transform:translateY(-2px);box-shadow:0 10px 20px -8px rgba(0,0,0,.28);border-color:var(--bc,var(--color-accent))}
+.blueprint.tap:hover::after,.blueprint.tap:active::after{transform:scaleY(1)}
+.pad{padding:14px}
+
+/* buttons / forms */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font-family:var(--font-heading);font-weight:600;font-size:16px;background:transparent;border:1px solid var(--color-divider);padding:9px 16px;border-radius:2px;white-space:nowrap}
+.btn:disabled{opacity:.45}
+.btn-primary{background:var(--color-accent);color:#fff;border-color:var(--color-accent)}
+.btn-ok{border-color:var(--green);color:var(--green)}
+.btn-danger{border-color:var(--red);color:var(--red)}
+.btn-sm{padding:5px 11px;font-size:14px}
+.btn-block{width:100%}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field>label{font-size:13.5px;color:var(--color-neutral-700)}
+.field .req{color:var(--red)}
+.input{width:100%;min-height:42px;padding:8px 10px;font:inherit;font-size:16px;color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-divider);border-radius:0}
+.input:focus-visible{outline:none;border-color:var(--color-accent)}
+textarea.input{min-height:84px;resize:vertical}
+.seg{display:inline-flex;overflow:hidden;border:1px solid var(--color-divider);max-width:100%}
+.seg-opt{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;font-size:14.5px;cursor:pointer;background:none;border:none;white-space:nowrap}
+.seg-opt+.seg-opt{border-left:1px solid var(--color-divider)}
+.seg-opt.active{background:var(--color-accent);color:#fff}
+
+/* tags & badges */
+.tag{display:inline-flex;align-items:center;font-size:12.5px;letter-spacing:.02em;padding:2px 9px;border-radius:2px;white-space:nowrap}
+.tag-accent{background:var(--color-accent-100);color:var(--color-accent-800)}
+.tag-neutral{background:var(--color-neutral-200);color:var(--color-neutral-800)}
+.tag-id{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:var(--color-neutral-200);color:var(--color-neutral-800);padding:1px 7px;border-radius:2px}
+.badge{display:inline-flex;align-items:center;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:600;white-space:nowrap;color:var(--bc);background:color-mix(in srgb,var(--bc) 14%,transparent)}
+.b-green{--bc:var(--green)}.b-yellow{--bc:var(--yellow)}.b-red{--bc:var(--red)}.b-blue{--bc:var(--sky)}.b-orange{--bc:var(--orange)}.b-gray{--bc:var(--color-neutral-600)}.b-teal{--bc:var(--teal)}.b-purple{--bc:var(--purple)}
+.svc-chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:1px 8px;border-radius:2px;white-space:nowrap;color:var(--sc);background:color-mix(in srgb,var(--sc) 13%,transparent)}
+.pill{font-family:var(--font-heading);font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700}
+
+/* atom */
+.atom{position:relative}
+.atom .ring{position:absolute;left:50%;top:50%;border-radius:50%}
+.atom .ring.a{border:3px solid var(--sky);animation:orbitA 14s linear infinite}
+.atom .ring.b{border:3px solid #4fd17a;animation:orbitB 11s linear infinite}
+.atom .ring.c{border:3px solid var(--orange);animation:orbitC 17s linear infinite}
+.atom .nucleus{position:absolute;left:50%;top:50%;background:#f0862f;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 16px 4px rgba(240,134,47,.7)}
+
+/* hero */
+.hero{flex-shrink:0;padding:calc(30px + env(safe-area-inset-top)) 16px 22px;position:relative;overflow:hidden;text-align:center;background:radial-gradient(circle at 50% 35%,#1c3a5e 0%,#0d1b30 70%,#0a1526 100%);color:#fff}
+.hero .kicker{font-family:var(--font-heading);font-size:15px;letter-spacing:.2em;color:var(--orange);margin-top:8px}
+.hero .title{font-family:var(--font-heading);font-size:28px;font-weight:600;margin-top:2px;letter-spacing:.02em}
+.hero .title .v{color:#e6672f}
+.hero .sub{font-family:var(--font-heading);font-size:13px;letter-spacing:.12em;color:#4fd17a;margin-top:4px}
+
+/* top bar + tab bar */
+.topbar{display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 10px max(16px,env(safe-area-inset-left));flex-shrink:0;border-bottom:1px solid var(--color-divider);position:sticky;top:0;background:var(--color-bg);z-index:20}
+.topbar .brand{font-family:var(--font-heading);font-weight:700;font-size:18px;line-height:1.05}
+.topbar .brand small{display:block;font-weight:500;font-size:11.5px;letter-spacing:.1em;color:var(--color-accent-700);text-transform:uppercase}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--color-accent);color:#fff;display:grid;place-items:center;font-family:var(--font-heading);font-weight:700;flex-shrink:0;border:none;cursor:pointer}
+.biz-chip{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:13px;border:1px solid var(--color-divider);padding:4px 9px;border-radius:2px;background:none;cursor:pointer;max-width:48vw;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.view-body{flex:1;padding:16px max(16px,env(safe-area-inset-right)) 24px max(16px,env(safe-area-inset-left))}
+.stack{display:flex;flex-direction:column;gap:14px}
+.tabbar{position:sticky;bottom:0;display:flex;border-top:1px solid var(--color-divider);flex-shrink:0;padding:8px max(4px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(4px,env(safe-area-inset-left));background:var(--color-bg);z-index:20}
+.tabitem{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;color:var(--color-neutral-600);background:none;border:none;padding:6px 2px;border-radius:6px;position:relative}
+.tabitem.active{color:var(--color-accent-700)}
+.tabitem::before{content:'';position:absolute;left:14%;right:14%;top:-9px;height:3px;background:var(--color-accent);transform:scaleX(0);transition:transform .15s}
+.tabitem.active::before{transform:scaleX(1)}
+.tabitem svg{width:23px;height:23px}
+.tabitem span{font-size:13.5px;line-height:1.1;font-family:var(--font-heading);white-space:nowrap}
+.tabitem .fab{width:48px;height:48px;margin-top:-22px;border-radius:50%;background:var(--color-accent);color:#fff;display:grid;place-items:center;box-shadow:0 8px 18px -6px rgba(0,0,0,.4)}
+.tabitem .fab svg{width:26px;height:26px}
+.tabitem .dot{position:absolute;top:2px;left:calc(50% + 8px);background:var(--red);color:#fff;font-size:10px;font-weight:700;border-radius:9px;padding:0 5px;line-height:16px;min-width:16px;text-align:center}
+
+/* content pieces */
+.sec-t{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.sec-t h2{font-size:21px}
+.sec-t small{font-size:13px;color:var(--color-neutral-700)}
+.kick{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{padding:11px 12px;border-top:3px solid var(--sc,var(--color-accent))}
+.stat .v{font-family:var(--font-heading);font-size:28px;font-weight:600;line-height:1.05;font-variant-numeric:tabular-nums}
+.stat .v small{font-size:15px;margin-left:1px}
+.stat .s{font-size:12.5px;color:var(--color-neutral-700);line-height:1.3}
+.bar{height:5px;background:var(--color-neutral-300);border-radius:3px;overflow:hidden}
+.bar>i{display:block;height:100%;border-radius:3px}
+.row{display:flex;align-items:center;gap:12px}
+.svc-row{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.svc-ic{width:40px;height:40px;border-radius:8px;display:grid;place-items:center;font-size:20px;flex-shrink:0;background:color-mix(in srgb,var(--sc) 15%,transparent)}
+.svc-row .n{font-family:var(--font-heading);font-size:18px;font-weight:600;line-height:1.1}
+.svc-row .th{font-size:12.5px;color:var(--color-neutral-700);line-height:1.25}
+.svc-row .sc{font-family:var(--font-heading);font-size:24px;font-weight:600;text-align:right;line-height:1;font-variant-numeric:tabular-nums}
+.svc-row .sc small{display:block;font-family:var(--font-body);font-size:11.5px;color:var(--color-neutral-700);font-weight:400;margin-top:3px}
+.list{display:flex;flex-direction:column;gap:10px}
+.rec{padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.rec .top{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.rec .t{font-weight:600;font-size:15.5px;line-height:1.35}
+.rec .m{font-size:13px;color:var(--color-neutral-700);line-height:1.35}
+.rec .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.alert-row{padding:10px 12px;border-left:4px solid var(--ac);display:flex;flex-direction:column;gap:2px}
+.alert-row .m{font-size:14px;line-height:1.35}
+.alert-row .s{font-size:12.5px;color:var(--color-neutral-700)}
+.note{padding:10px 12px;font-size:13.5px;color:var(--color-neutral-800);background:var(--color-accent-100);border:1px solid var(--color-divider);border-radius:6px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;border:1px solid var(--color-divider);padding:6px 12px;font-size:14px;border-radius:20px;background:none;cursor:pointer;white-space:nowrap}
+.chip.active{background:var(--color-accent);border-color:var(--color-accent);color:#fff}
+.mod-head{display:flex;align-items:center;gap:12px}
+.back{background:none;border:none;color:var(--color-accent-700);font-size:15px;cursor:pointer;padding:4px 0}
+.empty{padding:26px 14px;text-align:center;color:var(--color-neutral-700);font-size:14px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}
+.kv dt{color:var(--color-neutral-700)}
+.kv dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--color-divider);margin-left:6px;padding-left:14px}
+.timeline div{position:relative;padding:4px 0;font-size:13.5px}
+.timeline div::before{content:'';position:absolute;left:-20px;top:10px;width:10px;height:10px;border-radius:50%;background:var(--tc,var(--color-neutral-300))}
+.search{width:100%;min-height:40px;padding:8px 12px;font:inherit;font-size:15px;color:var(--color-text);background:var(--color-surface);border:1px solid var(--color-divider)}
+.footer-legal{text-align:center;padding-top:10px;border-top:1px solid var(--color-divider);margin-top:8px}
+.footer-legal .l1{font-family:var(--font-heading);font-size:12px;letter-spacing:.1em}
+.footer-legal .l2{font-size:11px;line-height:1.35;color:var(--color-accent-700);margin-top:6px}
+.footer-legal .l3{font-size:11px;color:var(--color-accent-700);margin-top:3px}
+.link{color:var(--color-accent-700);font-size:14px;text-align:center;display:block;cursor:pointer;background:none;border:none;width:100%;padding:8px}
+.pref-opt{cursor:pointer;border:2px solid var(--color-divider);padding:10px 8px;text-align:center;flex:1;min-width:0;background:none;font-size:14px}
+.pref-opt.active{border-color:var(--color-accent);background:var(--color-accent-100)}
+.biz-opt{display:flex;align-items:center;gap:12px;padding:11px 12px;text-align:left;width:100%}
+.biz-opt .i{font-size:24px}
+.biz-opt.on{border-color:var(--color-accent);--bc:var(--color-accent)}
+
+/* bottom sheet */
+.sheet-ov{position:fixed;inset:0;background:var(--overlay);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--sheet-bg);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:14px 14px 0 0;padding:8px max(18px,env(safe-area-inset-right)) calc(22px + env(safe-area-inset-bottom)) max(18px,env(safe-area-inset-left));animation:sheetUp .2s ease}
+.sheet .grip{width:42px;height:4px;border-radius:2px;background:var(--color-neutral-300);margin:4px auto 10px}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.sheet-h h3{font-size:21px}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.form-grid .full{grid-column:1/-1}
+.ferr{color:var(--red);font-size:13.5px;min-height:18px;margin:6px 0}
+@media(max-width:440px){.form-grid{grid-template-columns:1fr}}
+
+
+body{--bcs-card:var(--color-card);--bcs-card2:var(--color-surface);--bcs-line:var(--color-divider);--bcs-text:var(--color-text);--bcs-muted:var(--color-neutral-700);--bcs-acc:var(--color-accent);--bcs-r:6px;--bcs-display:var(--font-heading)}
+/*@@BCSCSS-START@@*/
+/* ── Building Critical Status (shared) — host maps --bcs-* tokens ── */
+.bcs{display:flex;flex-direction:column;gap:14px;color:var(--bcs-text)}
+.bcs [hidden]{display:none!important}
+.bcs-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.bcs-kpi{background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:var(--bcs-r);padding:11px 13px;border-top:3px solid var(--kc);display:flex;flex-direction:column;gap:2px;transition:transform .15s,box-shadow .15s}
+.bcs-kpi:hover{transform:translateY(-3px);box-shadow:0 10px 20px -8px rgba(0,0,0,.35)}
+.bcs-kpi span{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--bcs-muted);font-weight:600}
+.bcs-kpi b{font-family:var(--bcs-display);font-size:26px;line-height:1.05;color:var(--kc);font-variant-numeric:tabular-nums}
+.bcs-kpi small{font-size:11.5px;color:var(--bcs-muted)}
+.bcs-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bcs-chips{display:flex;gap:6px;overflow-x:auto;flex:1 1 320px;min-width:0;padding:2px 0 4px;scrollbar-width:thin}
+.bcs-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:20px;border:1px solid var(--bcs-line);background:var(--bcs-card);color:var(--bcs-text);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .15s,border-color .15s}
+.bcs-chip i{width:9px;height:9px;border-radius:50%;background:var(--fc)}
+.bcs-chip small{background:var(--fc);color:#fff;border-radius:9px;padding:0 6px;font-size:10.5px}
+.bcs-chip:hover{transform:translateY(-2px);border-color:var(--fc)}
+.bcs-chip.on{border-color:var(--bcs-acc);background:color-mix(in srgb,var(--bcs-acc) 14%,var(--bcs-card))}
+.bcs-tools{display:flex;gap:6px;flex-wrap:wrap}
+.bcs-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--bcs-line);background:transparent;color:var(--bcs-text);font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
+.bcs-btn:hover{background:var(--bcs-card2)}
+.bcs-btn.on{background:var(--bcs-acc);border-color:var(--bcs-acc);color:#fff}
+.bcs-pri{background:var(--bcs-acc);border-color:var(--bcs-acc);color:#fff}
+.bcs-ok{border-color:#22C55E;color:#22C55E;padding:2px 8px;font-size:11.5px}
+.bcs-danger{border-color:#EF4444;color:#EF4444}
+.bcs-layout{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+.bcs-bwrap{flex:0 0 470px;max-width:100%;background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:var(--bcs-r);padding:12px;position:relative;min-width:0}
+.bcs-bhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.bcs-cap{font-size:11px;font-weight:700;color:var(--bcs-muted);letter-spacing:.8px;text-transform:uppercase}
+.bcs-modes{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+.bcs-dots{font-size:10.5px;color:var(--bcs-muted);margin-right:4px}
+.bcs-dots i{font-style:normal;margin-left:4px}
+.bcs-mb{padding:2px 8px;border-radius:5px;border:1px solid var(--bcs-line);background:transparent;color:var(--bcs-muted);font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.bcs-mb.on{background:#F97316;border-color:#F97316;color:#fff}
+.bcs-3d{position:relative;width:100%;border-radius:8px;overflow:hidden;cursor:grab;background:radial-gradient(ellipse at 50% 30%,#1b2a3a 0%,#0d1117 75%)}
+.bcs-b3{height:clamp(440px,70vh,720px)}
+.bcs-ctl{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:4px;z-index:3}
+.bcs-ctl button{width:30px;height:28px;border-radius:6px;border:1px solid #30363D;background:rgba(22,27,34,.85);color:#E6EDF3;cursor:pointer;font-size:13px}
+.bcs-ctl button:hover{border-color:#F97316}
+.bcs-help{position:absolute;left:8px;bottom:6px;right:8px;font-size:10.5px;color:#8B949E;pointer-events:none;z-index:2}
+.bcs-b2scroll{max-height:78vh;overflow-y:auto}
+.bcs-floor{cursor:pointer;transition:filter .15s}.bcs-floor:hover{filter:brightness(1.35)}
+.bcs-hint{flex:1;min-width:240px;display:flex;align-items:center;justify-content:center;min-height:260px;color:var(--bcs-muted);font-size:13px;text-align:center;border:1px dashed var(--bcs-line);border-radius:var(--bcs-r);padding:20px;line-height:1.7}
+.bcs-panel{flex:1;min-width:0;display:flex;flex-direction:column;gap:12px}
+.bcs-panel.slide{animation:bcsSlide .38s cubic-bezier(.2,.8,.2,1)}
+@keyframes bcsSlide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.bcs-sum{background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:var(--bcs-r);padding:12px 14px}
+.bcs-sh{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.bcs-st{font-family:var(--bcs-display);font-size:17px;font-weight:800;color:#F97316;line-height:1.15}
+.bcs-pill{font-size:11px;padding:2px 10px;border-radius:12px;font-weight:700;color:var(--pc);background:color-mix(in srgb,var(--pc) 18%,transparent)}
+.bcs-muted{font-size:11.5px;color:var(--bcs-muted)}
+.bcs-rchips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.bcs-rchip{display:flex;align-items:center;gap:7px;padding:5px 12px;border-radius:20px;border:2px solid var(--rc);background:transparent;color:var(--bcs-text);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.bcs-rchip.on{background:color-mix(in srgb,var(--rc) 20%,transparent)}
+.bcs-rchip i{width:11px;height:11px;border-radius:50%}
+.blink{animation:bcsBlink .9s ease-in-out infinite}
+@keyframes bcsBlink{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--rc,#F97316) 0%,transparent)}50%{box-shadow:0 0 0 3px color-mix(in srgb,var(--rc,#F97316) 45%,transparent)}}
+.bcs-arow{padding:10px;background:var(--bcs-card2);border:1px solid var(--rc);border-left:3px solid var(--rc);border-radius:8px;margin-top:8px;cursor:pointer;transition:transform .15s}
+.bcs-arow:hover{transform:translateY(-2px)}
+.bcs-arow .h{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bcs-arow .h b{font-size:13px}
+.bcs-arow .why{margin-left:auto;font-size:11.5px;font-weight:700}
+.bcs-okrow{padding:12px;text-align:center;color:#22C55E;font-size:12.5px}
+.bcs-wr{display:flex;align-items:center;gap:6px;margin-top:6px;padding:6px 8px;background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:6px;font-size:11.5px;flex-wrap:wrap}
+.bcs-wr .d{flex:1;min-width:120px;color:var(--bcs-muted)}
+.bcs-editbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 14px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.4);border-radius:var(--bcs-r);font-size:12px}
+.bcs-editbar b{color:#F97316}
+.bcs-canvas{background:#0D1117;border:1px solid var(--bcs-line);border-radius:var(--bcs-r);overflow:hidden;position:relative}
+.bcs-flabel{position:absolute;top:10px;left:14px;font-size:13px;font-weight:700;color:#8B949E;z-index:10;pointer-events:none}
+.bcs-fmodes{position:absolute;top:8px;right:10px;z-index:12;display:flex;gap:4px}
+.bcs-fmodes .bcs-mb{background:rgba(22,27,34,.85);border-color:#30363D;color:#C9D1D9}
+.bcs-fmodes .bcs-mb.on{background:#F97316;border-color:#F97316;color:#fff}
+.bcs-ftip{position:absolute;z-index:20;pointer-events:none;background:#161B22;color:#E6EDF3;border:1px solid #F97316;border-radius:8px;padding:8px 10px;font-size:11.5px;min-width:180px;box-shadow:0 8px 24px rgba(0,0,0,.6)}
+.bcs-pin{cursor:pointer}
+.bcs-pin:hover circle{filter:brightness(1.25)}
+#bcs-f2.editing .bcs-redit{cursor:move}
+.bcs-rh{cursor:nwse-resize}
+.bcs-legend{background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:var(--bcs-r);padding:12px 14px}
+.bcs-lgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:8px}
+.bcs-lgrid>div{background:var(--bcs-card2);border-radius:8px;padding:9px 10px;border-left:3px solid var(--rc);display:flex;flex-direction:column;gap:3px;transition:transform .15s}
+.bcs-lgrid>div:hover{transform:translateY(-2px)}
+.bcs-lgrid b{font-size:11.5px;color:var(--rc);display:flex;align-items:center;gap:7px}
+.bcs-lgrid b i{width:13px;height:13px;border-radius:50%;border:3px solid var(--rc)}
+.bcs-lgrid span{font-size:11px;color:var(--bcs-muted)}
+.bcs-lnote{font-size:10.5px;color:var(--bcs-muted);margin-top:8px;text-align:right}
+.bcs-tip{position:fixed;z-index:400;pointer-events:none;background:#161B22;color:#E6EDF3;border:1px solid #F97316;border-radius:8px;padding:8px 10px;box-shadow:0 8px 24px rgba(0,0,0,.6);font-size:11.5px;min-width:170px;max-width:260px}
+.bcs-tip[hidden]{display:none}
+.bcs-tip .t{font-weight:800;color:#F97316;font-size:12.5px;margin-bottom:2px}
+.bcs-tip .s{color:#8B949E;margin-bottom:5px}
+.bcs-tip .r{display:flex;justify-content:space-between;gap:12px}
+.bcs-modal{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;padding:16px}
+.bcs-modal[hidden]{display:none}
+.bcs-mbox{background:var(--bcs-card);color:var(--bcs-text);border:1px solid var(--bcs-line);border-radius:14px;padding:18px;width:720px;max-width:100%;max-height:90vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;animation:bcsSlide .25s ease}
+.bcs-mh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--bcs-line)}
+.bcs-rgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.bcs-ring{border:1px solid var(--rc);border-left:4px solid var(--rc);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:3px;background:var(--bcs-card2)}
+.bcs-ring b{font-size:12px;display:flex;align-items:center;gap:6px;color:var(--rc)}
+.bcs-ring b i{width:10px;height:10px;border-radius:50%}
+.bcs-ring span{font-size:11.5px;font-weight:600}
+.bcs-msec{display:flex;flex-direction:column;gap:4px}
+.bcs-li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--bcs-line);font-size:12.5px}
+.bcs-li:last-child{border-bottom:none}
+.bcs-mf{display:flex;gap:8px;justify-content:flex-end;align-items:center;flex-wrap:wrap;padding-top:6px}
+.bcs-gen{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:10px;font-size:12px;color:var(--bcs-muted)}
+.bcs-gen label{display:flex;flex-direction:column;gap:3px}
+.bcs-gen label.ck{flex-direction:row;align-items:center;gap:5px;padding-bottom:6px}
+.bcs-in{background:var(--bcs-card2);border:1px solid var(--bcs-line);color:var(--bcs-text);border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;width:90px}
+.bcs-stable{display:flex;flex-direction:column;gap:5px;max-height:46vh;overflow-y:auto}
+.bcs-srow{display:flex;gap:6px;align-items:center}
+@media(max-width:1100px){.bcs-bwrap{flex:1 1 100%}}
+@media(max-width:700px){.bcs-kpis,.bcs-lgrid,.bcs-rgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.bcs-modal{align-items:flex-end;padding:0}.bcs-mbox{border-radius:14px 14px 0 0;max-height:92vh;padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
+.bcs-mob .bcs-b3{height:56vh;min-height:320px}
+.bcs-mob .bcs-bwrap{padding:10px}
+.bcs-mob .bcs-tools{width:100%}
+/*@@BCSCSS-END@@*/
+
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:#1d1f20;color:#fff;padding:10px 18px;font-size:14.5px;border-radius:4px;opacity:0;pointer-events:none;transition:.25s;z-index:999;max-width:88%;text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+body.theme-dark .toast{background:#e6edf3;color:#0d1117}
+@media(min-width:620px){.stat-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.list.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<div id="app-root"></div>
+<div id="sheet-root"></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/* ===== shared IFM core (identical to desktop) ===== */
+// ---------- utils ----------
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=(n,l=2)=>String(n).padStart(l,'0');
+function isoD(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())}
+function isoDT(d){return isoD(d)+'T'+pad(d.getHours())+':'+pad(d.getMinutes())}
+const NOW=new Date();const todayS=isoD(NOW);
+function addD(s,n){const d=new Date(s.slice(0,10)+'T00:00');d.setDate(d.getDate()+n);return isoD(d)}
+function dBetween(a,b){return Math.round((new Date(b.slice(0,10)+'T00:00')-new Date(a.slice(0,10)+'T00:00'))/864e5)}
+function fmtD(s){if(!s)return '—';const p=s.slice(0,10).split('-');return p.length<3?esc(s):`${p[2]}/${p[1]}/${p[0]}`}
+function fmtDT(s){if(!s)return '—';return fmtD(s)+' '+s.slice(11,16)}
+function fmtDur(m){m=Math.max(0,Math.round(m));if(m<60)return m+'m';const h=Math.floor(m/60);if(h<48)return h+'h '+(m%60)+'m';return Math.floor(h/24)+'d '+(h%24)+'h'}
+const fmtN=n=>(+n||0).toLocaleString('th-TH');
+const avg=a=>{a=a.filter(x=>x!=null&&!isNaN(x));return a.length?Math.round(a.reduce((s,x)=>s+ +x,0)/a.length):0};
+const sum=(a,f)=>a.reduce((s,x)=>s+(+f(x)||0),0);
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// ---------- master config ----------
+const SVC={
+  eng:{n:'Engineering',th:'งานวิศวกรรม / ระบบอาคาร',type:'Hard',ic:'⚙️',c:'#F97316'},
+  fac:{n:'Facility',th:'งานอาคารสถานที่',type:'Hard',ic:'🏗',c:'#3B82F6'},
+  hk:{n:'Housekeeping',th:'งานแม่บ้าน / ทำความสะอาด',type:'Soft',ic:'🧹',c:'#14B8A6'},
+  sec:{n:'Security',th:'งานรักษาความปลอดภัย',type:'Soft',ic:'🛡',c:'#A855F7'},
+  pest:{n:'Pest Control',th:'ควบคุมสัตว์และแมลงพาหะ',type:'Soft',ic:'🐜',c:'#84CC16'},
+  gdn:{n:'Garden',th:'งานภูมิทัศน์ / สวน',type:'Soft',ic:'🌳',c:'#22C55E'},
+  lin:{n:'Linen',th:'งานผ้า / ซักรีด',type:'Soft',ic:'🧺',c:'#EC4899'},
+};
+const SLA={P1:{l:'P1 Emergency',r:15,f:240},P2:{l:'P2 Urgent',r:30,f:480},P3:{l:'P3 Normal',r:120,f:1440},P4:{l:'P4 Planned',r:240,f:4320}};
+const FLOW=['New','Assigned','In Progress','Completed','Closed'];
+const CATS={
+  fac:['ฝ้า/เพดาน','พื้น/กระเบื้อง','ประตู/กุญแจ','เฟอร์นิเจอร์','ป้าย/Signage','งานสี/ผนัง','ห้องน้ำ/สุขภัณฑ์'],
+  hk:['ทำความสะอาดเร่งด่วน','ห้องน้ำ','ขยะ/ของเสีย','หกเลอะ/Spill','วัสดุสิ้นเปลือง','กลิ่นไม่พึงประสงค์'],
+  sec:['ตรวจสอบบุคคล','ที่จอดรถ','ของหาย/พบของ','เปิด-ปิดพื้นที่','CCTV/Access','ขอเจ้าหน้าที่คุมพื้นที่'],
+  pest:['แมลงสาบ','หนู','มด','แมลงวัน','ยุง','ปลวก','สัตว์จรจัด (สุนัข/แมว)','นก/ค้างคาว'],
+  gdn:['ตัดหญ้า','ตัดแต่งกิ่ง','ระบบรดน้ำ','เปลี่ยนต้นไม้','ต้นไม้ล้ม/กิ่งหัก','กระถางต้นไม้ในอาคาร'],
+  lin:['ขอเบิกผ้าเพิ่ม','ผ้าไม่สะอาด/มีคราบ','ผ้าขาด/ชำรุด','ส่งซักด่วน','ผ้าขาดสต็อก'],
+};
+const DESCS={
+  eng:['ไม่ทำงาน','มีเสียงดังผิดปกติ','รั่วซึม','ไฟตก/ไฟดับบางส่วน','อุณหภูมิไม่ได้ตามกำหนด','มี Alarm แจ้งเตือน'],
+  fac:['ชำรุด ต้องซ่อม','หลุด/แตก เสี่ยงอันตราย','ขอติดตั้งเพิ่ม','เสื่อมสภาพ'],
+  hk:['ขอทำความสะอาดด่วน','มีกลิ่นไม่พึงประสงค์','ล้น ต้องเก็บ','พื้นเปียก/ลื่น'],
+  sec:['ขอเจ้าหน้าที่ตรวจสอบ','พบบุคคลน่าสงสัย','ขอเปิดพื้นที่นอกเวลา','รถจอดผิดที่'],
+  pest:['พบในพื้นที่','พบร่องรอย/มูล','ขอบริการเพิ่ม'],
+  gdn:['ต้องการตัดแต่ง','ต้นไม้แห้งตาย','ไม่ทำงาน'],
+  lin:['ไม่พอใช้','ต้องการด่วน','ส่งล่าช้า'],
+};
+const POS={eng:['Chief Engineer','Engineering Supervisor','Technician (Electrical)','Technician (HVAC)','Technician (Plumbing)'],fac:['Facility Supervisor','Handyman','Carpenter/Painter'],hk:['HK Supervisor','Cleaner','Floor Technician'],sec:['Security Chief','Security Guard','CCTV Operator'],pest:['Pest Technician'],gdn:['Head Gardener','Gardener'],lin:['Linen Supervisor','Linen Attendant']};
+const FN=['สมชาย','สมหญิง','วิชัย','อรุณี','ประเสริฐ','มาลี','ธนพล','สุนิสา','กิตติพงษ์','จันทร์เพ็ญ','ณัฐวุฒิ','พรทิพย์','อนุชา','รัตนา','สุรเชษฐ์','วันเพ็ญ','ชาญวิทย์','ปิยะนุช','เอกชัย','ศิริพร','บุญมี','นภา','ทวีศักดิ์','กาญจนา'];
+const LN=['ก.','ข.','จ.','ช.','ท.','น.','บ.','พ.','ม.','ร.','ว.','ส.'];
+const VENDORS=[['LiftCare MA Co., Ltd.','eng','PM ลิฟต์ / บันไดเลื่อน รายเดือน',45000],['CoolTech Chiller Service','eng','PM Chiller & Cooling Tower',85000],['FireSafe Engineering','fac','ตรวจระบบดับเพลิง & Fire Alarm',30000],['BuildFix Maintenance','fac','งานซ่อมอาคาร On-call',40000],['CleanPro Services','hk','Housekeeping Outsource (Manpower + Chemical)',450000],['Guardian Security Co.','sec','รปภ. 24 ชม. + CCTV Monitoring',380000],['PestGuard Thailand','pest','Pest Control รายเดือน + Call-back',25000],['Green Scape Co.','gdn','ดูแลภูมิทัศน์ / ตัดแต่งต้นไม้',60000],['WashTech Laundry','lin','ซักรีดผ้า (คิดต่อ kg) + Delivery',120000]];
+
+// ---------- business profiles ----------
+const BIZ={
+hospital:{n:'โรงพยาบาล',en:'Hospital',ic:'🏥',c:'#EC4899',site:'PSD General Hospital',scale:1,
+ desc:'IC / HA / JCI · Terminal cleaning · Medical gas · Patient linen',
+ areas:[['OPD Lobby','G','Public',1800,'Medium'],['Emergency Room (ER)','G','Clinical',650,'High'],['ICU','3','Clinical',900,'High'],['Operating Theatre (OR)','3','Clinical',1200,'High'],['IPD Ward 5A','5','Clinical',1100,'High'],['Laboratory','2','Clinical',500,'High'],['Canteen','G','F&B',400,'Medium'],['Car Park','B1','Outdoor',6000,'Low'],['Plant Room / BOH','B2','Technical',1500,'Low'],['Admin Office','7','Office',800,'Low']],
+ sys:['HVAC','Electrical','Plumbing','Fire Protection','Medical Gas','Lift','Steam/Boiler','Nurse Call/ELV'],
+ assets:[['Chiller #1 450TR','HVAC',8,'A'],['Chiller #2 450TR','HVAC',8,'A'],['AHU-OR-01 (HEPA)','HVAC',3,'A'],['AHU-ICU-01','HVAC',2,'A'],['Generator 1,250 kVA','Electrical',8,'A'],['UPS 200 kVA (OR/ICU)','Electrical',8,'A'],['Medical O₂ VIE Tank','Medical Gas',8,'A'],['Medical Vacuum Plant','Medical Gas',8,'A'],['Steam Boiler 2 t/h','Steam/Boiler',8,'B'],['Bed Lift L1','Lift',0,'A'],['Fire Pump 750 GPM','Fire Protection',8,'A'],['Booster Pump Set','Plumbing',8,'B'],['Nurse Call System W5A','Nurse Call/ELV',4,'B']],
+ compliance:[['ทดสอบระบบแก๊สทางการแพทย์','HTM 02-01 / HA','eng',180],['ตรวจคุณภาพน้ำ / Legionella','HA / IC','eng',90],['Generator Load Test','HA / วสท.','eng',30],['Pressure differential OR / Isolation','ASHRAE 170','eng',30],['ตรวจลิฟต์ประจำปี','กฎกระทรวง','eng',365],['ตรวจระบบ Fire Alarm & Sprinkler','NFPA 72 / 25','fac',180],['ซ้อมดับเพลิงและอพยพ','กฎกระทรวงฯ 2555','fac',365],['ตรวจสอบอาคาร (ร.1)','พ.ร.บ.ควบคุมอาคาร','fac',365]],
+ hkTasks:[['Terminal Cleaning ห้องแยกโรค','Terminal','After discharge'],['Routine Cleaning หอผู้ป่วย','Routine','3x/day'],['OR Turnover Cleaning','Terminal','Every case'],['Spill Management (Blood/Body fluid)','Spill','On call'],['Public Toilet Check','Routine','Hourly'],['เก็บขยะติดเชื้อ','Waste','4x/day'],['Floor Scrub & Polish','Deep','Weekly']],
+ posts:['Main Gate','ER Entrance','OPD Lobby','Car Park B1','Back Gate / Loading'],
+ secInc:['บุคคลภายนอกก่อเหตุใน ER','ทรัพย์สินผู้ป่วยสูญหาย','จอดรถกีดขวางทางรถพยาบาล','Code Pink — ตามหาเด็ก','ผู้ป่วยออกนอกพื้นที่โดยไม่แจ้ง'],
+ garden:[['Healing Garden','Shrub',450],['Front Lawn','Lawn',1200],['Lobby Indoor Plants','Indoor',120],['Perimeter Trees','Tree',800]],
+ linen:[['ผ้าปูเตียงผู้ป่วย (Bed sheet)',1200,180],['ชุดผู้ป่วย (Patient gown)',1500,220],['ผ้าห่ม (Blanket)',600,450],['ผ้าคลุม OR (Surgical drape)',800,350],['ชุดเจ้าหน้าที่ (Scrub suit)',900,380],['ปลอกหมอน (Pillow case)',1000,60]],
+ pestNote:'IC: งดพ่นสารเคมีใน ICU / OR — ใช้ Gel bait, IGR และ ILT เท่านั้น · บันทึกผลให้ IC Committee รายเดือน',
+ hkNote:'IC Standard: Terminal cleaning ด้วย Chlorine 1,000 ppm / UV-C · แยกผ้าและอุปกรณ์ตามรหัสสี',
+ linNote:'แยกผ้าติดเชื้อ (ถุงแดง/ถุงละลายน้ำ) ออกจากผ้าทั่วไปก่อนส่งซัก · ซักที่อุณหภูมิ ≥ 71°C',
+ target:{sla:95,pm:95,hk:95,patrol:98,pest:95,gdn:85,lin:98,uptime:99},elec:520000,water:9800,gas:3200,gasL:'LPG/Steam fuel (kg)',
+ staff:{eng:8,fac:3,hk:14,sec:8,pest:2,gdn:3,lin:5}},
+factory:{n:'โรงงาน',en:'Factory',ic:'🏭',c:'#F97316',site:'PSD Manufacturing Plant',scale:.9,
+ desc:'GMP / HACCP / ISO 14001 · Boiler · Crane · Uniform & Clean-room linen',
+ areas:[['Production Line 1','G','Production',3200,'Medium'],['Production Line 2 (GMP Zone)','G','Production',2800,'High'],['Raw Material Warehouse','G','Warehouse',4000,'Low'],['Finished Goods Warehouse','G','Warehouse',3500,'Low'],['QC Laboratory','2','Clinical',300,'High'],['Canteen','G','F&B',600,'Medium'],['Office Building','1-3','Office',1500,'Low'],['Utility Yard / Boiler House','G','Technical',1200,'Low'],['Wastewater Treatment Plant','G','Technical',900,'Low'],['Main Gate & Truck Yard','G','Outdoor',5000,'Low']],
+ sys:['Electrical','Compressed Air','Boiler/Steam','Chiller/HVAC','Wastewater (WWTP)','Fire Protection','Crane/Hoist','Plumbing'],
+ assets:[['Main Transformer 3,000 kVA','Electrical',7,'A'],['Air Compressor #1 75 kW','Compressed Air',7,'A'],['Air Compressor #2 75 kW','Compressed Air',7,'B'],['Refrigerated Air Dryer','Compressed Air',7,'B'],['Fire-tube Boiler 5 t/h','Boiler/Steam',7,'A'],['Process Chiller 300TR','Chiller/HVAC',7,'A'],['AHU GMP Zone','Chiller/HVAC',1,'A'],['WWTP Aerator','Wastewater (WWTP)',8,'B'],['Overhead Crane 10 t','Crane/Hoist',2,'A'],['Fire Pump 1,000 GPM','Fire Protection',7,'A'],['Generator 1,000 kVA','Electrical',7,'A'],['RO Water System','Plumbing',7,'B']],
+ compliance:[['ตรวจสอบหม้อไอน้ำประจำปี','กรมโรงงานอุตสาหกรรม','eng',365],['ทดสอบปั้นจั่น (ปจ.2)','กฎกระทรวงฯ ปั้นจั่น','eng',180],['รายงานคุณภาพน้ำทิ้ง','กรมโรงงาน / ISO 14001','eng',30],['ตรวจถังแรงดัน / Air receiver','กรมโรงงานอุตสาหกรรม','eng',365],['ตรวจระบบไฟฟ้าประจำปี','กฎกระทรวงฯ ไฟฟ้า 2558','eng',365],['ซ้อมดับเพลิงและอพยพ','กฎกระทรวงฯ 2555','fac',365],['GMP / HACCP Audit — Facility','GMP / HACCP','fac',180],['ตรวจวัดสภาพแวดล้อมการทำงาน','กฎกระทรวงฯ แสง เสียง ความร้อน','fac',365]],
+ hkTasks:[['Production Floor Scrub','Routine','Daily'],['GMP Zone Cleaning (Clean room)','Deep','Every shift'],['Canteen Cleaning','Routine','3x/day'],['Toilet & Locker Room','Routine','2-hourly'],['Warehouse Sweeping','Routine','Daily'],['Industrial Waste Segregation','Waste','Daily'],['Office Cleaning','Routine','Daily']],
+ posts:['Main Gate','Truck Gate / Weighbridge','Warehouse Dock','Perimeter Fence Patrol','Office Lobby'],
+ secInc:['รถบรรทุกไม่มีเอกสารนำเข้า','นำของออกนอกโรงงานไม่มีใบผ่าน','บุคคลภายนอกเข้าพื้นที่ผลิต','อุบัติเหตุจราจรในโรงงาน','สัญญาณกันขโมยรั้วแจ้งเตือน'],
+ garden:[['Perimeter Green Belt','Tree',6000],['Front Office Lawn','Lawn',1500],['Buffer Zone (EIA)','Tree',4000],['Canteen Garden','Shrub',300]],
+ linen:[['ชุดพนักงานฝ่ายผลิต (Uniform)',1800,320],['ชุด Clean room (Coverall)',600,950],['ผ้าเช็ดเครื่องจักร (Shop towel)',3000,25],['ผ้ากันเปื้อน (Apron)',500,120],['หมวกคลุมผม (Washable cap)',800,45]],
+ pestNote:'GMP / HACCP: Zero tolerance ในพื้นที่ผลิต · Bait station ภายนอก / Glue board ภายใน · ทำ Trend analysis รายเดือน',
+ hkNote:'GMP Zone: ทำความสะอาดตาม Cleaning Validation · อุปกรณ์แยกรหัสสีตามโซน',
+ linNote:'ชุด Clean room ซักแยกและบรรจุถุงปิดผนึก · ตรวจรอยขาดก่อนแจกจ่ายทุกชุด',
+ target:{sla:93,pm:95,hk:90,patrol:98,pest:95,gdn:80,lin:95,uptime:98},elec:1850000,water:42000,gas:68000,gasL:'Fuel/Steam (kg)',
+ staff:{eng:12,fac:3,hk:10,sec:10,pest:2,gdn:4,lin:3}},
+hotel:{n:'โรงแรม',en:'Hotel',ic:'🏨',c:'#F59E0B',site:'PSD Grand Hotel & Residence',scale:1,
+ desc:'Guest experience · Room make-up · Pool & Kitchen · Room linen par',
+ areas:[['Main Lobby','G','Public',900,'Medium'],['Guest Floors 5-12','5-12','Guest Room',9600,'Medium'],['Ballroom & Function','2','Event',1400,'Medium'],['All-day Dining','G','F&B',600,'High'],['Main Kitchen','B1','F&B',500,'High'],['Swimming Pool & Deck','6','Recreation',700,'Medium'],['Fitness & Spa','6','Recreation',500,'Medium'],['Back-of-House','B1','Technical',1800,'Low'],['Car Park','B2','Outdoor',5000,'Low'],['Laundry Room','B1','Technical',300,'Medium']],
+ sys:['HVAC','Electrical','Plumbing','Hot Water/Boiler','Lift','Fire Protection','Pool System','Kitchen Equipment'],
+ assets:[['Chiller #1 350TR','HVAC',7,'A'],['Chiller #2 350TR','HVAC',7,'A'],['Heat Pump Hot Water','Hot Water/Boiler',7,'A'],['Passenger Lift P1','Lift',0,'A'],['Service Lift S1','Lift',7,'B'],['Generator 1,000 kVA','Electrical',7,'A'],['Pool Filtration & Chlorinator','Pool System',5,'B'],['Kitchen Exhaust Hood','Kitchen Equipment',4,'B'],['Walk-in Freezer','Kitchen Equipment',4,'A'],['Fire Pump 750 GPM','Fire Protection',7,'A'],['Domestic Water Booster','Plumbing',7,'A'],['Industrial Washer 60 kg','Plumbing',9,'B']],
+ compliance:[['ตรวจคุณภาพน้ำสระว่ายน้ำ','กรมอนามัย','eng',7],['ทำความสะอาด Kitchen Hood & Duct','NFPA 96','eng',90],['ตรวจลิฟต์ประจำปี','กฎกระทรวง','eng',365],['Legionella — Cooling tower / Hot water','กรมอนามัย','eng',90],['ล้างถังเก็บน้ำ','กรมอนามัย','eng',180],['ซ้อมดับเพลิงและอพยพ','กฎกระทรวงฯ 2555','fac',365],['ตรวจสอบอาคาร (ร.1)','พ.ร.บ.ควบคุมอาคาร','fac',365],['Kitchen hygiene audit','GMP / SHA','fac',90]],
+ hkTasks:[['Room Make-up (Occupied)','Routine','Daily'],['Check-out Room Cleaning','Deep','On departure'],['Turn-down Service','Routine','Evening'],['Public Area Cleaning','Routine','Hourly'],['Ballroom Set-up Clean','Event','Per event'],['Carpet Shampoo','Deep','Monthly'],['Pool Deck Cleaning','Routine','2x/day']],
+ posts:['Main Entrance / Porte-cochère','Lobby','Car Park B2','Staff Entrance / Loading','Pool & Fitness'],
+ secInc:['แขกทำทรัพย์สินหาย','บุคคลภายนอกขึ้นชั้นห้องพัก','เหตุทะเลาะวิวาท','Fire alarm แจ้งเตือน (ควันบุหรี่)','รถเฉี่ยวชนในที่จอด'],
+ garden:[['Front Driveway Landscape','Shrub',600],['Pool Deck Planters','Shrub',250],['Lobby Indoor Plants','Indoor',150],['Rooftop Garden','Lawn',400]],
+ linen:[['ผ้าปูเตียง King (Bed sheet)',1600,520],['ปลอกผ้านวม (Duvet cover)',1000,780],['ผ้าเช็ดตัว (Bath towel)',2200,260],['ผ้าเช็ดมือ (Hand towel)',2200,90],['ผ้าเช็ดตัวสระ (Pool towel)',600,240],['ผ้าปูโต๊ะจัดเลี้ยง (Table cloth)',800,350],['เสื้อคลุมอาบน้ำ (Bathrobe)',500,890]],
+ pestNote:'Guest-facing: ใช้ Gel bait / ILT แบบซ่อน · Bed bug inspection ห้องพักทุกไตรมาส',
+ hkNote:'Room status เชื่อมกับ Front Office (VC / VD / OC / OD / OOO) · Inspector ตรวจห้องก่อนปล่อยขาย',
+ linNote:'Par level ห้องพัก 3-4 Par (ใช้งาน / ซัก / สต็อก / สำรอง) · ตรวจคราบก่อนจัดห้องทุกผืน',
+ target:{sla:95,pm:95,hk:92,patrol:98,pest:92,gdn:90,lin:98,uptime:99},elec:780000,water:18500,gas:5200,gasL:'LPG (kg)',
+ staff:{eng:10,fac:3,hk:22,sec:9,pest:2,gdn:3,lin:7}},
+expo:{n:'ศูนย์แสดงสินค้า',en:'Exhibition Center',ic:'🎪',c:'#3B82F6',site:'PSD International Exhibition Center',scale:1.6,
+ desc:'Event-driven · Move-in / Move-out · Crowd control · Rigging',
+ areas:[['Exhibition Hall 1','G','Event',12000,'Medium'],['Exhibition Hall 2','G','Event',12000,'Medium'],['Exhibition Hall 3','G','Event',8000,'Medium'],['Main Foyer / Registration','G','Public',3000,'Medium'],['Meeting Rooms Zone','2','Event',2500,'Low'],['F&B Court','G','F&B',1200,'High'],['Loading Dock','G','Technical',3000,'Low'],['Multi-storey Car Park','P1-P4','Outdoor',30000,'Low'],['Central Plant','B1','Technical',2000,'Low'],['Public Toilets','G-2','Public',600,'High']],
+ sys:['HVAC','Electrical','Lift/Escalator','Fire Protection','Plumbing','Lighting Control','Rigging/AV','BMS'],
+ assets:[['Chiller #1 1,000TR','HVAC',8,'A'],['Chiller #2 1,000TR','HVAC',8,'A'],['AHU Hall 1 (x8)','HVAC',0,'A'],['Escalator Foyer E1','Lift/Escalator',3,'A'],['Goods Lift G1 (5 t)','Lift/Escalator',6,'B'],['Main Substation 22 kV','Electrical',8,'A'],['Generator 2,000 kVA','Electrical',8,'A'],['Hall Lighting Control (DALI)','Lighting Control',0,'B'],['Rigging Points Hall 1','Rigging/AV',0,'A'],['Fire Pump 1,500 GPM','Fire Protection',8,'A'],['BMS Server','BMS',8,'B'],['Floor Box Utilities Hall 2','Electrical',1,'B']],
+ compliance:[['Load test จุดแขวน Rigging','มาตรฐานวิศวกรรม','eng',365],['ตรวจลิฟต์ / บันไดเลื่อน','กฎกระทรวง','eng',365],['Generator Load Test','มาตรฐาน วสท.','eng',30],['ตรวจระบบ Fire Alarm & Smoke Exhaust','NFPA 72 / 92','eng',180],['ตรวจสอบอาคาร (ร.1) อาคารชุมนุมคน','พ.ร.บ.ควบคุมอาคาร','fac',365],['ซ้อมดับเพลิงและอพยพ','กฎกระทรวงฯ 2555','fac',365],['ทดสอบไฟฉุกเฉิน / Exit sign','วสท. / NFPA 101','fac',30],['Event Safety Plan','สำนักงานเขต','fac',90]],
+ hkTasks:[['Hall Move-in Cleaning','Event','Per event'],['Hall Move-out / Changeover','Deep','Per event'],['Carpet Vacuum (Aisle)','Routine','Daily during show'],['Toilet Check','Routine','30 min during show'],['Foyer Glass & Floor','Routine','Daily'],['Waste Collection & Recycling','Waste','Every 2 hr'],['Car Park Sweeping','Routine','Weekly']],
+ posts:['Main Foyer','Hall 1-2 Entrance','Loading Dock Control','Car Park P1','Perimeter / VIP Gate'],
+ secInc:['ผู้เข้าชมไม่มีบัตรผ่าน','สินค้าจัดแสดงสูญหาย','เด็กพลัดหลง','รถบรรทุกขนของเกินเวลา Move-in','ฝูงชนหนาแน่นจุดลงทะเบียน'],
+ garden:[['Entrance Plaza Landscape','Shrub',2500],['Boulevard Trees','Tree',4000],['Foyer Indoor Plants','Indoor',300],['Lake & Water Feature','Irrigation',1500]],
+ linen:[['ผ้าคลุมโต๊ะ (Table skirting)',1500,450],['ผ้าคลุมเก้าอี้ (Chair cover)',4000,120],['ผ้าปูโต๊ะประชุม (Table cloth)',1200,300],['ชุดพนักงาน (Uniform)',400,550],['ผ้าม่านกั้นบูธ (Drape)',300,1200]],
+ pestNote:'ช่วง Food fair เพิ่มรอบ ILT / Bait ทุกวัน · Move-out ตรวจหนูในลังสินค้าก่อนปล่อยฮอลล์',
+ hkNote:'Event-driven: แผนแม่บ้านผูกกับ Event calendar (Move-in / Show days / Move-out)',
+ linNote:'ผ้าจัดเลี้ยงเบิกตาม BEO ของแต่ละงาน · ตรวจนับคืนภายใน 24 ชม. หลังจบงาน',
+ target:{sla:93,pm:95,hk:90,patrol:97,pest:90,gdn:85,lin:95,uptime:99},elec:2600000,water:26000,gas:1200,gasL:'LPG (kg)',
+ staff:{eng:14,fac:5,hk:28,sec:20,pest:2,gdn:5,lin:3}},
+office:{n:'อาคารสำนักงาน',en:'Office Building',ic:'🏢',c:'#14B8A6',site:'PSD Tower (Grade A Office)',scale:1.2,
+ desc:'Tenant service · BMS · Lift · Hourly toilet check · IAQ',
+ areas:[['Main Lobby','G','Public',1200,'Medium'],['Office Floors 5-20','5-20','Office',28000,'Low'],['Meeting & Conference Center','4','Office',1500,'Low'],['Pantry & Toilets','5-20','Public',1600,'High'],['Food Court','G','F&B',900,'High'],['Car Park B1-B4','B1-B4','Outdoor',18000,'Low'],['Roof / Cooling Tower','Roof','Technical',1200,'Low'],['Plant Room','B4','Technical',1500,'Low'],['Data Center','3','Technical',300,'Medium'],['Sky Garden','21','Recreation',600,'Low']],
+ sys:['HVAC','Electrical','Plumbing','Lift','Fire Protection','BMS','Generator/UPS','Access Control'],
+ assets:[['Chiller #1 800TR','HVAC',7,'A'],['Chiller #2 800TR','HVAC',7,'A'],['Cooling Tower CT-1','HVAC',6,'A'],['Passenger Lift Low-zone L1','Lift',0,'A'],['Passenger Lift High-zone H1','Lift',0,'A'],['Generator 1,500 kVA','Generator/UPS',7,'A'],['UPS Data Center 160 kVA','Generator/UPS',8,'A'],['Main Distribution Board','Electrical',7,'A'],['Fire Pump 1,000 GPM','Fire Protection',7,'A'],['BMS Controller','BMS',7,'B'],['Access Turnstiles','Access Control',0,'B'],['Domestic Water Pump','Plumbing',7,'B']],
+ compliance:[['ตรวจลิฟต์ประจำปี','กฎกระทรวง','eng',365],['Generator Load Test','มาตรฐาน วสท.','eng',30],['ล้างถังเก็บน้ำ','กรมอนามัย','eng',180],['Legionella — Cooling tower','กรมอนามัย','eng',90],['ตรวจระบบไฟฟ้าประจำปี','กฎกระทรวงฯ ไฟฟ้า','eng',365],['ตรวจสอบอาคาร (ร.1)','พ.ร.บ.ควบคุมอาคาร','fac',365],['ซ้อมดับเพลิงและอพยพ','กฎกระทรวงฯ 2555','fac',365],['IAQ — CO₂ / PM2.5','TREES / WELL','fac',90]],
+ hkTasks:[['Office Floor Cleaning','Routine','Daily (after hours)'],['Toilet Hourly Check','Routine','Hourly'],['Pantry Cleaning','Routine','3x/day'],['Lobby Floor & Glass','Routine','2x/day'],['Carpet Shampoo','Deep','Quarterly'],['Facade Cleaning (BMU)','Deep','Quarterly'],['Waste & Recycling Collection','Waste','Daily']],
+ posts:['Main Lobby / Turnstile','Car Park Entrance','Loading Dock','Fire Control Room','Roaming Patrol'],
+ secInc:['ผู้มาติดต่อไม่ลงทะเบียน','บัตรผ่านสูญหาย','รถจอดในช่องสงวน','ทรัพย์สินสูญหายในห้องประชุม','ประตูหนีไฟเปิดค้าง'],
+ garden:[['Sky Garden','Lawn',600],['Entrance Landscape','Shrub',800],['Lobby & Floor Indoor Plants','Indoor',400],['Podium Trees','Tree',500]],
+ linen:[['ชุดพนักงานแม่บ้าน (Uniform)',300,450],['ชุด รปภ. (Uniform)',200,650],['ผ้าไมโครไฟเบอร์ (Microfiber)',2000,35],['ผ้าปูโต๊ะห้องประชุม',300,320],['ผ้าม่านห้องประชุม',120,1800]],
+ pestNote:'พื้นที่ผู้เช่า: แจ้งล่วงหน้า 24 ชม. ก่อนเข้าบริการ · Food court เพิ่มรอบรายสัปดาห์',
+ hkNote:'Tenant SLA: ห้องน้ำตรวจทุกชั่วโมง · Checklist ผ่าน QR ต่อจุด',
+ linNote:'ผ้าไมโครไฟเบอร์แยกสี: น้ำเงิน=โต๊ะ / แดง=ห้องน้ำ / เขียว=Pantry',
+ target:{sla:95,pm:95,hk:90,patrol:98,pest:90,gdn:85,lin:95,uptime:99},elec:1250000,water:15000,gas:800,gasL:'Diesel (L)',
+ staff:{eng:10,fac:4,hk:24,sec:14,pest:1,gdn:3,lin:1}},
+restaurant:{n:'ร้านอาหาร',en:'Restaurant',ic:'🍽',c:'#EF4444',site:'PSD Kitchen & Dining (Flagship)',scale:.12,
+ desc:'Food safety / HACCP · Grease trap · LPG · Kitchen hood',
+ areas:[['Dining Hall','G','F&B',450,'Medium'],['Main Kitchen','G','F&B',180,'High'],['Cold Room / Freezer','G','F&B',40,'High'],['Dishwashing Area','G','F&B',50,'High'],['Dry Store','G','Warehouse',60,'Medium'],['Customer Toilets','G','Public',40,'High'],['Outdoor Terrace','G','Outdoor',120,'Medium'],['Parking Lot','G','Outdoor',800,'Low'],['Back Yard / Waste Area','G','Technical',60,'High'],['Staff Room / Office','2','Office',80,'Low']],
+ sys:['Kitchen Equipment','Exhaust Hood','Refrigeration','Electrical','Plumbing','Grease Trap','LPG System','HVAC'],
+ assets:[['Combi Oven','Kitchen Equipment',1,'A'],['Wok Burner Range x4','Kitchen Equipment',1,'A'],['Kitchen Exhaust Hood & Fan','Exhaust Hood',1,'A'],['Walk-in Freezer -18°C','Refrigeration',2,'A'],['Walk-in Chiller 2-4°C','Refrigeration',2,'A'],['Conveyor Dishwasher','Kitchen Equipment',3,'B'],['Grease Trap 1,500 L','Grease Trap',8,'A'],['LPG Manifold & Leak Detector','LPG System',8,'A'],['Split Type AC (Dining x6)','HVAC',0,'B'],['Ice Machine','Refrigeration',1,'B'],['Water Filter / Softener','Plumbing',1,'B'],['Main Breaker Panel','Electrical',9,'A']],
+ compliance:[['สูบไขมัน Grease trap','เทศบาล / กทม.','eng',30],['ตรวจรั่ว LPG','กรมธุรกิจพลังงาน','eng',90],['ทำความสะอาด Exhaust hood & Duct','NFPA 96','eng',90],['Log อุณหภูมิ Cold room','HACCP','eng',1],['ตรวจสุขาภิบาลอาหาร (Clean Food Good Taste)','กรมอนามัย','fac',365],['ตรวจถังดับเพลิง','กฎกระทรวงฯ 2555','fac',30],['ตรวจคุณภาพน้ำแข็ง / น้ำดื่ม','กรมอนามัย','fac',180],['ซ้อมดับเพลิง','กฎกระทรวงฯ 2555','fac',365]],
+ hkTasks:[['Kitchen Deep Clean (After close)','Deep','Daily'],['Dining Table Sanitize','Routine','Every turn'],['Toilet Check','Routine','30 min'],['Hood Filter Wash','Deep','Weekly'],['Kitchen Floor Degrease','Routine','2x/day'],['Food Waste Segregation','Waste','Daily'],['Terrace Cleaning','Routine','Daily']],
+ posts:['Front Entrance','Parking Lot','Back Door / Delivery','Cashier Zone'],
+ secInc:['ลูกค้าลืมทรัพย์สิน','ลูกค้าเมาก่อความวุ่นวาย','รถเฉี่ยวชนในลานจอด','เงินสดไม่ตรงยอด','บุคคลน่าสงสัยหลังร้าน'],
+ garden:[['Front Planters','Shrub',60],['Terrace Garden','Shrub',80],['Indoor Plants (Dining)','Indoor',30],['Herb Garden (ใช้ในครัว)','Shrub',25]],
+ linen:[['ผ้าปูโต๊ะ (Table cloth)',300,280],['ผ้าเช็ดปาก (Napkin)',1200,45],['ชุดเชฟ (Chef jacket)',120,650],['ผ้ากันเปื้อน (Apron)',200,150],['ผ้าเช็ดจาน (Kitchen towel)',600,30]],
+ pestNote:'Food safety: Zero tolerance ในครัว · ตรวจ ILT ทุกวัน · เก็บรายงานไว้แสดงต่อ อย. / HACCP',
+ hkNote:'Food contact surface: Sanitizer 200 ppm · ผ้าแยกสี (ครัว / ห้องน้ำ / โต๊ะ)',
+ linNote:'ผ้าเช็ดจานห้ามใช้ข้ามโซน · เปลี่ยนผ้าเช็ดปากทุกรอบลูกค้า',
+ target:{sla:95,pm:95,hk:95,patrol:95,pest:98,gdn:85,lin:95,uptime:98},elec:42000,water:900,gas:2400,gasL:'LPG (kg)',
+ staff:{eng:2,fac:1,hk:6,sec:2,pest:1,gdn:1,lin:1}},
+};
+
+// ---------- state ----------
+let BIZK=LS.get('psd_ifm_biz','hospital');if(!BIZ[BIZK])BIZK='hospital';
+let D=null;const P=()=>BIZ[BIZK];
+const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
+let CUR='dashboard';let Q=[];const TB={};let charts={};
+function save(){LS.set('psd_ifm_v1_'+BIZK,D)}
+function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}}
+
+// ---------- seed (demo data, deterministic per business) ----------
+function rng(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
+function seed(bk){
+  const B=BIZ[bk],r=rng(bk+'-ifm-v1');
+  const ri=(a,b)=>a+Math.floor(r()*(b-a+1)),pick=a=>a[Math.floor(r()*a.length)];
+  const wp=pairs=>{const t=pairs.reduce((s,p)=>s+p[1],0);let x=r()*t;for(const p of pairs){x-=p[1];if(x<=0)return p[0]}return pairs[0][0]};
+  const person=()=>pick(FN)+' '+pick(LN);
+  const id=(p,i,l=3)=>p+'-'+pad(i,l);
+  const d={_v:1,site:B.site,created:todayS};
+  d.areas=B.areas.map((a,i)=>({id:id('AR',i+1),name:a[0],floor:a[1],type:a[2],sqm:a[3],risk:a[4]}));
+  const AN=d.areas.map(a=>a.name);
+  const FQ={Monthly:30,Quarterly:90,'Semi-annual':180,Annual:365};
+  const BR=['Trane','Carrier','Daikin','ABB','Schneider','Grundfos','Cummins','Mitsubishi','Hitachi','Siemens','York','Kone'];
+  d.assets=B.assets.map((a,i)=>{const f=pick(Object.keys(FQ));const last=addD(todayS,-ri(3,FQ[f]+12));
+    return{id:id('AS',i+1),name:a[0],system:a[1],area:AN[a[2]]||AN[0],brand:pick(BR),installYear:ri(2012,2024),crit:a[3],status:wp([['Running',78],['Standby',10],['Warning',8],['Down',4]]),pmFreq:f,lastPM:last,nextPM:addD(last,FQ[f])}});
+  d.pm=[];let pi=1;
+  d.assets.forEach(a=>{d.pm.push({id:id('PM',pi++,4),service:'eng',item:a.name,task:'PM '+a.pmFreq+' — ตามแผนผู้ผลิต',freq:a.pmFreq,dueDate:a.lastPM,assignee:person(),status:'Done'});
+    d.pm.push({id:id('PM',pi++,4),service:'eng',item:a.name,task:'PM '+a.pmFreq+' — ตามแผนผู้ผลิต',freq:a.pmFreq,dueDate:a.nextPM,assignee:person(),status:r()<.15&&a.nextPM<=todayS?'Done':'Planned'})});
+  ['ตรวจสภาพหลังคา / รางน้ำ','ตรวจ Door closer & Panic bar','ตรวจไฟฉุกเฉิน / Exit sign','ตรวจสภาพฝ้า / ผนัง / รอยร้าว','ตรวจป้าย / เส้นจราจร / Signage','ตรวจสุขภัณฑ์และอุปกรณ์ห้องน้ำ'].forEach((t,i)=>{
+    const due=addD(todayS,ri(-20,25));d.pm.push({id:id('PM',pi++,4),service:'fac',item:pick(AN),task:t,freq:pick(['Monthly','Quarterly']),dueDate:due,assignee:person(),status:due<todayS&&r()<.7?'Done':'Planned'})});
+  d.meters=[];for(let i=11;i>=0;i--){const dt=new Date(NOW.getFullYear(),NOW.getMonth()-i,1);const f=1+.12*Math.sin((dt.getMonth()-1)/12*2*Math.PI);
+    d.meters.push({id:id('MT',12-i),month:dt.getFullYear()+'-'+pad(dt.getMonth()+1),elec:Math.round(B.elec*f*(.95+r()*.1)),water:Math.round(B.water*(.94+r()*.12)),gas:Math.round(B.gas*(.93+r()*.14))})}
+  const DEF=[['Ceiling','ฝ้าเพดานมีคราบน้ำรั่วซึม'],['Floor','กระเบื้องแตก / หลุดร่อน'],['Door','Door closer ชำรุด ปิดไม่สนิท'],['Wall','สีลอก / ผนังร้าว'],['Roof','หลังคารั่วซึมช่วงฝนตก'],['Signage','ป้ายทางหนีไฟไม่สว่าง'],['Furniture','เก้าอี้ / โต๊ะชำรุด'],['Sanitary','สุขภัณฑ์ชำรุด / ก๊อกรั่ว']];
+  d.defects=DEF.map((x,i)=>{const rep=addD(todayS,-ri(1,40));const sev=wp([['Low',30],['Medium',40],['High',22],['Critical',8]]);
+    return{id:id('DF',i+1),area:pick(AN),element:x[0],desc:x[1],severity:sev,reported:rep,target:addD(rep,{Low:30,Medium:14,High:7,Critical:2}[sev]),status:wp([['Open',35],['In Progress',30],['Closed',35]])}});
+  d.compliance=B.compliance.map((c,i)=>({id:id('CP',i+1),item:c[0],standard:c[1],service:c[2],freqDays:c[3],lastDone:addD(todayS,-ri(0,Math.round(c[3]*1.08))),owner:person()}));
+  d.hkTasks=[];let hi=1;B.hkTasks.forEach(t=>{for(let k=0;k<2;k++)d.hkTasks.push({id:id('HK',hi++),task:t[0],type:t[1],area:pick(AN),freq:t[2],shift:pick(['Morning','Afternoon','Night']),staff:person(),lastDone:addD(todayS,-ri(0,3)),status:wp([['Done',70],['Scheduled',24],['Missed',6]])})});
+  d.hkInsp=[];for(let i=1;i<=40;i++)d.hkInsp.push({id:id('HI',i),date:addD(todayS,-ri(0,62)),area:pick(AN),score:Math.min(100,ri(78,96)+ri(0,6)),inspector:person(),remark:pick(['ผ่านเกณฑ์','มุมห้องมีฝุ่น','กระจกมีคราบ','ขยะไม่ได้แยกประเภท','ผ่าน — ดีมาก','อุปกรณ์ไม่ครบ'])});
+  d.hkInsp.sort((a,b)=>b.date.localeCompare(a.date));
+  d.patrols=[];let ptn=1;for(let day=6;day>=0;day--)B.posts.forEach(p=>['Day','Night'].forEach(sh=>{const pl=ri(8,12);d.patrols.push({id:id('PT',ptn++,4),date:addD(todayS,-day),post:p,shift:sh,guard:person(),planned:pl,scanned:r()<.82?pl:pl-ri(1,3)})}));
+  d.secInc=[];for(let i=1;i<=7;i++){const dt=new Date(NOW.getTime()-ri(1,30*24)*36e5);d.secInc.push({id:id('SI',i),date:isoDT(dt),type:pick(B.secInc),area:pick(AN),severity:wp([['Low',40],['Medium',40],['High',20]]),action:pick(['แจ้งหัวหน้า รปภ. / ตรวจ CCTV','เชิญออกนอกพื้นที่','ประสานตำรวจท้องที่','บันทึกเหตุการณ์ / ส่งต่อ Admin','ปิดกั้นพื้นที่ชั่วคราว']),status:wp([['Closed',60],['Investigating',25],['Open',15]])})}
+  d.secInc.sort((a,b)=>b.date.localeCompare(a.date));
+  d.visitors=[];for(let i=1;i<=10;i++){const tin=new Date(NOW.getTime()-ri(0,30)*36e5);d.visitors.push({id:id('VS',i),name:person(),company:pick(['ผู้รับเหมา','Supplier','ลูกค้า','หน่วยงานราชการ','ผู้ติดต่อทั่วไป','Vendor MA']),purpose:pick(['ส่งของ','ซ่อมบำรุง','ประชุม','ตรวจสอบ','สมัครงาน']),host:person(),timeIn:isoDT(tin),timeOut:r()<.7?isoDT(new Date(tin.getTime()+ri(1,4)*36e5)):'',badge:'V-'+pad(ri(1,99))})}
+  d.visitors.sort((a,b)=>b.timeIn.localeCompare(a.timeIn));
+  const ST=['Bait Station (หนู)','Glue Board','ILT เครื่องดักแมลงวัน','Termite Station','Gel Bait Point','Cage Trap (สัตว์จรจัด)'];
+  d.pestSt=[];for(let i=1;i<=18;i++)d.pestSt.push({id:id('PS',i),type:pick(ST),area:pick(AN),lastCheck:addD(todayS,-ri(0,20)),activity:wp([['None',55],['Low',25],['Medium',13],['High',7]]),remark:''});
+  d.pestVisit=[];for(let i=5;i>=0;i--){d.pestVisit.push({id:id('PV',6-i),date:addD(todayS,-i*30-ri(0,4)),vendor:'PestGuard Thailand',kind:i===2?'Termite':'Routine',areas:'ทุกพื้นที่ตามแผน',chemical:pick(['Fipronil Gel','Bromadiolone Bait','Cypermethrin 10% EC','IGR Pyriproxyfen']),findings:pick(['พบแมลงสาบระดับต่ำในครัว','ไม่พบความเคลื่อนไหว','พบร่องรอยหนูบริเวณขยะ','พบมดในพื้นที่ Pantry']),status:'Done'})}
+  d.pestVisit.push({id:id('PV',7),date:addD(todayS,ri(3,14)),vendor:'PestGuard Thailand',kind:'Routine',areas:'ทุกพื้นที่ตามแผน',chemical:'',findings:'',status:'Scheduled'});
+  d.gdnZones=B.garden.map((g,i)=>({id:id('GZ',i+1),zone:g[0],type:g[1],sqm:g[2],lastMaint:addD(todayS,-ri(1,16)),freqDays:pick([7,14,30]),health:wp([['Good',60],['Fair',30],['Poor',10]]),irrigation:g[1]==='Indoor'?'Manual':pick(['Auto','Manual'])}));
+  d.gdnTasks=[];for(let i=1;i<=9;i++){const dt=addD(todayS,ri(-10,10));d.gdnTasks.push({id:id('GT',i),date:dt,zone:pick(d.gdnZones).zone,task:pick(['ตัดหญ้า','ตัดแต่งพุ่มไม้','ใส่ปุ๋ย','พ่นยาป้องกันโรคพืช','ตรวจหัวสปริงเกอร์','เปลี่ยนไม้กระถาง','ตัดแต่งกิ่งไม้สูง']),staff:person(),status:dt>todayS?'Scheduled':wp([['Done',78],['Delayed',22]])})}
+  d.linenItems=B.linen.map((l,i)=>{const tot=Math.round(l[1]*(.86+r()*.14));const c=Math.round(tot*.34),u=Math.round(tot*.42);return{id:id('LN',i+1),name:l[0],par:l[1],clean:c,inUse:u,laundry:tot-c-u,reject:ri(2,Math.max(3,Math.round(l[1]*.012))),lost:ri(0,Math.max(2,Math.round(l[1]*.006))),cost:l[2]}});
+  d.linenTx=[];const TT=['Issue to Dept','Soiled to Laundry','Clean Return','Reject','Lost'];
+  for(let i=1;i<=18;i++){const t=wp([[TT[0],35],[TT[1],30],[TT[2],28],[TT[3],5],[TT[4],2]]);d.linenTx.push({id:id('LT',i),date:addD(todayS,-ri(0,14)),type:t,item:pick(B.linen)[0],qty:t==='Reject'||t==='Lost'?ri(1,6):ri(20,180),dept:pick(AN)})}
+  d.linenTx.sort((a,b)=>b.date.localeCompare(a.date));
+  d.staff=[];let sn=1;Object.entries(B.staff).forEach(([sv,n])=>{for(let k=0;k<n;k++){const out=['hk','sec','pest','gdn'].includes(sv)?r()<.8:r()<.2;
+    d.staff.push({id:id('ST',sn++),name:person(),service:sv,position:k===0?POS[sv][0]:pick(POS[sv].slice(1).length?POS[sv].slice(1):POS[sv]),shift:pick(['Morning','Afternoon','Night']),employment:out?'Outsource':'In-house',status:wp([['On Duty',62],['Off',30],['Leave',8]]),phone:'08'+ri(1,9)+'-'+ri(100,999)+'-'+ri(1000,9999)})}});
+  d.vendors=VENDORS.map((v,i)=>{const st=addD(todayS,-ri(200,700));return{id:id('VD',i+1),name:v[0],service:v[1],scope:v[2],value:Math.round(v[3]*B.scale/1000)*1000||1000,start:st,end:addD(st,730+ri(-120,60)),score:ri(78,98)}});
+  // tickets
+  d.tickets=[];const SW=[['eng',30],['fac',14],['hk',20],['sec',10],['pest',7],['gdn',6],['lin',13]];
+  for(let i=1;i<=46;i++){
+    const sv=wp(SW),pr=wp([['P1',6],['P2',20],['P3',54],['P4',20]]),S=SLA[pr];
+    const age=ri(10,30*1440),dt=new Date(NOW.getTime()-age*6e4);
+    let st;if(age>S.f*1.15)st=wp([['Closed',70],['Completed',18],['In Progress',8],['On Hold',4]]);else st=wp([['New',25],['Assigned',25],['In Progress',30],['Completed',20]]);
+    const cat=sv==='eng'?pick(B.sys):pick(CATS[sv]);
+    const t={id:'WR-'+pad(i,4),date:isoDT(dt),service:sv,area:pick(AN),category:cat,desc:cat+' '+pick(DESCS[sv]),priority:pr,requester:person(),assignee:st==='New'?'':person(),status:st,respondedAt:'',completedAt:''};
+    if(st!=='New')t.respondedAt=isoDT(new Date(dt.getTime()+ri(3,Math.round(S.r*1.3))*6e4));
+    if(st==='Completed'||st==='Closed'){const dur=ri(Math.round(S.f*.15),Math.round(S.f*1.12));t.completedAt=isoDT(new Date(Math.min(dt.getTime()+dur*6e4,NOW.getTime())))}
+    d.tickets.push(t)}
+  d.tickets.sort((a,b)=>b.date.localeCompare(a.date));
+  d.hist=[];for(let i=6;i>=1;i--){const dt=new Date(NOW.getFullYear(),NOW.getMonth()-i,1);d.hist.push({m:dt.getFullYear()+'-'+pad(dt.getMonth()+1),wr:ri(35,70),sla:ri(86,98)})}
+  return d;
+}
+
+// ---------- schema (drives tables + forms) ----------
+const AREAS=()=>D.areas.map(a=>a.name);
+const SVCO=()=>Object.keys(SVC).map(k=>[k,SVC[k].n]);
+const BC={Running:'green',Standby:'blue',Warning:'yellow',Down:'red',New:'blue',Assigned:'purple','In Progress':'yellow','On Hold':'gray',Completed:'teal',Closed:'green',Planned:'blue',Done:'green',Overdue:'red',Open:'red',Investigating:'yellow',Compliant:'green','Due Soon':'yellow',Scheduled:'blue',Missed:'red',Delayed:'orange',None:'green',Low:'teal',Medium:'yellow',High:'red',Critical:'red',Good:'green',Fair:'yellow',Poor:'red','On Duty':'green',Off:'gray',Leave:'yellow',Active:'green',Expiring:'yellow',Expired:'red',A:'red',B:'yellow',C:'gray',P1:'red',P2:'orange',P3:'blue',P4:'gray','In-house':'blue',Outsource:'purple',Met:'green',Breached:'red'};
+const badge=v=>v===''||v==null?'—':`<span class="badge b-${BC[v]||'gray'}">${esc(v)}</span>`;
+const chip=k=>SVC[k]?`<span class="svc-chip" style="--sc:${SVC[k].c}">${SVC[k].ic} ${SVC[k].n}</span>`:esc(k);
+const FREQ=['Daily','Weekly','Monthly','Quarterly','Semi-annual','Annual'];
+const SCH={
+ tickets:{label:'Work Request',pfx:'WR',l4:1,fields:[
+   {k:'service',l:'Service',t:'select',o:SVCO,req:1},{k:'priority',l:'Priority',t:'select',o:()=>Object.keys(SLA).map(k=>[k,SLA[k].l]),req:1,def:'P3'},
+   {k:'area',l:'พื้นที่',t:'select',o:AREAS,req:1},{k:'category',l:'หมวดงาน',t:'text',req:1,list:f=>{const s=f.service||'eng';return s==='eng'?P().sys:CATS[s]||[]}},
+   {k:'desc',l:'รายละเอียด',t:'textarea',req:1,full:1},{k:'requester',l:'ผู้แจ้ง',t:'text',req:1},{k:'assignee',l:'ผู้รับผิดชอบ',t:'text'},
+   {k:'date',l:'วันเวลาแจ้ง',t:'datetime',def:()=>isoDT(new Date())},{k:'status',l:'สถานะ',t:'select',o:FLOW.concat(['On Hold']),def:'New',b:1}],
+   cols:['id','date','service','area','category','desc','priority','assignee','status','_sla'],
+   sort:(a,b)=>b.date.localeCompare(a.date),
+   onSave(r){const n=isoDT(new Date());if(r.status!=='New'&&!r.respondedAt)r.respondedAt=n;if((r.status==='Completed'||r.status==='Closed')&&!r.completedAt)r.completedAt=n;if(r.status!=='Completed'&&r.status!=='Closed')r.completedAt=''}},
+ assets:{label:'ทรัพย์สิน / อุปกรณ์',pfx:'AS',fields:[
+   {k:'name',l:'ชื่ออุปกรณ์',t:'text',req:1,full:1},{k:'system',l:'ระบบ',t:'select',o:()=>P().sys,req:1},{k:'area',l:'พื้นที่',t:'select',o:AREAS},
+   {k:'brand',l:'ยี่ห้อ',t:'text'},{k:'installYear',l:'ปีที่ติดตั้ง',t:'number'},{k:'crit',l:'Criticality',t:'select',o:[['A','A — วิกฤต'],['B','B — สำคัญ'],['C','C — ทั่วไป']],def:'B',b:1},
+   {k:'status',l:'สถานะ',t:'select',o:['Running','Standby','Warning','Down'],def:'Running',b:1},{k:'pmFreq',l:'ความถี่ PM',t:'select',o:FREQ.slice(2),def:'Quarterly'},
+   {k:'lastPM',l:'PM ล่าสุด',t:'date'},{k:'nextPM',l:'PM ครั้งถัดไป',t:'date'}],
+   cols:['id','name','system','area','crit','brand','lastPM','nextPM','status']},
+ pm:{label:'แผน PM',pfx:'PM',l4:1,fields:[
+   {k:'service',l:'Service',t:'select',o:()=>[['eng','Engineering'],['fac','Facility']],req:1},{k:'item',l:'อุปกรณ์ / พื้นที่',t:'text',req:1,list:()=>D.assets.map(a=>a.name).concat(AREAS())},
+   {k:'task',l:'งาน',t:'text',req:1,full:1},{k:'freq',l:'ความถี่',t:'select',o:FREQ,def:'Monthly'},{k:'dueDate',l:'กำหนดวันที่',t:'date',req:1,def:()=>todayS},
+   {k:'assignee',l:'ผู้รับผิดชอบ',t:'text'},{k:'status',l:'สถานะ',t:'select',o:['Planned','Done'],def:'Planned',b:1}],
+   cols:['id','item','task','freq','dueDate','assignee','status'],sort:(a,b)=>a.dueDate.localeCompare(b.dueDate),
+   derive:r=>({...r,status:r.status==='Planned'&&r.dueDate<todayS?'Overdue':r.status})},
+ meters:{label:'มิเตอร์สาธารณูปโภค',pfx:'MT',fields:[
+   {k:'month',l:'เดือน (YYYY-MM)',t:'text',req:1,def:()=>todayS.slice(0,7)},{k:'elec',l:'ไฟฟ้า (kWh)',t:'number',req:1},{k:'water',l:'น้ำประปา (m³)',t:'number'},{k:'gas',l:()=>P().gasL,t:'number'}],
+   cols:['month','elec','water','gas'],sort:(a,b)=>b.month.localeCompare(a.month)},
+ defects:{label:'Defect อาคาร',pfx:'DF',fields:[
+   {k:'area',l:'พื้นที่',t:'select',o:AREAS,req:1},{k:'element',l:'องค์ประกอบอาคาร',t:'select',o:['Roof','Ceiling','Wall','Floor','Door','Window','Sanitary','Signage','Furniture','External'],req:1},
+   {k:'desc',l:'รายละเอียด',t:'textarea',req:1,full:1},{k:'severity',l:'ความรุนแรง',t:'select',o:['Low','Medium','High','Critical'],def:'Medium',b:1},
+   {k:'reported',l:'วันที่พบ',t:'date',def:()=>todayS},{k:'target',l:'กำหนดแล้วเสร็จ',t:'date',def:()=>addD(todayS,14)},{k:'status',l:'สถานะ',t:'select',o:['Open','In Progress','Closed'],def:'Open',b:1}],
+   cols:['id','area','element','desc','severity','reported','target','status'],sort:(a,b)=>b.reported.localeCompare(a.reported)},
+ compliance:{label:'รายการ Compliance',pfx:'CP',fields:[
+   {k:'item',l:'รายการตรวจ / ทดสอบ',t:'text',req:1,full:1},{k:'standard',l:'กฎหมาย / มาตรฐาน',t:'text'},{k:'service',l:'Service',t:'select',o:SVCO,def:'eng'},
+   {k:'freqDays',l:'รอบ (วัน)',t:'number',req:1,def:365},{k:'lastDone',l:'ดำเนินการล่าสุด',t:'date',req:1,def:()=>todayS},{k:'owner',l:'ผู้รับผิดชอบ',t:'text'}],
+   cols:['id','item','standard','lastDone','_nextDue','owner','status'],colL:{_nextDue:'ครบกำหนด',status:'สถานะ'},
+   derive:r=>{const nx=addD(r.lastDone,+r.freqDays||0),dl=dBetween(todayS,nx);return{...r,_nextDue:nx,_dl:dl,status:dl<0?'Overdue':dl<=30?'Due Soon':'Compliant'}},
+   sort:(a,b)=>a._dl-b._dl},
+ areas:{label:'พื้นที่',pfx:'AR',fields:[
+   {k:'name',l:'ชื่อพื้นที่',t:'text',req:1},{k:'floor',l:'ชั้น / โซน',t:'text'},{k:'type',l:'ประเภท',t:'select',o:['Public','Office','Clinical','Production','Warehouse','F&B','Guest Room','Event','Recreation','Technical','Outdoor']},
+   {k:'sqm',l:'พื้นที่ (ตร.ม.)',t:'number'},{k:'risk',l:'ระดับความเสี่ยงสุขอนามัย',t:'select',o:['High','Medium','Low'],def:'Medium',b:1}],
+   cols:['id','name','floor','type','sqm','risk']},
+ hkTasks:{label:'ตารางทำความสะอาด',pfx:'HK',fields:[
+   {k:'task',l:'งาน',t:'text',req:1,full:1,list:()=>P().hkTasks.map(t=>t[0])},{k:'type',l:'ประเภท',t:'select',o:['Routine','Deep','Terminal','Spill','Event','Waste']},
+   {k:'area',l:'พื้นที่',t:'select',o:AREAS,req:1},{k:'freq',l:'ความถี่',t:'text',def:'Daily'},{k:'shift',l:'กะ',t:'select',o:['Morning','Afternoon','Night']},
+   {k:'staff',l:'พนักงาน',t:'text'},{k:'lastDone',l:'ทำล่าสุด',t:'date',def:()=>todayS},{k:'status',l:'สถานะวันนี้',t:'select',o:['Scheduled','Done','Missed'],def:'Scheduled',b:1}],
+   cols:['id','task','type','area','freq','shift','staff','lastDone','status']},
+ hkInsp:{label:'ผลตรวจความสะอาด',pfx:'HI',fields:[
+   {k:'date',l:'วันที่ตรวจ',t:'date',req:1,def:()=>todayS},{k:'area',l:'พื้นที่',t:'select',o:AREAS,req:1},{k:'score',l:'คะแนน (%)',t:'number',req:1,min:0,max:100},
+   {k:'inspector',l:'ผู้ตรวจ',t:'text'},{k:'remark',l:'หมายเหตุ',t:'textarea',full:1}],
+   cols:['id','date','area','score','inspector','remark'],sort:(a,b)=>b.date.localeCompare(a.date)},
+ patrols:{label:'รอบตรวจการณ์',pfx:'PT',l4:1,fields:[
+   {k:'date',l:'วันที่',t:'date',req:1,def:()=>todayS},{k:'post',l:'จุด / ป้อม',t:'select',o:()=>P().posts,req:1},{k:'shift',l:'กะ',t:'select',o:['Day','Night']},
+   {k:'guard',l:'เจ้าหน้าที่',t:'text'},{k:'planned',l:'Checkpoint ตามแผน',t:'number',req:1,def:10},{k:'scanned',l:'Checkpoint ที่สแกน',t:'number',req:1}],
+   cols:['date','post','shift','guard','planned','scanned','_pct'],colL:{_pct:'% Compliance'},sort:(a,b)=>b.date.localeCompare(a.date)||a.post.localeCompare(b.post)},
+ secInc:{label:'เหตุการณ์ความปลอดภัย',pfx:'SI',fields:[
+   {k:'date',l:'วันเวลา',t:'datetime',req:1,def:()=>isoDT(new Date())},{k:'type',l:'ประเภทเหตุ',t:'text',req:1,list:()=>P().secInc},{k:'area',l:'พื้นที่',t:'select',o:AREAS},
+   {k:'severity',l:'ความรุนแรง',t:'select',o:['Low','Medium','High'],def:'Low',b:1},{k:'action',l:'การดำเนินการ',t:'textarea',full:1},{k:'status',l:'สถานะ',t:'select',o:['Open','Investigating','Closed'],def:'Open',b:1}],
+   cols:['id','date','type','area','severity','action','status'],sort:(a,b)=>b.date.localeCompare(a.date)},
+ visitors:{label:'ผู้มาติดต่อ',pfx:'VS',fields:[
+   {k:'name',l:'ชื่อ-สกุล',t:'text',req:1},{k:'company',l:'บริษัท / หน่วยงาน',t:'text'},{k:'purpose',l:'วัตถุประสงค์',t:'text'},{k:'host',l:'ผู้รับการติดต่อ',t:'text'},
+   {k:'timeIn',l:'เวลาเข้า',t:'datetime',req:1,def:()=>isoDT(new Date())},{k:'timeOut',l:'เวลาออก',t:'datetime'},{k:'badge',l:'บัตรผู้มาติดต่อ',t:'text'}],
+   cols:['id','name','company','purpose','host','timeIn','timeOut','badge'],sort:(a,b)=>b.timeIn.localeCompare(a.timeIn)},
+ pestSt:{label:'จุดติดตั้งอุปกรณ์',pfx:'PS',fields:[
+   {k:'type',l:'ประเภท',t:'select',o:['Bait Station (หนู)','Glue Board','ILT เครื่องดักแมลงวัน','Termite Station','Gel Bait Point','Cage Trap (สัตว์จรจัด)'],req:1},
+   {k:'area',l:'พื้นที่',t:'select',o:AREAS,req:1},{k:'lastCheck',l:'ตรวจล่าสุด',t:'date',def:()=>todayS},
+   {k:'activity',l:'ระดับการพบ',t:'select',o:['None','Low','Medium','High'],def:'None',b:1},{k:'remark',l:'หมายเหตุ',t:'text',full:1}],
+   cols:['id','type','area','lastCheck','activity','remark']},
+ pestVisit:{label:'การเข้าบริการ',pfx:'PV',fields:[
+   {k:'date',l:'วันที่',t:'date',req:1,def:()=>todayS},{k:'vendor',l:'ผู้ให้บริการ',t:'text',def:'PestGuard Thailand'},{k:'kind',l:'ประเภทบริการ',t:'select',o:['Routine','Call-back','Termite','Fumigation','Stray animal']},
+   {k:'areas',l:'พื้นที่',t:'text'},{k:'chemical',l:'สารเคมี / วิธีการ',t:'text'},{k:'findings',l:'ผลการตรวจพบ',t:'textarea',full:1},{k:'status',l:'สถานะ',t:'select',o:['Scheduled','Done'],def:'Scheduled',b:1}],
+   cols:['id','date','kind','areas','chemical','findings','status'],sort:(a,b)=>b.date.localeCompare(a.date)},
+ gdnZones:{label:'โซนภูมิทัศน์',pfx:'GZ',fields:[
+   {k:'zone',l:'ชื่อโซน',t:'text',req:1},{k:'type',l:'ประเภท',t:'select',o:['Lawn','Shrub','Tree','Indoor','Irrigation']},{k:'sqm',l:'พื้นที่ (ตร.ม.)',t:'number'},
+   {k:'lastMaint',l:'ดูแลล่าสุด',t:'date',def:()=>todayS},{k:'freqDays',l:'รอบดูแล (วัน)',t:'number',def:14},{k:'health',l:'สภาพ',t:'select',o:['Good','Fair','Poor'],def:'Good',b:1},
+   {k:'irrigation',l:'ระบบรดน้ำ',t:'select',o:['Auto','Manual','N/A']}],
+   cols:['id','zone','type','sqm','lastMaint','_next','irrigation','health'],colL:{_next:'ครบรอบถัดไป'},
+   derive:r=>({...r,_next:addD(r.lastMaint,+r.freqDays||14)})},
+ gdnTasks:{label:'งานสวน',pfx:'GT',fields:[
+   {k:'date',l:'วันที่',t:'date',req:1,def:()=>todayS},{k:'zone',l:'โซน',t:'select',o:()=>D.gdnZones.map(z=>z.zone),req:1},{k:'task',l:'งาน',t:'text',req:1},
+   {k:'staff',l:'ผู้รับผิดชอบ',t:'text'},{k:'status',l:'สถานะ',t:'select',o:['Scheduled','Done','Delayed'],def:'Scheduled',b:1}],
+   cols:['id','date','zone','task','staff','status'],sort:(a,b)=>b.date.localeCompare(a.date)},
+ linenItems:{label:'รายการผ้า',pfx:'LN',fields:[
+   {k:'name',l:'ชื่อรายการผ้า',t:'text',req:1,full:1},{k:'par',l:'Par level (ผืน)',t:'number',req:1},{k:'cost',l:'ราคา/ผืน (฿)',t:'number'},
+   {k:'clean',l:'ผ้าสะอาดในคลัง',t:'number',def:0},{k:'inUse',l:'ใช้งานอยู่',t:'number',def:0},{k:'laundry',l:'อยู่ระหว่างซัก',t:'number',def:0},
+   {k:'reject',l:'Reject (เดือนนี้)',t:'number',def:0},{k:'lost',l:'สูญหาย (เดือนนี้)',t:'number',def:0}],
+   cols:['id','name','par','clean','inUse','laundry','_total','_avail','reject','lost'],colL:{_total:'รวม',_avail:'Availability'},
+   derive:r=>{const t=(+r.clean||0)+(+r.inUse||0)+(+r.laundry||0);return{...r,_total:t,_avail:r.par?Math.min(100,Math.round(t/r.par*100)):0}}},
+ linenTx:{label:'รายการเคลื่อนไหวผ้า',pfx:'LT',fields:[
+   {k:'date',l:'วันที่',t:'date',req:1,def:()=>todayS},{k:'type',l:'ประเภท',t:'select',o:['Issue to Dept','Soiled to Laundry','Clean Return','Reject','Lost'],req:1},
+   {k:'item',l:'รายการผ้า',t:'select',o:()=>D.linenItems.map(x=>x.name),req:1},{k:'qty',l:'จำนวน (ผืน)',t:'number',req:1},{k:'dept',l:'หน่วยงาน / พื้นที่',t:'select',o:AREAS}],
+   cols:['id','date','type','item','qty','dept'],sort:(a,b)=>b.date.localeCompare(a.date),
+   onCreate(r){const it=D.linenItems.find(x=>x.name===r.item);if(!it)return;const q=+r.qty||0;const mv={'Issue to Dept':['clean','inUse'],'Soiled to Laundry':['inUse','laundry'],'Clean Return':['laundry','clean'],'Reject':['laundry','reject'],'Lost':['inUse','lost']}[r.type];if(mv){it[mv[0]]=Math.max(0,(+it[mv[0]]||0)-q);it[mv[1]]=(+it[mv[1]]||0)+q}}},
+ staff:{label:'พนักงาน',pfx:'ST',fields:[
+   {k:'name',l:'ชื่อ-สกุล',t:'text',req:1},{k:'service',l:'Service',t:'select',o:SVCO,req:1},{k:'position',l:'ตำแหน่ง',t:'text',list:f=>POS[f.service||'eng']},
+   {k:'shift',l:'กะ',t:'select',o:['Morning','Afternoon','Night']},{k:'employment',l:'การจ้าง',t:'select',o:['In-house','Outsource'],b:1},{k:'status',l:'สถานะวันนี้',t:'select',o:['On Duty','Off','Leave'],def:'On Duty',b:1},{k:'phone',l:'โทรศัพท์',t:'text'}],
+   cols:['id','name','service','position','shift','employment','phone','status']},
+ vendors:{label:'สัญญาผู้รับจ้าง',pfx:'VD',fields:[
+   {k:'name',l:'ชื่อบริษัท',t:'text',req:1},{k:'service',l:'Service',t:'select',o:SVCO,req:1},{k:'scope',l:'ขอบเขตงาน',t:'text',full:1},
+   {k:'value',l:'มูลค่า/เดือน (฿)',t:'number'},{k:'score',l:'คะแนนประเมิน (%)',t:'number'},{k:'start',l:'เริ่มสัญญา',t:'date'},{k:'end',l:'สิ้นสุดสัญญา',t:'date'}],
+   cols:['id','name','service','scope','value','start','end','score','status'],colL:{status:'สถานะ'},
+   derive:r=>{const dl=r.end?dBetween(todayS,r.end):999;return{...r,status:dl<0?'Expired':dl<=60?'Expiring':'Active'}}},
+};
+
+// ---------- KPI calculations ----------
+function slaOf(t){const S=SLA[t.priority]||SLA.P3,f=S.f*6e4,st=new Date(t.date).getTime();
+  if(t.completedAt){return{s:(new Date(t.completedAt).getTime()-st)<=f?'met':'breach'}}
+  if(t.status==='On Hold')return{s:'hold'};
+  const left=st+f-Date.now();return left<0?{s:'breach',open:1}:{s:'open',left:left/6e4}}
+function slaPct(svc){let m=0,b=0;D.tickets.forEach(t=>{if(svc&&t.service!==svc)return;const s=slaOf(t).s;if(s==='met')m++;else if(s==='breach')b++});return m+b?Math.round(m/(m+b)*100):100}
+function pmPct(svc){const t=D.pm.filter(p=>p.service===svc&&p.dueDate<=todayS);return t.length?Math.round(t.filter(p=>p.status==='Done').length/t.length*100):100}
+function compRows(svc){return D.compliance.filter(x=>!svc||x.service===svc).map(SCH.compliance.derive)}
+function compPct(svc){const c=compRows(svc);return c.length?Math.round(c.filter(x=>x.status!=='Overdue').length/c.length*100):100}
+function uptime(){const a=D.assets;return a.length?Math.round(a.filter(x=>x.status==='Running'||x.status==='Standby').length/a.length*100):100}
+function defClose(){const d=D.defects;return d.length?Math.round(d.filter(x=>x.status==='Closed').length/d.length*100):100}
+function hkScore(days=30){const s=D.hkInsp.filter(x=>x.date>=addD(todayS,-days));return s.length?avg(s.map(x=>x.score)):0}
+function hkDone(){const t=D.hkTasks;return t.length?Math.round(t.filter(x=>x.status==='Done').length/t.length*100):100}
+function patrolPct(post){const p=D.patrols.filter(x=>x.date>=addD(todayS,-7)&&(!post||x.post===post));const pl=sum(p,x=>x.planned);return pl?Math.round(sum(p,x=>x.scanned)/pl*100):100}
+function incClose(){const s=D.secInc;return s.length?Math.round(s.filter(x=>x.status==='Closed').length/s.length*100):100}
+function pestPct(){const s=D.pestSt;return s.length?Math.round(s.filter(x=>x.activity==='None'||x.activity==='Low').length/s.length*100):100}
+function gdnPct(){const z=D.gdnZones;return z.length?Math.round(sum(z,x=>x.health==='Good'?1:x.health==='Fair'?.6:0)/z.length*100):100}
+function gdnOnTime(){const t=D.gdnTasks.filter(x=>x.status!=='Scheduled');return t.length?Math.round(t.filter(x=>x.status==='Done').length/t.length*100):100}
+function linPct(){return D.linenItems.length?avg(D.linenItems.map(x=>SCH.linenItems.derive(x)._avail)):100}
+function linLoss(){const par=sum(D.linenItems,x=>x.par);return par?Math.round(sum(D.linenItems,x=>(+x.reject||0)+(+x.lost||0))/par*1000)/10:0}
+const SCORE={
+  eng:()=>avg([slaPct('eng'),pmPct('eng'),uptime(),compPct('eng')]),
+  fac:()=>avg([slaPct('fac'),pmPct('fac'),compPct('fac'),defClose()]),
+  hk:()=>avg([slaPct('hk'),hkScore(),hkDone()]),
+  sec:()=>avg([slaPct('sec'),patrolPct(),incClose()]),
+  pest:()=>avg([slaPct('pest'),pestPct()]),
+  gdn:()=>avg([slaPct('gdn'),gdnPct(),gdnOnTime()]),
+  lin:()=>avg([slaPct('lin'),linPct()]),
+};
+function KPIS(){const T=P().target;return[
+  ['eng','SLA งานแจ้งซ่อม',()=>slaPct('eng'),T.sla,'%'],['eng','PM Compliance',()=>pmPct('eng'),T.pm,'%'],['eng','Asset Uptime',uptime,T.uptime,'%'],['eng','Statutory Compliance',()=>compPct('eng'),100,'%'],
+  ['fac','SLA งานแจ้งซ่อม',()=>slaPct('fac'),T.sla,'%'],['fac','PM Compliance (อาคาร)',()=>pmPct('fac'),T.pm,'%'],['fac','Life-safety Compliance',()=>compPct('fac'),100,'%'],['fac','Defect Closure',defClose,85,'%'],
+  ['hk','SLA งานแจ้ง',()=>slaPct('hk'),T.sla,'%'],['hk','Cleanliness Score (30 วัน)',()=>hkScore(),T.hk,'%'],['hk','Task Completion',hkDone,95,'%'],
+  ['sec','SLA งานแจ้ง',()=>slaPct('sec'),T.sla,'%'],['sec','Patrol Compliance (7 วัน)',()=>patrolPct(),T.patrol,'%'],['sec','Incident Closure',incClose,90,'%'],
+  ['pest','SLA งานแจ้ง',()=>slaPct('pest'),T.sla,'%'],['pest','Station Clean Rate',pestPct,T.pest,'%'],
+  ['gdn','SLA งานแจ้ง',()=>slaPct('gdn'),T.sla,'%'],['gdn','Zone Health',gdnPct,T.gdn,'%'],['gdn','Task On-time',gdnOnTime,90,'%'],
+  ['lin','SLA งานแจ้ง',()=>slaPct('lin'),T.sla,'%'],['lin','Linen Availability',linPct,T.lin,'%'],['lin','Reject + Lost Rate',linLoss,2,'%',1],
+]}
+const scoreColor=v=>v>=90?'var(--green)':v>=75?'var(--yellow)':'var(--red)';
+const openWR=svc=>D.tickets.filter(t=>(!svc||t.service===svc)&&t.status!=='Closed'&&t.status!=='Completed').length;
+
+function alerts(){const A=[];
+  D.tickets.forEach(t=>{const s=slaOf(t);if(s.s==='breach'&&s.open)A.push({lv:'red',svc:t.service,m:`${t.id} เกิน SLA — ${t.desc}`,s:`${t.area} · ${t.priority}`,v:'helpdesk'})});
+  D.assets.filter(a=>a.status==='Down').forEach(a=>A.push({lv:'red',svc:'eng',m:`${a.name} หยุดทำงาน`,s:`${a.area} · Criticality ${a.crit}`,v:'eng'}));
+  compRows().filter(c=>c.status==='Overdue').forEach(c=>A.push({lv:'red',svc:c.service,m:`Compliance เลยกำหนด: ${c.item}`,s:`${c.standard} · ครบ ${fmtD(c._nextDue)}`,v:c.service}));
+  D.defects.filter(d=>d.status!=='Closed'&&(d.severity==='Critical'||d.target<todayS)).forEach(d=>A.push({lv:d.severity==='Critical'?'red':'yellow',svc:'fac',m:`Defect ${d.element}: ${d.desc}`,s:`${d.area} · กำหนด ${fmtD(d.target)}`,v:'fac'}));
+  D.pestSt.filter(s=>s.activity==='High').forEach(s=>A.push({lv:'yellow',svc:'pest',m:`พบความเคลื่อนไหวสูง — ${s.type}`,s:`${s.id} · ${s.area}`,v:'pest'}));
+  D.linenItems.map(SCH.linenItems.derive).filter(x=>x._avail<90).forEach(x=>A.push({lv:'yellow',svc:'lin',m:`ผ้าต่ำกว่า Par: ${x.name}`,s:`Availability ${x._avail}%`,v:'lin'}));
+  compRows().filter(c=>c.status==='Due Soon').forEach(c=>A.push({lv:'blue',svc:c.service,m:`ใกล้ครบกำหนด: ${c.item}`,s:`อีก ${c._dl} วัน`,v:c.service}));
+  const o={red:0,yellow:1,blue:2};return A.sort((a,b)=>o[a.lv]-o[b.lv]);
+}
+
+
+function nextId(ent){const S=SCH[ent];const mx=D[ent].reduce((m,r)=>{const n=parseInt(String(r.id||'').split('-').pop(),10);return isNaN(n)?m:Math.max(m,n)},0);return S.pfx+'-'+pad(mx+1,S.l4?4:3)}
+
+
+/* =====================================================================
+   PSD · eNGINNo IFM MANAGEMENT V1.0 — Mobile
+   Same data store as the desktop file (localStorage 'psd_ifm_v1_<biz>'),
+   so a WR raised on the phone shows up on the desktop Command Center
+   when both pages are served from the same site (GitHub Pages).
+   ===================================================================== */
+const DESKTOP_URL='PSD_eNGINNo_IFM_Management_v1_0.html';
+const MK={user:'psd_ifm_m_user',lang:'psd_ifm_m_lang',theme:'psd_ifm_m_theme',font:'psd_ifm_m_font'};
+const ST={lang:LS.get(MK.lang,null),user:LS.get(MK.user,null),tab:'home',svc:null,sub:{},wrf:'open',wrsvc:'',q:'',sheet:null,delArm:null,resetArm:false};
+const tx=(th,en)=>ST.lang==='en'?en:th;
+const ROLES=[['requester','ผู้แจ้งงาน','Requester'],['tech','ช่าง / พนักงานบริการ','Technician / Service staff'],['sup','หัวหน้างาน','Supervisor'],['fm','ผู้จัดการอาคาร (FM)','Facility Manager'],['admin','ผู้ดูแลระบบ (Admin)','Administrator']];
+const roleName=k=>{const r=ROLES.find(x=>x[0]===k)||ROLES[0];return tx(r[1],r[2])};
+const svcName=k=>SVC[k]?(ST.lang==='en'?SVC[k].n:SVC[k].th):k;
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._h);toast._h=setTimeout(()=>t.classList.remove('show'),2400)}
+function applyPrefs(){
+  const th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default');
+  let dark=th==='dark';
+  if(th==='system'){const dt=document.documentElement.getAttribute('data-theme');dark=dt?dt==='dark':(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
+  document.body.classList.toggle('theme-dark',dark);
+  document.body.classList.toggle('font-sarabun',ft==='sarabun');
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',dark?'#0d1117':'#f2f2f3');
+}
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{applyPrefs()})}catch(e){}
+
+/* ---------- branding blocks ---------- */
+function atomHtml(size,rw,rh,dot){return '<div class="atom" style="width:'+size+'px;height:'+size+'px;margin:0 auto" aria-hidden="true">'
+  +['a','b','c'].map(k=>'<div class="ring '+k+'" style="width:'+rw+'px;height:'+rh+'px;margin:'+(-rh/2)+'px 0 0 '+(-rw/2)+'px"></div>').join('')
+  +'<div class="nucleus" style="width:'+dot+'px;height:'+dot+'px"></div></div>'}
+function footerLegal(){return '<div class="footer-legal"><div class="l1"><span style="color:var(--color-neutral-700)">PSD · </span><span style="color:var(--orange)">eNGINNo</span><span style="color:var(--color-neutral-700)"> · </span><span style="color:var(--hard)">HARD</span><span style="color:var(--color-neutral-700)"> + </span><span style="color:var(--soft)">SOFT SERVICE</span></div>'
+  +'<div class="l2">IFM – Integrated Facility Management · Engineering · Facility · Housekeeping · Security · Pest Control · Garden · Linen</div>'
+  +'<div class="l3">MR.KITTANAN ONSEE | Copyright - Edition V1.0-2026</div></div>'}
+function segLang(){const th=ST.lang!=='en';return '<div class="seg"><button class="seg-opt '+(th?'active':'')+'" onclick="setLang(\'th\')">TH</button><button class="seg-opt '+(!th?'active':'')+'" onclick="setLang(\'en\')">EN</button></div>'}
+function setLang(l){ST.lang=l;LS.set(MK.lang,l);render()}
+
+/* ---------- screens: splash / login ---------- */
+function screenSplash(){
+  return '<div style="display:flex;flex-direction:column;align-items:center;justify-content:space-between;min-height:100vh;padding:calc(36px + env(safe-area-inset-top)) 24px calc(28px + env(safe-area-inset-bottom))">'
+  +'<div></div><div style="display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center">'
+  +'<div style="width:128px;height:128px;display:grid;place-items:center">'+atomHtml(88,76,30,18)+'</div>'
+  +'<div class="pill" style="color:var(--orange);margin-top:10px;text-transform:none">PSD · eNGINNo</div>'
+  +'<h1 style="font-size:36px">IFM MANAGEMENT</h1>'
+  +'<div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700)">Hard Service · Soft Service · 6 Business Types</div>'
+  +'<p style="max-width:300px;font-size:15px;color:var(--color-neutral-700);margin-top:10px">Integrated Facility Management — Engineering, Facility, Housekeeping, Security, Pest Control, Garden &amp; Linen</p></div>'
+  +'<div style="width:100%;max-width:420px;display:flex;flex-direction:column;gap:14px">'
+  +'<div style="font-size:15px;text-align:center;color:var(--color-neutral-700)">เลือกภาษา · Select your language</div>'
+  +'<div style="display:flex;gap:10px"><button class="blueprint tap" style="flex:1;padding:16px 10px;font-family:var(--font-heading);font-size:18px" onclick="setLang(\'th\')">ภาษาไทย</button><button class="blueprint tap" style="flex:1;padding:16px 10px;font-family:var(--font-heading);font-size:18px" onclick="setLang(\'en\')">English</button></div>'
+  +'<div style="font-size:12px;text-align:center;color:var(--color-neutral-500);letter-spacing:.04em">IFM MANAGEMENT V1.0 · PSD eNGINNo · 2026</div></div></div>'}
+
+function screenLogin(){
+  return '<div style="display:flex;flex-direction:column;min-height:100vh"><div class="hero">'+atomHtml(96,84,32,18)
+  +'<div class="kicker">PSD · eNGINNo</div><div class="title">IFM MANAGEMENT <span class="v">V1.0</span></div><div class="sub">INTEGRATED FACILITY MANAGEMENT · 2026</div></div>'
+  +'<div style="flex:1;padding:22px max(22px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:16px;max-width:560px;width:100%;margin:0 auto">'
+  +'<div><h2 style="font-size:23px;margin-bottom:2px">'+tx('เข้าสู่ระบบ','Sign In')+'</h2><div style="font-size:14px;color:var(--color-neutral-700)">'+tx('ระบุชื่อ บทบาท และไซต์ที่ปฏิบัติงาน','Enter your name, role and the site you work at')+'</div></div>'
+  +'<form id="login-form" onsubmit="event.preventDefault();doLogin()" style="display:flex;flex-direction:column;gap:12px">'
+  +'<div class="field"><label for="li-name">'+tx('ชื่อ-นามสกุล','Full name')+'</label><input class="input" id="li-name" autocomplete="name" required></div>'
+  +'<div class="field"><label for="li-role">'+tx('บทบาท','Role')+'</label><select class="input" id="li-role">'+ROLES.map(r=>'<option value="'+r[0]+'"'+(r[0]==='tech'?' selected':'')+'>'+tx(r[1],r[2])+'</option>').join('')+'</select></div>'
+  +'<div class="field"><label for="li-biz">'+tx('ประเภทธุรกิจ / ไซต์','Business type / site')+'</label><select class="input" id="li-biz">'+Object.entries(BIZ).map(([k,b])=>'<option value="'+k+'"'+(k===BIZK?' selected':'')+'>'+b.ic+' '+tx(b.n,b.en)+'</option>').join('')+'</select></div>'
+  +'<button type="submit" class="btn btn-primary btn-block">'+tx('เข้าสู่ระบบ','Sign In')+'</button>'
+  +'<div class="ferr" id="li-err"></div></form>'
+  +'<div class="note">'+tx('เวอร์ชันนี้บันทึกข้อมูลไว้ในเครื่อง และใช้ข้อมูลชุดเดียวกับ IFM เวอร์ชันเดสก์ท็อปบนเว็บไซต์เดียวกัน · ระบบยืนยันตัวตนจริงจะเปิดใช้เมื่อเชื่อม Google Sheets / Apps Script','This version stores data on the device and shares it with the IFM desktop app on the same site. Real authentication comes with the Google Sheets / Apps Script backend.')+'</div>'
+  +'<div style="display:flex;justify-content:center;margin-top:auto">'+segLang()+'</div>'
+  +'<a class="link" href="'+DESKTOP_URL+'">'+tx('← เปิด IFM เวอร์ชันเดสก์ท็อป','← Open IFM desktop version')+'</a>'+footerLegal()+'</div></div>'}
+function doLogin(){const n=document.getElementById('li-name').value.trim();if(!n){document.getElementById('li-err').textContent=tx('กรุณาระบุชื่อ','Please enter your name');return}
+  const role=document.getElementById('li-role').value,bz=document.getElementById('li-biz').value;
+  ST.user={name:n,role};LS.set(MK.user,ST.user);if(bz!==BIZK){BIZK=bz;LS.set('psd_ifm_biz',bz);load()}ST.tab='home';render();toast(tx('ยินดีต้อนรับ ','Welcome ')+n)}
+
+/* ---------- small renderers ---------- */
+const stat=(l,v,s,c,act)=>'<div class="blueprint stat '+(act?'tap':'')+'" style="--sc:'+(c||'var(--color-accent)')+'"'+(act?' onclick="'+act+'" role="button" tabindex="0"':'')+'><div class="kick">'+l+(act?' ›':'')+'</div><div class="v" style="color:'+(c||'inherit')+'">'+v+'</div><div class="s">'+(s||'')+'</div></div>';
+const pc=v=>v+'<small>%</small>';
+const scol=v=>v>=90?'var(--green)':v>=75?'var(--yellow)':'var(--red)';
+const bar=(v,c)=>'<div class="bar"><i style="width:'+Math.max(0,Math.min(100,v))+'%;background:'+c+'"></i></div>';
+const mchip=k=>SVC[k]?'<span class="svc-chip" style="--sc:'+SVC[k].c+'">'+SVC[k].ic+' '+SVC[k].n+'</span>':'';
+function slaBadge(t){const s=slaOf(t);return s.s==='met'?badge('Met'):s.s==='breach'?badge('Breached'):s.s==='hold'?badge('On Hold'):'<span class="badge b-'+(s.left<60?'orange':'blue')+'">'+tx('เหลือ ','')+fmtDur(s.left)+tx('',' left')+'</span>'}
+const ICON={
+ home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>',
+ svc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1"/></svg>',
+ plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg>',
+ bldg:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V5l8-3 8 3v16"/><path d="M4 21h16M8 8h2M14 8h2M8 12h2M14 12h2M8 16h2M14 16h2"/></svg>',
+ task:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 5h11M9 12h11M9 19h11"/><path d="M3.5 5l1.2 1.2L7 4M3.5 12l1.2 1.2L7 11M3.5 19l1.2 1.2L7 18"/></svg>',
+ set:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>'};
+
+/* ---------- main shell ---------- */
+function screenMain(){
+  const B=P(),u=ST.user,ini=(u.name||'?').trim().charAt(0).toUpperCase();
+  const myOpen=D.tickets.filter(t=>t.assignee===u.name&&t.status!=='Closed'&&t.status!=='Completed').length;
+  const tabs=[['home',ICON.home,tx('หน้าหลัก','Home')],['bldg',ICON.bldg,tx('อาคาร','Building')],['new',ICON.plus,tx('แจ้งงาน','New WR')],['tasks',ICON.task,tx('งาน','Tasks')],['set',ICON.set,tx('ตั้งค่า','Settings')]];
+  let body;
+  if(ST.tab==='home')body=viewHome();else if(ST.tab==='svc')body=ST.svc?viewModule(ST.svc):viewServices();else if(ST.tab==='bldg')body=viewBuilding();else if(ST.tab==='tasks')body=viewTasks();else body=viewSettings();
+  return '<header class="topbar"><button class="avatar" onclick="goTab(\'set\')" aria-label="'+tx('โปรไฟล์','Profile')+'">'+esc(ini)+'</button>'
+   +'<div class="brand">IFM MANAGEMENT<small style="text-transform:none">PSD · eNGINNo · V1.0</small></div>'
+   +'<button class="biz-chip" onclick="goTab(\'set\')">'+B.ic+' '+esc(tx(B.n,B.en))+'</button></header>'
+   +'<main class="view-body">'+body+'</main>'
+   +'<nav class="tabbar" aria-label="'+tx('เมนูหลัก','Main menu')+'">'+tabs.map(t=>t[0]==='new'
+      ?'<button class="tabitem" onclick="newWR()"><span class="fab">'+t[1]+'</span><span>'+t[2]+'</span></button>'
+      :'<button class="tabitem '+(ST.tab===t[0]?'active':'')+'" onclick="goTab(\''+t[0]+'\')">'+t[1]+'<span>'+t[2]+'</span>'+(t[0]==='tasks'&&myOpen?'<b class="dot">'+myOpen+'</b>':'')+'</button>').join('')+'</nav>'}
+function goTab(t){if(t==='svc'&&ST.tab==='svc')ST.svc=null;ST.tab=t;ST.q='';render();window.scrollTo(0,0)}
+function openSvc(k){ST.tab='svc';ST.svc=k;ST.q='';render();window.scrollTo(0,0)}
+
+/* ---------- HOME ---------- */
+function viewHome(){
+  const B=P(),sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
+  const hard=avg([sc.eng,sc.fac]),soft=avg([sc.hk,sc.sec,sc.pest,sc.gdn,sc.lin]),idx=Math.round((hard+soft)/2);
+  const AL=alerts().slice(0,5),pmA=avg([pmPct('eng'),pmPct('fac')]);
+  const mine=D.tickets.filter(t=>t.assignee===ST.user.name&&t.status!=='Closed'&&t.status!=='Completed');
+  return '<div class="stack">'
+  +'<div><h2 style="font-size:24px">'+tx('สวัสดี, ','Hello, ')+esc(ST.user.name)+'</h2><div style="font-size:14px;color:var(--color-neutral-700)">'+roleName(ST.user.role)+' · '+esc(D.site)+'</div></div>'
+  +'<div class="blueprint pad" style="display:flex;flex-direction:column;gap:10px"><div class="row"><div class="svc-ic" style="--sc:'+B.c+';font-size:24px">'+B.ic+'</div><div style="flex:1;min-width:0"><div class="kick">'+B.en+' · '+B.n+'</div><div style="font-family:var(--font-heading);font-size:19px;font-weight:600;line-height:1.15">'+esc(D.site)+'</div></div>'
+  +'<div style="text-align:right"><div class="kick">IFM Index</div><div style="font-family:var(--font-heading);font-size:38px;font-weight:700;line-height:1;color:'+scol(idx)+'">'+idx+'</div></div></div>'
+  +'<div><div class="row" style="justify-content:space-between;font-size:13.5px"><span><b class="pill" style="color:var(--hard)">Hard</b> Engineering · Facility</span><b>'+hard+'%</b></div>'+bar(hard,'var(--hard)')+'</div>'
+  +'<div><div class="row" style="justify-content:space-between;font-size:13.5px"><span><b class="pill" style="color:var(--soft)">Soft</b> HK · Security · Pest · Garden · Linen</span><b>'+soft+'%</b></div>'+bar(soft,'var(--soft)')+'</div></div>'
+  +(()=>{const st=bcsFloorStatus(),fl=bcsFloors(),cf=fl.filter(f=>st[f.id]&&st[f.id].crit).length,wf=fl.filter(f=>st[f.id]&&st[f.id].bad&&!st[f.id].crit).length;return '<button class="blueprint tap pad" style="--bc:#F97316;text-align:left;display:flex;gap:12px;align-items:center;width:100%" onclick="goTab(\'bldg\')"><span class="svc-ic" style="--sc:#F97316;font-size:22px">🏢</span><span style="flex:1;min-width:0"><span class="kick" style="display:block">Building Critical Status</span><span style="font-family:var(--font-heading);font-size:18px;font-weight:600;display:block;line-height:1.2">'+fl.length+tx(' ชั้น · ',' floors · ')+'<b style="color:var(--red)">'+cf+tx(' วิกฤต',' critical')+'</b> · <b style="color:var(--orange)">'+wf+tx(' มีกิจกรรม',' activity')+'</b></span><span style="display:flex;gap:4px;margin-top:6px">'+fl.slice(0,24).map(f=>{const o=st[f.id];return '<i style="flex:1;height:6px;border-radius:2px;background:'+(o&&o.crit?'#DC2626':o&&o.bad?'#F97316':'#16A34A')+'"></i>'}).join('')+'</span></span><span style="font-size:20px;color:var(--color-accent-700)">›</span></button>'})()
+  +'<div class="stat-grid">'+stat(tx('งานเปิดอยู่','Open WR'),openWR(),tx('ของฉัน ','Mine ')+mine.length,'var(--sky)',"ST.wrf='open';goTab('tasks')")
+   +stat('SLA',pc(slaPct()),tx('เป้า ','Target ')+B.target.sla+'%',scol(slaPct()),"ST.wrf='breach';goTab('tasks')")
+   +stat('PM',pc(pmA),tx('ตามแผน Hard Service','Hard service plan'),scol(pmA),"openSvc('eng')")
+   +stat('Compliance',pc(compPct()),compRows().filter(c=>c.status==='Overdue').length+tx(' รายการเลยกำหนด',' overdue'),scol(compPct()),"openSvc('fac')")+'</div>'
+  +(mine.length?'<div class="sec-t"><h2>'+tx('งานของฉัน','My jobs')+'</h2><button class="link" style="width:auto;padding:0" onclick="ST.wrf=\'mine\';goTab(\'tasks\')">'+tx('ดูทั้งหมด ›','See all ›')+'</button></div><div class="list">'+mine.slice(0,3).map(wrCard).join('')+'</div>':'')
+  +'<div class="sec-t"><h2>'+tx('สถานะแต่ละบริการ','Service health')+'</h2><button class="link" style="width:auto;padding:0" onclick="goTab(\'svc\')">'+tx('บริการทั้งหมด ›','All services ›')+'</button></div>'
+  +svcGroup('Hard',['eng','fac'],sc)+svcGroup('Soft',['hk','sec','pest','gdn','lin'],sc)
+  +'<div class="sec-t"><h2>'+tx('ต้องดำเนินการ','Needs attention')+'</h2><small>'+alerts().length+tx(' รายการ',' items')+'</small></div>'
+  +'<div class="list">'+(AL.length?AL.map(a=>'<button class="blueprint tap alert-row" style="--ac:'+({red:'var(--red)',yellow:'var(--yellow)',blue:'var(--sky)'}[a.lv])+';text-align:left" onclick="'+(SVC[a.v]?"openSvc('"+a.v+"')":"ST.wrf='breach';goTab('tasks')")+'"><span class="m">'+esc(a.m)+'</span><span class="s">'+(SVC[a.svc]?SVC[a.svc].ic+' '+SVC[a.svc].n+' · ':'')+esc(a.s)+'</span></button>').join(''):'<div class="note">'+tx('ไม่มีรายการค้าง','Nothing pending')+'</div>')+'</div>'
+  +footerLegal()+'</div>'}
+function svcGroup(type,keys,sc){return '<div class="kick" style="margin-bottom:-6px;color:var(--'+(type==='Hard'?'hard':'soft')+')">'+type+' Service</div><div class="list two">'+keys.map(k=>{const S=SVC[k];return '<button class="blueprint tap svc-row" style="--bc:'+S.c+';--sc:'+S.c+';text-align:left" onclick="openSvc(\''+k+'\')"><span class="svc-ic">'+S.ic+'</span><span style="flex:1;min-width:0"><span class="n" style="display:block">'+S.n+'</span><span class="th" style="display:block">'+S.th+'</span><span style="display:block;margin-top:6px">'+bar(sc[k],S.c)+'</span></span><span class="sc" style="color:'+scol(sc[k])+'">'+sc[k]+'%<small>WR '+openWR(k)+'</small></span></button>'}).join('')+'</div>'}
+
+/* ---------- SERVICES ---------- */
+function viewServices(){const sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
+  return '<div class="stack"><div class="sec-t"><h2>'+tx('งานบริการ IFM','IFM services')+'</h2><small>'+esc(tx(P().n,P().en))+'</small></div>'+svcGroup('Hard',['eng','fac'],sc)+svcGroup('Soft',['hk','sec','pest','gdn','lin'],sc)
+  +'<div class="sec-t"><h2>'+tx('สัญญาผู้รับจ้าง','Vendor contracts')+'</h2></div><div class="list">'+listOf('vendors',null,6)+'</div>'+footerLegal()+'</div>'}
+
+/* per-entity card renderers */
+const CARD={
+ tickets:r=>wrCard(r),
+ assets:r=>({t:r.name,m:r.system+' · '+r.area+' · Crit '+r.crit,b:badge(r.status),x:'PM '+fmtD(r.nextPM)}),
+ pm:r=>({t:r.task,m:r.item+' · '+(r.assignee||'—'),b:badge(r.status),x:tx('กำหนด ','Due ')+fmtD(r.dueDate),a:r.status!=='Done'?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();markDone(\'pm\',\''+r.id+'\')">✓ Done</button>':''}),
+ compliance:r=>({t:r.item,m:r.standard+' · '+tx('รอบ ','every ')+r.freqDays+tx(' วัน',' d'),b:badge(r.status),x:tx('ครบกำหนด ','Due ')+fmtD(r._nextDue),a:'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();markDone(\'compliance\',\''+r.id+'\')">✓ '+tx('ดำเนินการวันนี้','Done today')+'</button>'}),
+ defects:r=>({t:r.desc,m:r.element+' · '+r.area,b:badge(r.severity)+' '+badge(r.status),x:tx('กำหนดเสร็จ ','Target ')+fmtD(r.target),a:r.status!=='Closed'?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();setField(\'defects\',\''+r.id+'\',\'status\',\''+(r.status==='Open'?'In Progress':'Closed')+'\')">▶ '+(r.status==='Open'?'In Progress':'Closed')+'</button>':''}),
+ meters:r=>({t:r.month,m:tx('ไฟฟ้า ','Electricity ')+fmtN(r.elec)+' kWh · '+tx('น้ำ ','Water ')+fmtN(r.water)+' m³ · '+fmtN(r.gas)+' '+P().gasL}),
+ areas:r=>({t:r.name,m:tx('ชั้น ','Floor ')+r.floor+' · '+r.type+' · '+fmtN(r.sqm)+' m²',b:badge(r.risk)}),
+ hkTasks:r=>({t:r.task,m:r.area+' · '+r.freq+' · '+r.shift+' · '+(r.staff||'—'),b:badge(r.status),x:tx('ล่าสุด ','Last ')+fmtD(r.lastDone),a:r.status!=='Done'?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();markDone(\'hkTasks\',\''+r.id+'\')">✓ Done</button>':''}),
+ hkInsp:r=>({t:r.area,m:fmtD(r.date)+' · '+(r.inspector||'')+(r.remark?' · '+r.remark:''),b:'<b style="font-family:var(--font-heading);font-size:20px;color:'+scol(+r.score)+'">'+r.score+'%</b>'}),
+ patrols:r=>{const p=r.planned?Math.round(r.scanned/r.planned*100):0;return{t:r.post+' · '+r.shift,m:fmtD(r.date)+' · '+(r.guard||'—')+' · '+r.scanned+'/'+r.planned+' checkpoints',b:'<b style="font-family:var(--font-heading);font-size:20px;color:'+scol(p)+'">'+p+'%</b>'}},
+ secInc:r=>({t:r.type,m:fmtDT(r.date)+' · '+r.area+(r.action?' · '+r.action:''),b:badge(r.severity)+' '+badge(r.status),a:r.status!=='Closed'?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();setField(\'secInc\',\''+r.id+'\',\'status\',\'Closed\')">✓ '+tx('ปิดเหตุ','Close')+'</button>':''}),
+ visitors:r=>({t:r.name,m:(r.company||'')+' · '+(r.purpose||'')+' · '+tx('พบ ','Host ')+(r.host||'—'),b:r.timeOut?badge('Closed'):'<span class="badge b-blue">'+tx('อยู่ในพื้นที่','On site')+'</span>',x:tx('เข้า ','In ')+fmtDT(r.timeIn)+(r.timeOut?' · '+tx('ออก ','Out ')+fmtDT(r.timeOut).slice(11):''),a:!r.timeOut?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();checkout(\''+r.id+'\')">'+tx('บันทึกออก','Check out')+'</button>':''}),
+ pestSt:r=>({t:r.type,m:r.id+' · '+r.area+' · '+tx('ตรวจ ','Checked ')+fmtD(r.lastCheck),b:badge(r.activity),a:'<span class="seg" onclick="event.stopPropagation()">'+['None','Low','Medium','High'].map(l=>'<button class="seg-opt '+(r.activity===l?'active':'')+'" style="padding:4px 9px;font-size:13px" onclick="pestCheck(\''+r.id+'\',\''+l+'\')">'+l+'</button>').join('')+'</span>'}),
+ pestVisit:r=>({t:r.kind+' · '+r.vendor,m:fmtD(r.date)+(r.chemical?' · '+r.chemical:'')+(r.findings?' · '+r.findings:''),b:badge(r.status)}),
+ gdnZones:r=>({t:r.zone,m:r.type+' · '+fmtN(r.sqm)+' m² · '+tx('รดน้ำ ','Irrigation ')+r.irrigation,b:badge(r.health),x:tx('ดูแลครั้งถัดไป ','Next care ')+fmtD(r._next),a:'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();setField(\'gdnZones\',\''+r.id+'\',\'lastMaint\',todayS)">✓ '+tx('ดูแลวันนี้','Cared today')+'</button>'}),
+ gdnTasks:r=>({t:r.task,m:r.zone+' · '+fmtD(r.date)+' · '+(r.staff||'—'),b:badge(r.status),a:r.status!=='Done'?'<button class="btn btn-ok btn-sm" onclick="event.stopPropagation();setField(\'gdnTasks\',\''+r.id+'\',\'status\',\'Done\')">✓ Done</button>':''}),
+ linenItems:r=>({t:r.name,m:tx('สะอาด ','Clean ')+fmtN(r.clean)+' · '+tx('ใช้งาน ','In use ')+fmtN(r.inUse)+' · '+tx('ซัก ','Laundry ')+fmtN(r.laundry)+' · Par '+fmtN(r.par),b:'<b style="font-family:var(--font-heading);font-size:20px;color:'+scol(r._avail)+'">'+r._avail+'%</b>',bar:[r._avail,scol(r._avail)]}),
+ linenTx:r=>({t:r.type+' · '+fmtN(r.qty)+tx(' ผืน',' pcs'),m:r.item+' · '+(r.dept||'')+' · '+fmtD(r.date)}),
+ staff:r=>({t:r.name,m:r.position+' · '+r.shift+' · '+r.employment+(r.phone?' · '+r.phone:''),b:mchip(r.service)+' '+badge(r.status)}),
+ vendors:r=>({t:r.name,m:r.scope+' · ฿'+fmtN(r.value)+tx('/เดือน','/mo')+' · '+tx('สิ้นสุด ','Ends ')+fmtD(r.end),b:mchip(r.service)+' '+badge(r.status)}),
+};
+function recCard(ent,r){const c=CARD[ent](r);if(typeof c==='string')return c;
+  return '<div class="blueprint tap rec" role="button" tabindex="0" onclick="openForm2(\''+ent+'\',\''+r.id+'\')"><div class="top"><span class="tag-id">'+esc(r.id)+'</span>'+(c.b||'')+'</div><div class="t">'+esc(c.t)+'</div><div class="m">'+esc(c.m)+'</div>'+(c.bar?bar(c.bar[0],c.bar[1]):'')+(c.x?'<div class="m" style="color:var(--color-accent-700)">'+esc(c.x)+'</div>':'')+(c.a?'<div class="acts">'+c.a+'</div>':'')+'</div>'}
+function listOf(ent,filter,limit){const S=SCH[ent];let rows=D[ent].map(r=>S.derive?S.derive(r):r);if(filter)rows=rows.filter(filter);
+  if(ST.q){const q=ST.q.toLowerCase();rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q))}
+  if(S.sort)rows.sort(S.sort);const n=rows.length;if(limit)rows=rows.slice(0,limit);
+  return rows.length?rows.map(r=>recCard(ent,r)).join('')+(limit&&n>limit?'<div class="m" style="text-align:center;font-size:13px;color:var(--color-neutral-700)">'+tx('แสดง ','Showing ')+limit+tx(' จาก ',' of ')+n+'</div>':''):'<div class="blueprint empty">'+tx('ยังไม่มีข้อมูล — แตะ “+ เพิ่ม” เพื่อบันทึกรายการแรก','No records yet — tap “+ Add” to create the first one')+'</div>'}
+
+/* ---------- MODULE (one service) ---------- */
+function MOD(k){const B=P();const T=B.target;const wr={k:'wr',l:'Work Request',ent:'tickets',f:t=>t.service===k,def:{service:k}};
+  return{
+  eng:{kpi:()=>[['Uptime',pc(uptime()),D.assets.filter(a=>a.status==='Down').length+' Down',scol(uptime())],['PM',pc(pmPct('eng')),tx('เป้า ','Target ')+T.pm+'%',scol(pmPct('eng'))],['Compliance',pc(compPct('eng')),compRows('eng').filter(c=>c.status!=='Compliant').length+tx(' ต้องติดตาม',' to follow'),scol(compPct('eng'))],['Open WR',openWR('eng'),'SLA '+slaPct('eng')+'%','var(--sky)']],
+    subs:[{k:'pm',l:tx('PM ครบกำหนด','PM due'),ent:'pm',f:r=>r.service==='eng'&&r.dueDate<=addD(todayS,30),def:{service:'eng'}},{k:'asset',l:'Assets',ent:'assets'},{k:'comp',l:'Compliance',ent:'compliance',f:r=>r.service==='eng',def:{service:'eng'}},{k:'mt',l:tx('มิเตอร์','Meters'),ent:'meters',custom:meterList},wr]},
+  fac:{kpi:()=>[['Defects',D.defects.filter(d=>d.status!=='Closed').length,tx('เปิดอยู่','open'),'var(--red)'],[tx('ปิดงาน','Closure'),pc(defClose()),tx('เป้า 85%','Target 85%'),scol(defClose())],['Life safety',pc(compPct('fac')),compRows('fac').filter(c=>c.status==='Overdue').length+tx(' เลยกำหนด',' overdue'),scol(compPct('fac'))],['Open WR',openWR('fac'),'SLA '+slaPct('fac')+'%','var(--sky)']],
+    subs:[{k:'def',l:'Defects',ent:'defects'},{k:'pm',l:tx('PM อาคาร','Building PM'),ent:'pm',f:r=>r.service==='fac',def:{service:'fac'}},{k:'comp',l:'Life Safety',ent:'compliance',f:r=>r.service==='fac',def:{service:'fac'}},{k:'area',l:tx('พื้นที่','Areas'),ent:'areas'},wr]},
+  hk:{note:B.hkNote,kpi:()=>[[tx('คะแนนความสะอาด','Cleanliness'),pc(hkScore()),tx('30 วัน · เป้า ','30 d · target ')+T.hk+'%',scol(hkScore())],[tx('งานเสร็จ','Done'),pc(hkDone()),D.hkTasks.filter(t=>t.status==='Missed').length+' Missed',scol(hkDone())],[tx('ปฏิบัติงาน','On duty'),D.staff.filter(s=>s.service==='hk'&&s.status==='On Duty').length,tx('คน','staff'),'var(--teal)'],['Open WR',openWR('hk'),'SLA '+slaPct('hk')+'%','var(--sky)']],
+    subs:[{k:'task',l:tx('งานวันนี้','Today'),ent:'hkTasks'},{k:'ins',l:tx('ตรวจความสะอาด','Inspections'),ent:'hkInsp',def:{inspector:ST.user.name}},wr]},
+  sec:{kpi:()=>[['Patrol',pc(patrolPct()),tx('7 วัน · เป้า ','7 d · target ')+T.patrol+'%',scol(patrolPct())],['Incidents',D.secInc.filter(x=>x.status!=='Closed').length,tx('เปิดอยู่','open'),'var(--red)'],[tx('ผู้มาติดต่อ','Visitors'),D.visitors.filter(v=>!v.timeOut).length,tx('อยู่ในพื้นที่','on site'),'var(--sky)'],['Open WR',openWR('sec'),'SLA '+slaPct('sec')+'%','var(--purple)']],
+    subs:[{k:'pt',l:'Patrol',ent:'patrols',def:{guard:ST.user.name},limit:20},{k:'inc',l:'Incidents',ent:'secInc'},{k:'vis',l:'Visitors',ent:'visitors'},wr]},
+  pest:{note:B.pestNote,kpi:()=>[[tx('จุดสะอาด','Clean rate'),pc(pestPct()),tx('เป้า ','Target ')+T.pest+'%',scol(pestPct())],['High',D.pestSt.filter(s=>s.activity==='High').length,'Medium '+D.pestSt.filter(s=>s.activity==='Medium').length,'var(--red)'],['Stations',D.pestSt.length,tx('จุดติดตั้ง','installed'),'var(--teal)'],['Sightings',openWR('pest'),'SLA '+slaPct('pest')+'%','var(--sky)']],
+    subs:[{k:'st',l:tx('ตรวจจุด','Stations'),ent:'pestSt'},{k:'vs',l:tx('เข้าบริการ','Visits'),ent:'pestVisit'},{...wr,l:tx('แจ้งพบ','Sightings')}]},
+  gdn:{kpi:()=>[['Zone health',pc(gdnPct()),tx('เป้า ','Target ')+T.gdn+'%',scol(gdnPct())],[tx('ตรงเวลา','On-time'),pc(gdnOnTime()),D.gdnTasks.filter(t=>t.status==='Delayed').length+' Delayed',scol(gdnOnTime())],[tx('โซน','Zones'),D.gdnZones.length,fmtN(sum(D.gdnZones,z=>z.sqm))+' m²','var(--green)'],['Open WR',openWR('gdn'),'SLA '+slaPct('gdn')+'%','var(--sky)']],
+    subs:[{k:'t',l:tx('งานสวน','Tasks'),ent:'gdnTasks'},{k:'z',l:tx('โซน','Zones'),ent:'gdnZones'},wr]},
+  lin:{note:B.linNote,kpi:()=>{const it=D.linenItems.map(SCH.linenItems.derive);return[['Availability',pc(linPct()),tx('เป้า ','Target ')+T.lin+'%',scol(linPct())],[tx('ผ้าสะอาด','Clean'),fmtN(sum(it,x=>x.clean)),tx('ผืนพร้อมจ่าย','pcs ready'),'var(--teal)'],['Reject+Lost',pc(linLoss()),tx('ของ Par','of par'),linLoss()<=2?'var(--green)':'var(--red)'],['Open WR',openWR('lin'),'SLA '+slaPct('lin')+'%','var(--sky)']]},
+    subs:[{k:'inv',l:tx('คลังผ้า','Inventory'),ent:'linenItems'},{k:'tx',l:tx('เบิก / ส่งซัก','Transactions'),ent:'linenTx',limit:30},wr]},
+  }[k]}
+function meterList(){const m=[...D.meters].sort((a,b)=>b.month.localeCompare(a.month));const mx=Math.max(...m.map(x=>+x.elec||0),1);
+  return '<div class="blueprint pad"><div class="kick" style="margin-bottom:8px">'+tx('ไฟฟ้า kWh รายเดือน','Electricity kWh / month')+'</div>'+m.slice(0,12).map(x=>'<div style="display:grid;grid-template-columns:64px 1fr auto;gap:10px;align-items:center;font-size:13px;margin:5px 0"><span>'+esc(x.month)+'</span>'+bar(x.elec/mx*100,'var(--yellow)')+'<b style="font-variant-numeric:tabular-nums">'+fmtN(x.elec)+'</b></div>').join('')+'</div>'}
+function viewModule(k){const S=SVC[k],M=MOD(k);const sub=M.subs.find(s=>s.k===ST.sub[k])||M.subs[0];
+  const filt=sub.f||null;
+  return '<div class="stack"><button class="back" onclick="ST.svc=null;render()">'+tx('← บริการทั้งหมด','← All services')+'</button>'
+  +'<div class="mod-head"><div class="svc-ic" style="--sc:'+S.c+';width:48px;height:48px;font-size:24px">'+S.ic+'</div><div style="min-width:0"><div class="pill" style="color:var(--'+(S.type==='Hard'?'hard':'soft')+')">'+S.type+' Service</div><h2 style="font-size:26px">'+S.n+'</h2><div style="font-size:13.5px;color:var(--color-neutral-700)">'+S.th+'</div></div></div>'
+  +(M.note?'<div class="note">'+esc(M.note)+'</div>':'')
+  +'<div class="stat-grid">'+M.kpi().map(x=>stat(x[0],x[1],x[2],x[3])).join('')+'</div>'
+  +'<div class="chips" role="tablist">'+M.subs.map(s=>'<button class="chip '+(s===sub?'active':'')+'" onclick="ST.sub[\''+k+'\']=\''+s.k+'\';ST.q=\'\';render()">'+s.l+(s.ent==='tickets'?' ('+openWR(k)+')':'')+'</button>').join('')+'</div>'
+  +'<div class="row"><input class="search" id="mq" placeholder="'+tx('ค้นหา','Search')+' '+esc(SCH[sub.ent].label)+'…" value="'+esc(ST.q)+'" oninput="ST.q=this.value;render();refocusM()"><button class="btn btn-primary" onclick="openForm2(\''+sub.ent+'\',null,'+esc(JSON.stringify(sub.def||{})).replace(/"/g,'&quot;')+')">+ '+tx('เพิ่ม','Add')+'</button></div>'
+  +(sub.custom?sub.custom():'')
+  +'<div class="list">'+(sub.ent==='tickets'?wrList(filt):listOf(sub.ent,filt,sub.limit))+'</div></div>'}
+function refocusM(){const i=document.getElementById('mq');if(i){i.focus();const n=i.value.length;i.setSelectionRange(n,n)}}
+
+/* ---------- TASKS (Work Requests) ---------- */
+function wrCard(t){const S=SVC[t.service]||{};const i=FLOW.indexOf(t.status);const nx=i>=0&&i<FLOW.length-1?FLOW[i+1]:null;
+  return '<div class="blueprint tap rec" style="--bc:'+S.c+'" role="button" tabindex="0" onclick="wrDetail(\''+t.id+'\')"><div class="top"><span class="tag-id">'+t.id+'</span>'+badge(t.priority)+mchip(t.service)+'<span style="margin-left:auto">'+badge(t.status)+'</span></div>'
+  +'<div class="t">'+esc(t.desc)+'</div><div class="m">'+esc(t.area)+' · '+esc(t.category)+' · '+fmtDT(t.date)+'</div>'
+  +'<div class="top" style="justify-content:space-between">'+slaBadge(t)+'<span class="m">'+(t.assignee?'👤 '+esc(t.assignee):tx('ยังไม่มีผู้รับงาน','Unassigned'))+'</span></div>'
+  +(nx?'<div class="acts"><button class="btn btn-ok btn-sm" onclick="event.stopPropagation();advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept'):nx)+'</button></div>':'')+'</div>'}
+function wrList(filter){let r=D.tickets.filter(filter||(()=>true));if(ST.q){const q=ST.q.toLowerCase();r=r.filter(t=>Object.values(t).join(' ').toLowerCase().includes(q))}
+  r.sort((a,b)=>b.date.localeCompare(a.date));return r.length?r.slice(0,60).map(wrCard).join(''):'<div class="blueprint empty">'+tx('ไม่มีงานในรายการนี้','No work requests here')+'</div>'}
+function viewTasks(){const me=ST.user.name;
+  const F={open:[tx('เปิดอยู่','Open'),t=>t.status!=='Closed'&&t.status!=='Completed'],mine:[tx('งานของฉัน','Mine'),t=>(t.assignee===me||t.requester===me)&&t.status!=='Closed'],new:[tx('รอรับงาน','New'),t=>t.status==='New'],breach:[tx('เกิน SLA','Breached'),t=>{const s=slaOf(t);return s.s==='breach'&&s.open}],done:[tx('ปิดแล้ว','Closed'),t=>t.status==='Closed'||t.status==='Completed'],all:[tx('ทั้งหมด','All'),()=>true]};
+  const cur=F[ST.wrf]?ST.wrf:'open';const svf=ST.wrsvc;
+  const base=t=>!svf||t.service===svf;
+  return '<div class="stack"><div class="sec-t"><h2>Work Request</h2><small>SLA '+slaPct()+'%</small></div>'
+  +'<div class="chips">'+Object.entries(F).map(([k,f])=>'<button class="chip '+(k===cur?'active':'')+'" onclick="ST.wrf=\''+k+'\';render()">'+f[0]+' ('+D.tickets.filter(t=>base(t)&&f[1](t)).length+')</button>').join('')+'</div>'
+  +'<div class="chips"><button class="chip '+(!svf?'active':'')+'" onclick="ST.wrsvc=\'\';render()">'+tx('ทุกบริการ','All services')+'</button>'+Object.keys(SVC).map(k=>'<button class="chip '+(svf===k?'active':'')+'" onclick="ST.wrsvc=\''+k+'\';render()">'+SVC[k].ic+' '+SVC[k].n+'</button>').join('')+'</div>'
+  +'<input class="search" id="mq" placeholder="'+tx('ค้นหาเลขงาน พื้นที่ รายละเอียด…','Search ID, area, description…')+'" value="'+esc(ST.q)+'" oninput="ST.q=this.value;render();refocusM()">'
+  +'<div class="list two">'+wrList(t=>base(t)&&F[cur][1](t))+'</div></div>'}
+function advanceM(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const i=FLOW.indexOf(t.status);if(i<0||i>=FLOW.length-1)return;
+  const n=isoDT(new Date());if(t.status==='New'){t.respondedAt=n;t.assignee=ST.user.name}
+  t.status=FLOW[i+1];if(t.status==='Completed'&&!t.completedAt)t.completedAt=n;save();closeSheet();render();toast(t.id+' → '+t.status)}
+function wrDetail(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const S=SVC[t.service];const i=FLOW.indexOf(t.status);const nx=i>=0&&i<FLOW.length-1?FLOW[i+1]:null;const sla=SLA[t.priority]||SLA.P3;
+  const step=(l,v,c)=>'<div style="--tc:'+(v?c:'var(--color-neutral-300)')+'"><b>'+l+'</b> <span style="color:var(--color-neutral-700)">'+(v?fmtDT(v):'—')+'</span></div>';
+  openSheet('<div class="sheet-h"><div><div class="top" style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag-id">'+t.id+'</span>'+badge(t.priority)+badge(t.status)+'</div><h3 style="margin-top:6px">'+esc(t.desc)+'</h3></div><button class="btn btn-sm" onclick="closeSheet()" aria-label="close">✕</button></div>'
+   +'<div class="stack"><dl class="kv"><dt>Service</dt><dd>'+mchip(t.service)+' '+svcName(t.service)+'</dd><dt>'+tx('พื้นที่','Area')+'</dt><dd>'+esc(t.area)+'</dd><dt>'+tx('หมวด','Category')+'</dt><dd>'+esc(t.category)+'</dd><dt>'+tx('ผู้แจ้ง','Requester')+'</dt><dd>'+esc(t.requester||'—')+'</dd><dt>'+tx('ผู้รับงาน','Assignee')+'</dt><dd>'+esc(t.assignee||'—')+'</dd><dt>SLA</dt><dd>'+slaBadge(t)+' <span style="font-size:12.5px;color:var(--color-neutral-700)">'+tx('ตอบรับ ','Respond ')+fmtDur(sla.r)+' · '+tx('แก้ไข ','Resolve ')+fmtDur(sla.f)+'</span></dd></dl>'
+   +'<div class="timeline">'+step(tx('แจ้งงาน','Reported'),t.date,'var(--sky)')+step(tx('รับงาน','Responded'),t.respondedAt,'var(--purple)')+step(tx('แล้วเสร็จ','Completed'),t.completedAt,'var(--green)')+'</div>'
+   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+(nx?'<button class="btn btn-primary" style="flex:1" onclick="advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept job'):nx)+'</button>':'')+(t.status!=='On Hold'&&t.status!=='Closed'&&t.status!=='Completed'?'<button class="btn" onclick="setField(\'tickets\',\''+t.id+'\',\'status\',\'On Hold\')">'+tx('พักงาน','Hold')+'</button>':'')+'<button class="btn" onclick="openForm2(\'tickets\',\''+t.id+'\')">✎ '+tx('แก้ไข','Edit')+'</button></div></div>')}
+
+/* ---------- SETTINGS ---------- */
+function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default');
+  return '<div class="stack"><div class="blueprint pad row"><div class="avatar" style="width:52px;height:52px;font-size:22px">'+esc(u.name.charAt(0).toUpperCase())+'</div><div style="flex:1;min-width:0"><div style="font-family:var(--font-heading);font-size:21px;font-weight:600">'+esc(u.name)+'</div><div style="font-size:14px;color:var(--color-neutral-700)">'+roleName(u.role)+'</div></div><button class="btn btn-sm" onclick="signOut()">'+tx('ออกจากระบบ','Sign out')+'</button></div>'
+  +'<div class="sec-t"><h2>'+tx('ประเภทธุรกิจ','Business type')+'</h2><small>'+tx('ข้อมูลแยกตามธุรกิจ','Data kept per business')+'</small></div>'
+  +'<div class="list two">'+Object.entries(BIZ).map(([k,b])=>'<button class="blueprint tap biz-opt '+(k===BIZK?'on':'')+'" onclick="switchBiz(\''+k+'\')"><span class="i">'+b.ic+'</span><span style="flex:1;min-width:0"><b style="font-family:var(--font-heading);font-size:17px;display:block">'+tx(b.n,b.en)+'</b><span style="font-size:12.5px;color:var(--color-neutral-700);display:block;line-height:1.3">'+esc(b.desc)+'</span></span>'+(k===BIZK?'<span class="badge b-green">✓</span>':'')+'</button>').join('')+'</div>'
+  +'<div class="field"><label for="site-in">'+tx('ชื่อไซต์ / โครงการ','Site / project name')+'</label><input class="input" id="site-in" value="'+esc(D.site)+'" onchange="D.site=this.value.trim()||P().site;save();toast(\''+tx('บันทึกแล้ว','Saved')+'\')"></div>'
+  +'<div class="sec-t"><h2>'+tx('การแสดงผล','Display')+'</h2></div>'
+  +'<div><div class="kick" style="margin-bottom:6px">'+tx('ภาษา','Language')+'</div>'+segLang()+'</div>'
+  +'<div><div class="kick" style="margin-bottom:6px">'+tx('ธีม','Theme')+'</div><div style="display:flex;gap:8px">'+[['system',tx('ตามระบบ','System')],['light','Light'],['dark','Dark']].map(o=>'<button class="pref-opt '+(th===o[0]?'active':'')+'" onclick="LS.set(MK.theme,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
+  +'<div><div class="kick" style="margin-bottom:6px">'+tx('ฟอนต์','Font')+'</div><div style="display:flex;gap:8px">'+[['default','Barlow'],['sarabun','Sarabun']].map(o=>'<button class="pref-opt '+(ft===o[0]?'active':'')+'" style="font-family:'+(o[0]==='sarabun'?'Sarabun':'Barlow')+'" onclick="LS.set(MK.font,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
+  +'<div class="sec-t"><h2>'+tx('ข้อมูล','Data')+'</h2></div>'
+  +'<div class="note">'+tx('ข้อมูลเก็บในเครื่องนี้และใช้ร่วมกับ IFM เดสก์ท็อปเมื่อเปิดจากเว็บไซต์เดียวกัน','Data lives on this device and is shared with IFM desktop when opened from the same site')+'</div>'
+  +'<button class="btn" id="reset-btn" onclick="resetM(this)">'+tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data')+'</button>'
+  +'<a class="link" href="'+DESKTOP_URL+'">'+tx('เปิด IFM เวอร์ชันเดสก์ท็อป ›','Open IFM desktop version ›')+'</a>'+footerLegal()+'</div>'}
+function switchBiz(k){if(!BIZ[k])return;BIZK=k;LS.set('psd_ifm_biz',k);load();ST.svc=null;ST.q='';render();toast(BIZ[k].ic+' '+tx(BIZ[k].n,BIZ[k].en))}
+function signOut(){ST.user=null;try{localStorage.removeItem(MK.user)}catch(e){}render()}
+function resetM(btn){if(!ST.resetArm){ST.resetArm=true;btn.textContent=tx('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm');btn.className='btn btn-danger';setTimeout(()=>{ST.resetArm=false;if(btn.isConnected){btn.textContent=tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data');btn.className='btn'}},4000);return}
+  ST.resetArm=false;D=seed(BIZK);save();render();toast(tx('รีเซ็ตข้อมูลแล้ว','Data reset'))}
+
+/* ---------- actions ---------- */
+function markDone(ent,id){const r=D[ent].find(x=>x.id===id);if(!r)return;if(ent==='compliance')r.lastDone=todayS;else{r.status='Done';if(ent==='hkTasks')r.lastDone=todayS}save();render();toast(id+' ✓')}
+function setField(ent,id,k,v){const r=D[ent].find(x=>x.id===id);if(!r)return;r[k]=v;if(ent==='tickets')SCH.tickets.onSave(r);save();closeSheet();render();toast(id+' → '+v)}
+function checkout(id){const v=D.visitors.find(x=>x.id===id);if(v){v.timeOut=isoDT(new Date());save();render();toast(v.name+tx(' ออกจากพื้นที่',' checked out'))}}
+function pestCheck(id,l){const s=D.pestSt.find(x=>x.id===id);if(!s)return;s.activity=l;s.lastCheck=todayS;save();render();toast(id+' · '+l)}
+function newWR(){openForm2('tickets',null,{service:ST.tab==='svc'&&ST.svc?ST.svc:(ST.wrsvc||'eng'),requester:ST.user.name})}
+
+/* ---------- bottom sheet + generic form (driven by shared SCH) ---------- */
+let FM=null;
+function openSheet(html){document.getElementById('sheet-root').innerHTML='<div class="sheet-ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" role="dialog" aria-modal="true"><div class="grip"></div>'+html+'</div></div>';document.body.style.overflow='hidden'}
+function closeSheet(){document.getElementById('sheet-root').innerHTML='';document.body.style.overflow='';FM=null}
+function openForm2(ent,id,defs){
+  const S=SCH[ent],rec=id?D[ent].find(r=>r.id===id):null;defs=defs||{};FM={ent,id};ST.delArm=null;
+  const vals={};S.fields.forEach(f=>{vals[f.k]=rec?rec[f.k]:(defs[f.k]!=null?defs[f.k]:(typeof f.def==='function'?f.def():f.def??''))});
+  const fields=S.fields.map(f=>{const lab=typeof f.l==='function'?f.l():f.l,v=vals[f.k]??'',fid='m_'+f.k;let inp;
+    if(f.t==='select'){let o=typeof f.o==='function'?f.o():f.o;o=o.map(x=>Array.isArray(x)?x:[x,x]);if(v!==''&&!o.some(x=>String(x[0])===String(v)))o.push([v,v]);
+      inp='<select class="input" id="'+fid+'"'+(f.k==='service'?' onchange="refreshLists2()"':'')+'>'+(f.req?'':'<option value="">—</option>')+o.map(x=>'<option value="'+esc(x[0])+'"'+(String(x[0])===String(v)?' selected':'')+'>'+esc(f.k==='service'&&SVC[x[0]]?SVC[x[0]].ic+' '+x[1]:x[1])+'</option>').join('')+'</select>'}
+    else if(f.t==='textarea')inp='<textarea class="input" id="'+fid+'" rows="3">'+esc(v)+'</textarea>';
+    else{const ty=f.t==='datetime'?'datetime-local':f.t==='number'?'number':f.t==='date'?'date':'text';inp='<input class="input" id="'+fid+'" type="'+ty+'" value="'+esc(v)+'"'+(f.t==='number'?' inputmode="decimal" step="any"':'')+(f.list?' list="mdl_'+f.k+'"':'')+'>'+(f.list?'<datalist id="mdl_'+f.k+'"></datalist>':'')}
+    return '<div class="field'+(f.full||f.t==='textarea'?' full':'')+'"><label for="'+fid+'">'+esc(lab)+(f.req?' <span class="req">*</span>':'')+'</label>'+inp+'</div>'}).join('');
+  openSheet('<div class="sheet-h"><h3>'+(rec?tx('แก้ไข','Edit')+' · '+esc(rec.id):(ent==='tickets'?tx('แจ้งงานใหม่','New work request'):tx('เพิ่ม','Add ')+esc(S.label)))+'</h3><button class="btn btn-sm" onclick="closeSheet()" aria-label="close">✕</button></div>'
+   +'<form onsubmit="event.preventDefault();submit2()"><div class="form-grid">'+fields+'</div><div class="ferr" id="m-err"></div>'
+   +'<div style="display:flex;gap:8px"><button type="submit" class="btn btn-primary" style="flex:1">'+tx('บันทึก','Save')+'</button>'+(rec?'<button type="button" class="btn btn-danger" onclick="del2(this)">'+tx('ลบ','Delete')+'</button>':'')+'</div></form>');
+  refreshLists2();
+}
+function refreshLists2(){if(!FM)return;const S=SCH[FM.ent];const cur={};S.fields.forEach(f=>{const e=document.getElementById('m_'+f.k);if(e)cur[f.k]=e.value});
+  S.fields.filter(f=>f.list).forEach(f=>{const dl=document.getElementById('mdl_'+f.k);if(dl)dl.innerHTML=(f.list(cur)||[]).map(x=>'<option value="'+esc(x)+'">').join('')})}
+function submit2(){if(!FM)return;const{ent,id}=FM,S=SCH[ent];const r=id?{...D[ent].find(x=>x.id===id)}:{};
+  for(const f of S.fields){const e=document.getElementById('m_'+f.k);let v=e?e.value.trim():'';
+    if(f.req&&v===''){document.getElementById('m-err').textContent=tx('กรุณากรอก “','Please fill in “')+(typeof f.l==='function'?f.l():f.l)+'”';e&&e.focus();return}
+    if(f.t==='number'&&v!==''){v=+v;if(f.max!=null&&v>f.max)v=f.max;if(f.min!=null&&v<f.min)v=f.min}r[f.k]=v}
+  S.onSave&&S.onSave(r);
+  if(id){const i=D[ent].findIndex(x=>x.id===id);D[ent][i]=r;toast(tx('บันทึก ','Saved ')+r.id)}
+  else{r.id=nextId(ent);S.onCreate&&S.onCreate(r);D[ent].unshift(r);toast(tx('เพิ่ม ','Added ')+r.id)}
+  save();closeSheet();render()}
+function del2(btn){if(!FM)return;if(ST.delArm!==FM.id){ST.delArm=FM.id;btn.textContent=tx('แตะอีกครั้งเพื่อลบ','Tap again to delete');return}
+  const{ent,id}=FM;D[ent]=D[ent].filter(r=>r.id!==id);save();closeSheet();render();toast(tx('ลบ ','Deleted ')+id)}
+
+/*@@BCS-START@@*/
+/* ═══════════════════════════════════════════════════════════════════
+   BUILDING CRITICAL STATUS (BCS) — shared by IFM desktop + IFM mobile
+   Ported from iMATOMs v3.0 Building Critical Status:
+   3D building (3 styles + 2D) · per-floor plan (3D / 2D) · 4-Ring System
+   IFM 4-Ring is evaluated per AREA:
+     วง 1 WR   — open work requests (all services) · red = over SLA / P1
+     วง 2 HARD — assets Down / Warning · open building defects
+     วง 3 PPM  — PM overdue / due in 7 days · missed housekeeping tasks
+     วง 4 SOFT — cleanliness below target · pest activity · security incidents
+   Data: D.bldg.floors / D.bldg.rooms (inside the shared IFM data store),
+         floor-plan images in localStorage 'psd_ifm_plan_<biz>_<floor>'.
+   ═══════════════════════════════════════════════════════════════════ */
+const BR_COL=['#F97316','#06B6D4','#A855F7','#EC4899'];
+const BR_KEY=['r1','r2','r3','r4'];
+const BR_NAME=['WR','HARD','PPM','SOFT'];
+const BR_DESC=[['งานแจ้งซ่อม / แจ้งบริการค้าง','Open work requests'],['อุปกรณ์ Down/Warning · Defect ระดับ Medium+','Assets down / warning · defects Medium+'],['PM เกิน/ครบใน 7 วัน · งานแม่บ้าน Missed','PM overdue / due 7 days · missed HK'],['ความสะอาดตรวจล่าสุด < 85% · Pest ระดับ High · เหตุ รปภ. Medium+','Cleanliness < 85% · pest High · incidents Medium+']];
+const BR_GO=['helpdesk','eng','eng','hk'];
+const BCS={sel:null,ring:'r1',edit:false,kind:'desk',host:{},st:null,rd:null,rows:[]};
+const bT=(th,en)=>(BCS.host.lang&&BCS.host.lang()==='en')?en:th;
+function bLS(k,d){try{const v=localStorage.getItem('psd_ifm_'+k);return v==null?d:v}catch(e){return d}}
+function bLSset(k,v){try{localStorage.setItem('psd_ifm_'+k,v)}catch(e){}}
+const bIsBase=c=>/^B\d+$/i.test(String(c).trim());
+const bOK=n=>({bad:0,c:'#22C55E',k:0,n});
+
+/* ---------- floors ---------- */
+function bcsName(c){c=String(c);if(/^roof$/i.test(c))return'Roof Level';if(/^g$/i.test(c))return'Ground Floor (G)';if(bIsBase(c))return'ชั้น '+c.toUpperCase();if(/^\d+$/.test(c))return'ชั้น '+c;return c}
+function bcsMakeFloors(b,t,roof,prev){
+  b=Math.max(0,Math.min(10,b|0));t=Math.max(1,Math.min(80,t|0));
+  const codes=[];if(roof)codes.push('Roof');for(let n=t;n>=2;n--)codes.push(String(n));codes.push('G');for(let n=1;n<=b;n++)codes.push('B'+n);
+  const old={};(prev||[]).forEach(f=>old[String(f.code).toUpperCase()]=f.name);
+  return codes.map((c,i)=>({id:c.toUpperCase(),code:c,name:old[c.toUpperCase()]||bcsName(c),order:codes.length-i}))}
+function bcsTokens(s){return String(s||'').toUpperCase().split(/[-–,\/]/).map(x=>x.trim()).filter(Boolean)}
+function bcsAutoFloors(){let b=0,t=1,roof=false;
+  D.areas.forEach(a=>bcsTokens(a.floor).forEach(x=>{if(x==='ROOF')roof=true;else{const m=x.match(/^B(\d+)$/);if(m)b=Math.max(b,+m[1]);else if(/^\d+$/.test(x))t=Math.max(t,+x)}}));
+  return bcsMakeFloors(b,t,roof,[])}
+function bcsFloors(){if(!D.bldg)D.bldg={floors:[],rooms:{}};if(!D.bldg.rooms)D.bldg.rooms={};if(!D.bldg.floors||!D.bldg.floors.length)D.bldg.floors=bcsAutoFloors();return D.bldg.floors.slice().sort((a,b)=>b.order-a.order)}
+function bcsFloorById(id){return bcsFloors().find(f=>f.id===id)}
+function bcsAreaFloor(a){const fl=bcsFloors(),ids=new Set(fl.map(f=>f.id));
+  for(const x of bcsTokens(a.floor)){if(ids.has(x))return x;if((x==='1'||/^(GF|G\/F|GROUND|L1)$/.test(x))&&ids.has('G'))return'G'}
+  return ids.has('G')?'G':(fl[fl.length-1]||{}).id}
+
+/* ---------- 4-ring per area ---------- */
+function bcsOpenWR(t){return t.status!=='Closed'&&t.status!=='Completed'}
+function bcsAreaRS(a){
+  const n=a.name,T=P().target,in7=addD(todayS,7);
+  const ow=D.tickets.filter(t=>t.area===n&&bcsOpenWR(t));
+  const crW=ow.filter(t=>t.priority==='P1'||slaOf(t).s==='breach');
+  const as=D.assets.filter(x=>x.area===n);
+  const down=as.filter(x=>x.status==='Down'),warn=as.filter(x=>x.status==='Warning');
+  const df=D.defects.filter(d=>d.area===n&&d.status!=='Closed'&&d.severity!=='Low');
+  const items=new Set(as.map(x=>x.name).concat([n]));
+  const pmO=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate<todayS);
+  const pm7=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate>=todayS&&p.dueDate<=in7);
+  const hkM=D.hkTasks.filter(h=>h.area===n&&h.status==='Missed');
+  const ins=D.hkInsp.filter(x=>x.area===n&&x.date>=addD(todayS,-30));const hkA=ins.length?avg(ins.map(x=>x.score)):null;
+  const pst=D.pestSt.filter(s=>s.area===n&&s.activity==='High');
+  const inc=D.secInc.filter(s=>s.area===n&&s.status!=='Closed'&&s.severity!=='Low');
+  const hkLast=ins.slice().sort((x,y)=>y.date.localeCompare(x.date))[0];const hkLow=hkA!=null&&((hkLast&&+hkLast.score<85)||hkA<Math.min(T.hk,90)-5);
+  const j=a=>a.filter(Boolean).join(' · ');
+  const r1=ow.length?{bad:1,c:crW.length?'#EF4444':BR_COL[0],k:ow.length,n:crW.length?j([bT('เกิน SLA/P1 ','Over SLA/P1 ')+crW.length,bT('เปิด ','open ')+ow.length]):bT('WR เปิด ','Open WR ')+ow.length}:bOK(bT('ไม่มีงานค้าง','No open WR'));
+  const k2=down.length+warn.length+df.length;
+  const r2=k2?{bad:1,c:BR_COL[1],k:k2,n:j([down.length&&'Down '+down.length,warn.length&&'Warning '+warn.length,df.length&&'Defect '+df.length])}:bOK(bT('อุปกรณ์/อาคารปกติ','Assets & fabric OK'));
+  const k3=pmO.length+pm7.length+hkM.length;
+  const r3=k3?{bad:1,c:BR_COL[2],k:k3,n:j([pmO.length&&bT('PM เกินกำหนด ','PM overdue ')+pmO.length,pm7.length&&bT('PM ใน 7 วัน ','PM in 7d ')+pm7.length,hkM.length&&bT('แม่บ้าน Missed ','HK missed ')+hkM.length])}:bOK(bT('ตามแผน','On plan'));
+  const k4=(hkLow?1:0)+pst.length+inc.length;
+  const r4=k4?{bad:1,c:BR_COL[3],k:k4,n:j([hkLow&&bT('ความสะอาด ','Clean ')+hkA+'%',pst.length&&'Pest '+pst.length+bT(' จุด',' pts'),inc.length&&bT('เหตุ รปภ. ','Incident ')+inc.length])}:bOK(bT('ปกติ','Normal'));
+  const crit=crW.length>0||down.length>0||df.some(d=>d.severity==='Critical')||pst.some(s=>s.activity==='High');
+  return{r1,r2,r3,r4,crit,bad:!!(r1.bad||r2.bad||r3.bad||r4.bad),ow,as,down,warn,df,pmO,pm7,hkM,hkA,pst,inc}}
+function bcsFloorStatus(){const out={};bcsFloors().forEach(f=>out[f.id]={n:0,r1:0,r2:0,r3:0,r4:0,crit:0,bad:false,items:[]});
+  D.areas.forEach(a=>{const o=out[bcsAreaFloor(a)];if(!o)return;const rs=bcsAreaRS(a);o.n++;BR_KEY.forEach(k=>{if(rs[k].bad)o[k]++});if(rs.crit)o.crit++;o.items.push({a,rs})});
+  Object.values(out).forEach(o=>o.bad=(o.r1+o.r2+o.r3+o.r4)>0);BCS.st=out;return out}
+
+/* ---------- rooms (areas) on a floor ---------- */
+function bcsRooms(fid,svgH){const ar=D.areas.filter(a=>bcsAreaFloor(a)===fid),L=D.bldg.rooms||{},n=ar.length;if(!n)return[];
+  const cols=Math.ceil(Math.sqrt(n*1.7)),rows=Math.ceil(n/cols),gx=18,gy=18,pw=820,ph=(svgH||540)-90;
+  const w=(pw-(cols-1)*gx)/cols,h=Math.min(260,(ph-(rows-1)*gy)/rows),oy=Math.max(40,((svgH||540)-(rows*h+(rows-1)*gy))/2);
+  return ar.map((a,i)=>{const p=L[a.id];if(p)return{a,x:p.x,y:p.y,w:p.w,h:p.h};const c=i%cols,r=Math.floor(i/cols);return{a,x:40+c*(w+gx),y:oy+r*(h+gy),w,h}})}
+function bcsPlan(fid){try{return JSON.parse(localStorage.getItem('psd_ifm_plan_'+BIZK+'_'+fid)||'null')}catch(e){return null}}
+
+/* ---------- markup ---------- */
+BCS.html=function(kind){BCS.kind=kind;const m=kind==='mob';
+  return `<div class="bcs bcs-${kind}">
+  <div class="bcs-kpis" id="bcs-kpis"></div>
+  <div class="bcs-bar">
+    <div class="bcs-chips" id="bcs-chips" role="tablist"></div>
+    <div class="bcs-tools">
+      <button class="bcs-btn" onclick="bcsSetupOpen()">🏗 ${bT('ตั้งค่าอาคาร','Floors')}</button>
+      <button class="bcs-btn" id="bcs-edit-btn" onclick="bcsToggleEdit()">✏ ${bT('แก้ไขผังห้อง','Edit rooms')}</button>
+      <button class="bcs-btn" onclick="document.getElementById('bcs-plan-in').click()">🗺 Floor Plan ${bT('(รูป/PDF)','(img/PDF)')}</button>
+      <button class="bcs-btn bcs-danger" id="bcs-plan-clr" onclick="bcsPlanClear()" hidden>✕ ${bT('ลบผัง','Plan')}</button>
+      <input type="file" id="bcs-plan-in" accept=".pdf,image/*" hidden onchange="bcsPlanUpload(this)">
+    </div>
+  </div>
+  <div class="bcs-layout">
+    <div class="bcs-bwrap" id="bcs-bwrap">
+      <div class="bcs-bhead"><span class="bcs-cap">🏢 ${bT('อาคาร — แตะชั้นเพื่อดูผัง','Building — tap a floor')}</span>
+        <span class="bcs-modes"><span class="bcs-dots"><i style="color:#22C55E">●</i>${bT('ปกติ','OK')} <i style="color:#F97316">●</i>${bT('เตือน','Warn')} <i style="color:#EF4444">●</i>${bT('วิกฤต','Crit')}</span>
+        ${['3d','3d2','3d3','2d'].map((k,i)=>`<button class="bcs-mb" id="bcs-bm-${k}" onclick="bcsSetBMode('${k}')">${['3D-1','3D-2','3D-3','2D'][i]}</button>`).join('')}</span></div>
+      <div class="bcs-3d bcs-b3" id="bcs-b3" hidden>
+        <div class="bcs-ctl"><button onclick="b3Pan(3)" title="${bT('ชั้นบน','Up')}">▲</button><button onclick="b3Pan(-3)" title="${bT('ชั้นล่าง','Down')}">▼</button><button onclick="b3Zoom(.8)">＋</button><button onclick="b3Zoom(1.25)">－</button><button onclick="b3Reset()" title="Reset">⟳</button></div>
+        <div class="bcs-help">${m?bT('ลาก = หมุน · 2 นิ้ว = ซูม · แตะชั้น = เปิดผัง','Drag = rotate · pinch = zoom · tap floor = open'):bT('ลาก = หมุน · คลิกขวาลาก = เลื่อนขึ้น/ลง · ล้อเมาส์ = ซูม · คลิกชั้น = เปิดผัง','Drag = rotate · right-drag = pan · wheel = zoom · click floor = open')}</div></div>
+      <div class="bcs-b2scroll" id="bcs-b2s"><svg id="bcs-b2" style="width:100%;display:block"></svg></div>
+    </div>
+    <div class="bcs-hint" id="bcs-hint">${bT('ชี้หรือแตะชั้นเพื่อดูสถานะ<br>ชั้นสีส้ม/แดง = มีรายการใน 4 วง (WR / HARD / PPM / SOFT)<br>คลิกชั้นเพื่อเปิดผังพื้นที่','Hover or tap a floor to see its status<br>Orange/red floors have items in the 4 rings<br>Click a floor to open its plan')}</div>
+    <div class="bcs-panel" id="bcs-panel" hidden>
+      <div class="bcs-sum" id="bcs-sum"></div>
+      <div class="bcs-editbar" id="bcs-editbar" hidden><b>✏ ${bT('โหมดแก้ไขผังห้อง','Room edit mode')}</b><span>${bT('ลากกล่อง = ย้าย · ลากมุมส้ม = ย่อ/ขยาย','Drag box = move · drag orange corner = resize')}</span><button class="bcs-btn" onclick="bcsResetRooms()">${bT('จัดผังอัตโนมัติ','Auto layout')}</button><button class="bcs-btn bcs-pri" onclick="bcsToggleEdit()">${bT('เสร็จสิ้น','Done')}</button></div>
+      <div class="bcs-canvas">
+        <div class="bcs-flabel" id="bcs-flabel"></div>
+        <div class="bcs-fmodes"><button class="bcs-mb" id="bcs-fm-3d" onclick="bcsSetFMode('3d')">3D</button><button class="bcs-mb" id="bcs-fm-2d" onclick="bcsSetFMode('2d')">2D</button></div>
+        <div class="bcs-3d bcs-f3" id="bcs-f3" hidden><div class="bcs-ftip" id="bcs-ftip" hidden></div><div class="bcs-help">${bT('ลาก = หมุน · ซูมได้ · แตะหมุด = ดูพื้นที่','Drag = rotate · zoom · tap pin = area detail')}</div></div>
+        <svg id="bcs-f2" viewBox="0 0 900 540" style="width:100%;display:block;touch-action:${m?'pan-y':'auto'}"></svg>
+      </div>
+    </div>
+  </div>
+  <div class="bcs-legend"><div class="bcs-cap">🔵 IFM 4-Ring Status System — ${bT('กวาดสายตาดูสถานะทั้งอาคาร','see the whole building at a glance')}</div>
+    <div class="bcs-lgrid">${BR_NAME.map((nm,i)=>`<div style="--rc:${BR_COL[i]}"><b><i></i>${bT('วง ','Ring ')}${i+1} — ${nm}</b><span>${bT(BR_DESC[i][0],BR_DESC[i][1])}</span></div>`).join('')}</div>
+    <div class="bcs-lnote">${bT('กระพริบ = ต้องดำเนินการ · วงนอกสุด = SOFT → วงในสุด = WR · แตะหมุดเพื่อดูรายละเอียดพื้นที่','Blinking = action needed · outer ring = SOFT → inner = WR · tap a pin for area detail')}</div></div>
+</div>`};
+
+/* ---------- mount / refresh ---------- */
+BCS.mount=function(){
+  if(!document.getElementById('bcs-tip')){const t=document.createElement('div');t.id='bcs-tip';t.className='bcs-tip';t.hidden=true;document.body.appendChild(t)}
+  if(!document.getElementById('bcs-modal')){const m=document.createElement('div');m.id='bcs-modal';m.className='bcs-modal';m.hidden=true;m.addEventListener('click',e=>{if(e.target===m)bcsModalClose()});document.body.appendChild(m)}
+  const s=bLS('bcs_sel_'+BIZK,'');BCS.sel=s&&bcsFloorById(s)?s:null;BCS.edit=false;
+  bcsRefresh();
+};
+function bcsRefresh(){if(!document.getElementById('bcs-chips'))return;bcsFloorStatus();bcsKpis();bcsChips();bcsRenderBuilding();
+  const p=document.getElementById('bcs-panel'),h=document.getElementById('bcs-hint');
+  if(BCS.sel){if(p)p.hidden=false;if(h)h.hidden=true;bcsRenderPanel()}else{if(p)p.hidden=true;if(h)h.hidden=false}}
+function bcsKpis(){const el=document.getElementById('bcs-kpis');if(!el)return;const st=BCS.st,fl=bcsFloors();
+  const items=Object.values(st).flatMap(o=>o.items),bad=items.filter(x=>x.rs.bad).length,crit=items.filter(x=>x.rs.crit).length;
+  const ok=items.length?Math.round((items.length-bad)/items.length*100):100,cf=fl.filter(f=>st[f.id]&&st[f.id].crit).length,wf=fl.filter(f=>st[f.id]&&st[f.id].bad&&!st[f.id].crit).length;
+  const k=(l,v,s,c)=>`<div class="bcs-kpi" style="--kc:${c}"><span>${l}</span><b>${v}</b><small>${s}</small></div>`;
+  el.innerHTML=k(bT('พื้นที่ปกติ','Areas normal'),ok+'%',(items.length-bad)+'/'+items.length+bT(' พื้นที่',' areas'),ok>=90?'#22C55E':ok>=70?'#EAB308':'#EF4444')+k(bT('ชั้นวิกฤต','Critical floors'),cf,crit+bT(' พื้นที่วิกฤต',' critical areas'),'#EF4444')+k(bT('ชั้นที่มีกิจกรรม','Floors w/ activity'),wf,bT('จาก ','of ')+fl.length+bT(' ชั้น',' floors'),'#F97316')+k('Open WR',D.tickets.filter(bcsOpenWR).length,'SLA '+slaPct()+'%','#3B82F6')}
+function bcsColor(o){return!o?'#16A34A':o.crit?'#DC2626':o.bad?'#F97316':'#16A34A'}
+function bcsChips(){const el=document.getElementById('bcs-chips');if(!el)return;const st=BCS.st;
+  el.innerHTML=bcsFloors().map(f=>{const o=st[f.id];const nb=o?o.items.filter(x=>x.rs.bad).length:0;
+    return`<button class="bcs-chip ${BCS.sel===f.id?'on':''}" style="--fc:${bcsColor(o)}" onclick="bcsSelect('${f.id}')" onmouseenter="bcsTip(event,'${f.id}')" onmousemove="bcsTipMove(event)" onmouseleave="bcsTipHide()"><i></i>${esc(f.code)}${nb?`<small>${nb}</small>`:''}</button>`}).join('');
+  const on=el.querySelector('.on');if(on&&on.scrollIntoView)try{on.scrollIntoView({block:'nearest',inline:'center'})}catch(e){}}
+
+/* ---------- floor tooltip ---------- */
+function bcsTip(evt,fid){const f=bcsFloorById(fid),o=(BCS.st||{})[fid],tip=document.getElementById('bcs-tip');if(!f||!tip)return;
+  const row=(c,l,n)=>`<div class="r"><span style="color:${c}">● ${l}</span><b style="color:${n?c:'#22C55E'}">${n||'OK'}</b></div>`;
+  tip.innerHTML=`<div class="t">${esc(f.code)} — ${esc(f.name)}</div><div class="s">${o?o.n:0} ${bT('พื้นที่','areas')} · ${o&&o.crit?'<span style="color:#EF4444">⛔ '+bT('วิกฤต','critical')+'</span>':o&&o.bad?'<span style="color:#F97316">⚠ '+bT('มีกิจกรรม','activity')+'</span>':'<span style="color:#22C55E">✔ '+bT('ปกติ','normal')+'</span>'}</div>`+(o?BR_KEY.map((k,i)=>row(BR_COL[i],BR_NAME[i],o[k])).join(''):'');
+  tip.hidden=false;bcsTipMove(evt)}
+function bcsTipMove(evt){const t=document.getElementById('bcs-tip');if(!t)return;t.style.left=Math.min(evt.clientX+16,window.innerWidth-210)+'px';t.style.top=(evt.clientY+12)+'px'}
+function bcsTipHide(){const t=document.getElementById('bcs-tip');if(t)t.hidden=true}
+
+/* ---------- building (2D svg + 3D) ---------- */
+function bcsBMode(){return bLS('bldg_mode','3d')}
+function bcsSetBMode(m){bLSset('bldg_mode',m);bcsRenderBuilding()}
+function bcsModeBtns(){const m=bcsBMode();['3d','3d2','3d3','2d'].forEach(k=>{const b=document.getElementById('bcs-bm-'+k);if(b)b.classList.toggle('on',m===k)});
+  const f=bLS('fp_mode','3d');['3d','2d'].forEach(k=>{const b=document.getElementById('bcs-fm-'+k);if(b)b.classList.toggle('on',f===k)})}
+function bcsRenderBuilding(){
+  const fl=bcsFloors(),st=BCS.st||bcsFloorStatus(),s3=document.getElementById('bcs-b3'),s2=document.getElementById('bcs-b2s');bcsModeBtns();
+  if(/^3d/.test(bcsBMode())&&window.THREE&&B3.ok!==false){if(s2)s2.hidden=true;if(s3)s3.hidden=false;if(bldg3dRender(fl,st))return}
+  if(s2)s2.hidden=false;if(s3)s3.hidden=true;
+  const svg=document.getElementById('bcs-b2');if(!svg)return;
+  const W=360,H=34,G=3,TOP=46,X=28,SW=304,lastUp=fl.map(f=>!bIsBase(f.code)).lastIndexOf(true),hasBase=fl.some(f=>bIsBase(f.code));
+  const total=TOP+fl.length*(H+G)+(hasBase?22:0)+16;let y=TOP,s='';
+  s+=`<polygon points="${X-10},${TOP-4} ${W/2},10 ${W-X+10},${TOP-4}" fill="#1C2333" stroke="#30363D" stroke-width="2"/>`;
+  s+=`<text x="${W/2}" y="34" text-anchor="middle" fill="#8B949E" font-size="10" font-family="Rajdhani,'Barlow Condensed',sans-serif" font-weight="700" letter-spacing="1">${esc(String(D.site).toUpperCase().slice(0,34))}</text>`;
+  s+=`<rect x="${X-8}" y="${TOP-4}" width="${SW+16}" height="${total-TOP-8}" rx="4" fill="#0D1117" stroke="#30363D" stroke-width="2"/>`;
+  fl.forEach((f,i)=>{const o=st[f.id]||{r1:0,r2:0,r3:0,r4:0,crit:0,bad:false},sel=BCS.sel===f.id,col=bcsColor(o);
+    s+=`<g class="bcs-floor" onmouseenter="bcsTip(event,'${f.id}')" onmousemove="bcsTipMove(event)" onmouseleave="bcsTipHide()" onclick="bcsSelect('${f.id}')">`;
+    s+=`<rect x="${X}" y="${y}" width="${SW}" height="${H}" rx="5" fill="${col}" fill-opacity="${o.bad?.85:.55}" stroke="${sel?'#F97316':'rgba(255,255,255,.12)'}" stroke-width="${sel?3:1}">${o.bad?'<animate attributeName="fill-opacity" values=".9;.5;.9" dur="1.6s" repeatCount="indefinite"/>':''}</rect>`;
+    s+=`<text x="${X+10}" y="${y+H/2+1}" dominant-baseline="middle" fill="#fff" font-size="13" font-weight="800" font-family="sans-serif">${esc(f.code)}</text>`;
+    s+=`<text x="${X+56}" y="${y+H/2+1}" dominant-baseline="middle" fill="rgba(255,255,255,.9)" font-size="10.5" font-family="sans-serif">${esc(String(f.name).substring(0,18))}</text>`;
+    [o.r1,o.r2,o.r3,o.r4].forEach((n,k)=>{const cx=X+SW-84+k*22,cy=y+H/2;
+      s+=`<circle cx="${cx}" cy="${cy}" r="8" fill="${n?BR_COL[k]:'rgba(0,0,0,.35)'}" stroke="${n?'#fff':'rgba(255,255,255,.25)'}" stroke-width="1.5"/>`;
+      if(n)s+=`<text x="${cx}" y="${cy+.5}" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="9" font-weight="800">${n}</text>`});
+    s+='</g>';y+=H+G;
+    if(i===lastUp&&hasBase){s+=`<rect x="${X-8}" y="${y}" width="${SW+16}" height="16" fill="#3F2D1A" stroke="#6B4F2A"/><text x="${W/2}" y="${y+8.5}" text-anchor="middle" dominant-baseline="middle" fill="#C9A66B" font-size="8.5" font-family="sans-serif" letter-spacing="2">GROUND LEVEL</text>`;y+=22}});
+  svg.setAttribute('viewBox',`0 0 ${W} ${total}`);svg.innerHTML=s}
+
+/* orbit / touch controller shared by both 3D scenes */
+function bcsOrbit(cv,S,o){
+  const pts=new Map();let pd=0;
+  cv.addEventListener('contextmenu',e=>e.preventDefault());
+  cv.addEventListener('pointerdown',e=>{pts.set(e.pointerId,{x:e.clientX,y:e.clientY});try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    if(pts.size===2){const[a,b]=[...pts.values()];pd=Math.hypot(a.x-b.x,a.y-b.y);S.drag=null;return}
+    S.drag={x:e.clientX,y:e.clientY,moved:false,pan:!!o.pan&&(e.button===2||e.button===1||e.shiftKey)};cv.style.cursor='grabbing';o.leave&&o.leave()});
+  cv.addEventListener('pointermove',e=>{
+    if(pts.has(e.pointerId))pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+    if(pts.size===2){const[a,b]=[...pts.values()],d=Math.hypot(a.x-b.x,a.y-b.y);if(pd>0&&d>0)S.rad=Math.max(S.rmin,Math.min(S.rmax,S.rad*pd/d));pd=d;return}
+    if(S.drag){const dx=e.clientX-S.drag.x,dy=e.clientY-S.drag.y;if(Math.abs(dx)+Math.abs(dy)>4)S.drag.moved=true;
+      if(S.drag.moved){if(S.drag.pan&&o.panFn)o.panFn(dy*S.rad*0.0022);else{S.th-=dx*0.008;S.ph=Math.max(0.2,Math.min(1.5,S.ph-dy*0.006))}S.drag.x=e.clientX;S.drag.y=e.clientY}return}
+    if(e.pointerType==='mouse'){const id=o.pick(e);cv.style.cursor=id?'pointer':'grab';o.hover&&o.hover(e,id)}});
+  cv.addEventListener('pointerup',e=>{pts.delete(e.pointerId);if(pts.size<2)pd=0;const d=S.drag;S.drag=null;cv.style.cursor='grab';if(d&&!d.moved&&!d.pan){const id=o.pick(e);if(id)o.click(id)}});
+  cv.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);pd=0;S.drag=null});
+  cv.addEventListener('pointerleave',()=>{o.leave&&o.leave()});
+  cv.addEventListener('wheel',e=>{e.preventDefault();S.rad=Math.max(S.rmin,Math.min(S.rmax,S.rad*(e.deltaY>0?1.1:0.9)))},{passive:false})}
+const F3C=h=>new THREE.Color(h).convertSRGBToLinear();
+const B3={ok:null,renderer:null,scene:null,cam:null,group:null,mats:[],pick:[],th:0.75,ph:1.0,rad:16,rmin:2.5,rmax:120,cy:0,n:-1,drag:null,el:null,rc:null};
+function b3Facade(f,o){
+  const cv=document.createElement('canvas');cv.width=512;cv.height=96;const c=cv.getContext('2d');
+  const base=o.crit?'#DC2626':o.bad?'#F97316':'#1FA971';
+  const g=c.createLinearGradient(0,0,0,96);g.addColorStop(0,'rgba(255,255,255,.35)');g.addColorStop(.5,base);g.addColorStop(1,base);
+  c.fillStyle=base;c.fillRect(0,0,512,96);c.fillStyle=g;c.fillRect(0,0,512,96);
+  c.strokeStyle='rgba(255,255,255,.55)';c.lineWidth=4;for(let x=0;x<=512;x+=64){c.beginPath();c.moveTo(x,0);c.lineTo(x,96);c.stroke()}
+  c.fillStyle='rgba(255,255,255,.85)';c.fillRect(0,0,512,7);c.fillRect(0,89,512,7);
+  c.fillStyle='rgba(0,0,0,.45)';if(c.roundRect){c.beginPath();c.roundRect(14,16,200,64,12);c.fill()}else c.fillRect(14,16,200,64);
+  c.fillStyle='#fff';c.font='bold 40px Arial';c.textBaseline='middle';c.fillText(String(f.code),26,40);
+  c.font='15px Arial';c.fillText(String(f.name).substring(0,16),26,67);
+  [o.r1,o.r2,o.r3,o.r4].forEach((n,k)=>{const cx=262+k*58;c.beginPath();c.arc(cx,48,22,0,6.283);c.fillStyle=n?BR_COL[k]:'rgba(0,0,0,.45)';c.fill();
+    c.lineWidth=4;c.strokeStyle=n?'#fff':'rgba(255,255,255,.35)';c.stroke();
+    if(n){c.fillStyle='#fff';c.font='bold 24px Arial';c.textAlign='center';c.fillText(String(n),cx,50);c.textAlign='left'}});
+  const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t}
+function b3Dispose(){if(!B3.group)return;B3.group.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{if(m.map)m.map.dispose();m.dispose()})});B3.scene.remove(B3.group);B3.group=null;B3.mats=[];B3.pick=[]}
+function b3Pick(e){if(!B3.renderer)return null;const r=B3.renderer.domElement.getBoundingClientRect();
+  B3.rc.setFromCamera({x:((e.clientX-r.left)/r.width)*2-1,y:-((e.clientY-r.top)/r.height)*2+1},B3.cam);const hit=B3.rc.intersectObjects(B3.pick,false)[0];return hit?hit.object.userData.fid:null}
+function b3Init(){
+  const el=document.getElementById('bcs-b3');if(!el)return false;
+  if(B3.renderer){if(B3.el!==el){el.insertBefore(B3.renderer.domElement,el.firstChild);B3.el=el;B3._w=0}return true}
+  try{
+    const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.outputEncoding=THREE.sRGBEncoding;r.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    B3.renderer=r;B3.el=el;B3.scene=new THREE.Scene();B3.cam=new THREE.PerspectiveCamera(35,1,0.1,400);B3.rc=new THREE.Raycaster();
+    B3.scene.add(new THREE.HemisphereLight(0xffffff,0x6b7a90,0.95));
+    const d=new THREE.DirectionalLight(0xffffff,0.85);d.position.set(9,16,7);B3.scene.add(d);
+    const d2=new THREE.DirectionalLight(0x9fd8ff,0.35);d2.position.set(-8,6,-9);B3.scene.add(d2);
+    el.insertBefore(r.domElement,el.firstChild);r.domElement.style.display='block';r.domElement.style.touchAction='none';
+    bcsOrbit(r.domElement,B3,{pan:true,panFn:b3Pan,pick:b3Pick,hover:(e,id)=>id?bcsTip(e,id):bcsTipHide(),click:id=>{bcsTipHide();bcsSelect(id)},leave:bcsTipHide});
+    B3.ok=true;
+    const loop=t=>{requestAnimationFrame(loop);
+      if(!B3.el||!document.body.contains(B3.el)||B3.el.offsetParent===null)return;
+      const w=B3.el.clientWidth||440,h=B3.el.clientHeight||440;
+      if(B3._w!==w||B3._h!==h){B3._w=w;B3._h=h;B3.renderer.setSize(w,h);B3.cam.aspect=w/h;B3.cam.updateProjectionMatrix()}
+      const s=0.5+0.5*Math.sin(t/230);B3.mats.forEach(m=>{m.m.emissiveIntensity=m.bad?(0.12+0.35*s):(m.sel?0.35:0.05)});
+      if(B3.tcy!=null)B3.cy+=(B3.tcy-B3.cy)*0.14;
+      const rp=B3.rad*Math.sin(B3.ph);B3.cam.position.set(rp*Math.sin(B3.th),B3.cy+B3.rad*Math.cos(B3.ph),rp*Math.cos(B3.th));B3.cam.lookAt(0,B3.cy,0);
+      B3.renderer.render(B3.scene,B3.cam)};
+    requestAnimationFrame(loop);return true;
+  }catch(err){console.warn('3D building unavailable, using 2D',err);B3.ok=false;return false}}
+function bcsBStyle(){const m=bcsBMode();return m==='3d3'?3:m==='3d2'?2:1}
+function b3Pan(d){B3.tcy=Math.max(B3.yb-1,Math.min(B3.top+1,(B3.tcy!=null?B3.tcy:B3.cy)+d))}
+function b3Zoom(f){B3.rad=Math.max(B3.rmin,Math.min(B3.rmax,B3.rad*f))}
+function b3Reset(){B3.tcy=B3.mid;B3.rad=B3.fit||16;B3.th=0.75;B3.ph=1.0;B3.lastSel=null}
+function bldg3dRender(fl,st){
+  if(!window.THREE||!b3Init())return false;b3Dispose();
+  const g=new THREE.Group();B3.group=g;
+  const asc=[...fl].reverse(),nBase=fl.filter(f=>bIsBase(f.code)).length,n=asc.length,yb=-nBase,FW=4,FH=0.9,sty=bcsBStyle();
+  const trim=new THREE.MeshStandardMaterial({color:0xE5E7EB,roughness:.6}),plain=new THREE.MeshStandardMaterial({color:0xD1D5DB,roughness:.7});
+  const white=new THREE.MeshStandardMaterial({color:0xF4F6F8,roughness:.55}),rail=new THREE.MeshStandardMaterial({color:0x9ED8F0,transparent:true,opacity:.45,roughness:.1}),blue=new THREE.MeshStandardMaterial({color:0x3B9AE1,roughness:.5});
+  const floorY={};
+  asc.forEach((f,k)=>{
+    const o=st[f.id]||{r1:0,r2:0,r3:0,r4:0,crit:0,bad:false},sel=BCS.sel===f.id,col=o.crit?0xDC2626:o.bad?0xF97316:0x1FA971,base=bIsBase(f.code);
+    const side=new THREE.MeshStandardMaterial({map:b3Facade(f,o),roughness:.3,metalness:.12,emissive:new THREE.Color(col),emissiveIntensity:.05,transparent:base,opacity:base?.88:1});
+    const y=yb+k+0.5;floorY[f.id]=y;let w=FW,ox=0;
+    if(sty===2&&k>n*0.72&&!base)w=FW-0.7;if(sty===3&&!base)ox=(k%2?-0.3:0.3);
+    const m=new THREE.Mesh(new THREE.BoxGeometry(w,FH,w),[side,side,plain,plain,side,side]);m.position.set(ox,y,0);m.userData.fid=f.id;if(sel)m.scale.set(1.07,1,1.07);
+    g.add(m);B3.pick.push(m);B3.mats.push({m:side,bad:o.bad,sel});
+    const slab=new THREE.Mesh(new THREE.BoxGeometry(w+(sty===2?0.5:0.28),0.1,w+(sty===2?0.5:0.28)),sty===3?white:trim);slab.position.set(ox,yb+k+0.05,0);g.add(slab);
+    if(sty===2&&!base)[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(c=>{const p=new THREE.Mesh(new THREE.BoxGeometry(0.22,FH,0.22),white);p.position.set(ox+c[0]*(w/2),y,c[1]*(w/2));g.add(p)});
+    if(sty===3&&!base&&k%2===0){const b=new THREE.Mesh(new THREE.BoxGeometry(w*0.9,0.1,1.05),white);b.position.set(ox,yb+k+0.05,w/2+0.5);g.add(b);const r=new THREE.Mesh(new THREE.BoxGeometry(w*0.9,0.4,0.04),rail);r.position.set(ox,yb+k+0.3,w/2+1.0);g.add(r)}
+    if(sel){const ln=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(w*1.07+.02,FH+.02,w*1.07+.02)),new THREE.LineBasicMaterial({color:0xFFFFFF}));ln.position.set(ox,y,0);g.add(ln)}});
+  const top=yb+n;
+  if(sty===2){const core=new THREE.Mesh(new THREE.BoxGeometry(1.1,n+0.9,1.1),white);core.position.set(FW/2-0.2,yb+(n+0.9)/2,FW/2-0.2);g.add(core);
+    const strip=new THREE.Mesh(new THREE.BoxGeometry(0.12,n*0.92,0.6),new THREE.MeshStandardMaterial({color:0x2B7F8A,roughness:.2}));strip.position.set(FW/2-0.2,yb+n/2,FW/2+0.38);g.add(strip);
+    const rb=new THREE.Mesh(new THREE.BoxGeometry(FW-1.6,0.55,FW-1.6),white);rb.position.set(-0.3,top+0.3,-0.3);g.add(rb)}
+  else if(sty===3){const core=new THREE.Mesh(new THREE.BoxGeometry(1.5,n+1.6,1.5),blue);core.position.set(-FW/2+0.3,yb+(n+1.6)/2,-FW/2+0.3);g.add(core);
+    const rv=new THREE.Mesh(new THREE.BoxGeometry(FW-1.2,0.9,FW-1.2),white);rv.position.set(0.4,top+0.45,0.2);g.add(rv)}
+  else{const cap=new THREE.Mesh(new THREE.BoxGeometry(FW-0.5,0.22,FW-0.5),trim);cap.position.y=top+0.11;g.add(cap);
+    const mech=new THREE.Mesh(new THREE.BoxGeometry(0.9,0.5,0.9),plain);mech.position.set(0.8,top+0.47,0.8);g.add(mech);
+    const ant=new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,1.7,8),trim);ant.position.set(0.8,top+1.5,0.8);g.add(ant)}
+  const ped=new THREE.Mesh(new THREE.BoxGeometry(9,0.3,9),new THREE.MeshStandardMaterial({color:F3C('#1E242E'),roughness:.9}));ped.position.y=yb-0.17;g.add(ped);
+  if(nBase){const gp=new THREE.Mesh(new THREE.BoxGeometry(9,0.06,9),new THREE.MeshStandardMaterial({color:F3C('#4A5361'),transparent:true,opacity:.65,depthWrite:false,roughness:.9}));gp.position.y=0;g.add(gp)}
+  B3.scene.add(g);B3.mid=yb+(n+1)/2-0.3;B3.yb=yb;B3.top=top;
+  const fit=Math.max(13,n*1.15+9);if(B3.n!==n||B3.sty!==sty){B3.rad=fit;B3.tcy=B3.mid;B3.cy=B3.mid;B3.n=n;B3.sty=sty}B3.fit=fit;
+  if(BCS.sel&&B3.lastSel!==BCS.sel&&floorY[BCS.sel]!=null){B3.tcy=floorY[BCS.sel];B3.rad=Math.min(B3.rad,Math.max(7,fit*0.55))}
+  B3.lastSel=BCS.sel;return true}
+
+/* ---------- select floor → panel ---------- */
+function bcsSelect(fid){if(!bcsFloorById(fid))return;BCS.sel=fid;bLSset('bcs_sel_'+BIZK,fid);bcsTipHide();
+  const p=document.getElementById('bcs-panel'),h=document.getElementById('bcs-hint');if(h)h.hidden=true;
+  if(p){p.hidden=false;p.classList.remove('slide');void p.offsetWidth;p.classList.add('slide')}
+  bcsChips();bcsRenderBuilding();bcsRenderPanel();
+  if((BCS.kind==='mob'||window.innerWidth<1100)&&p)setTimeout(()=>{try{p.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}},60)}
+function bcsHidePanel(){BCS.sel=null;bLSset('bcs_sel_'+BIZK,'');BCS.edit=false;bcsRefresh()}
+function bcsRenderPanel(){const fid=BCS.sel,f=bcsFloorById(fid);if(!f)return;bcsSummary(fid);bcsRenderFloor(fid);
+  const eb=document.getElementById('bcs-editbar');if(eb)eb.hidden=!BCS.edit;const b=document.getElementById('bcs-edit-btn');if(b)b.classList.toggle('on',BCS.edit)}
+function bcsPickRing(k){BCS.ring=k;bcsSummary(BCS.sel)}
+function bcsSummary(fid){const el=document.getElementById('bcs-sum'),f=bcsFloorById(fid);if(!el||!f)return;
+  const o=(BCS.st||bcsFloorStatus())[fid]||{n:0,r1:0,r2:0,r3:0,r4:0,items:[],bad:false,crit:0},ri=BR_KEY.indexOf(BCS.ring);
+  const chips=BR_KEY.map((k,i)=>`<button class="bcs-rchip ${o[k]?'blink':''} ${BCS.ring===k?'on':''}" style="--rc:${BR_COL[i]}" onclick="bcsPickRing('${k}')"><i style="background:${o[k]?BR_COL[i]:'#22C55E'}"></i>${BR_NAME[i]} <b style="color:${o[k]?BR_COL[i]:'#22C55E'}">${o[k]||'OK'}</b></button>`).join('');
+  const rows=o.items.filter(it=>it.rs[BCS.ring].bad);
+  const list=!rows.length?`<div class="bcs-okrow">✅ ${bT('วง ','Ring ')}${BR_NAME[ri]} ${bT('ปกติในชั้นนี้','is normal on this floor')}</div>`:rows.map(({a,rs})=>{
+    let wrx='';if(BCS.ring==='r1')wrx=rs.ow.slice(0,6).map(w=>bcsWrRow(w)).join('');
+    return`<div class="bcs-arow blink" style="--rc:${BR_COL[ri]}" onclick="bcsArea('${a.id}')"><div class="h"><span class="tag-id">${esc(a.id)}</span><b>${esc(a.name)}</b><span class="why" style="color:${rs[BCS.ring].c}">${esc(rs[BCS.ring].n)}</span></div>${wrx}</div>`}).join('');
+  el.innerHTML=`<div class="bcs-sh"><div class="bcs-st">${esc(f.code)} — ${esc(f.name)}</div><span class="bcs-pill" style="--pc:${bcsColor(o)}">${o.crit?bT('วิกฤต','Critical'):o.bad?bT('มีกิจกรรม','Activity'):bT('ปกติ','Normal')}</span><span class="bcs-muted">${o.n} ${bT('พื้นที่','areas')}</span><button class="bcs-btn" style="margin-left:auto" onclick="bcsHidePanel()">✕ ${bT('ปิดผัง','Close')}</button></div>
+  <div class="bcs-rchips">${chips}<button class="bcs-btn" style="margin-left:auto" onclick="bcsGo(${ri})">${bT('ไปหน้า ','Open ')}${BR_NAME[ri]} →</button></div>${list}`}
+function bcsWrRow(w){const i=FLOW.indexOf(w.status),nx=i>=0&&i<FLOW.length-1?FLOW[i+1]:null,sl=slaOf(w);
+  return`<div class="bcs-wr" onclick="event.stopPropagation()"><span class="tag-id">${esc(w.id)}</span>${SVC[w.service]?SVC[w.service].ic:''}<span class="d">${esc(String(w.desc||'').substring(0,60))}</span>${badge(w.priority)} ${sl.s==='breach'?badge('Breached'):badge(w.status)}${nx?`<button class="bcs-btn bcs-ok" onclick="bcsAdvance('${w.id}')">▶ ${w.status==='New'?bT('รับงาน','Accept'):nx}</button>`:''}</div>`}
+function bcsGo(i){bcsModalClose();BCS.host.go&&BCS.host.go(BR_GO[i])}
+function bcsAdvance(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const i=FLOW.indexOf(t.status);if(i<0||i>=FLOW.length-1)return;
+  const n=isoDT(new Date());if(t.status==='New'){t.respondedAt=n;t.assignee=(BCS.host.user&&BCS.host.user())||t.assignee||'Duty '+SVC[t.service].n}
+  t.status=FLOW[i+1];if(t.status==='Completed'&&!t.completedAt)t.completedAt=n;save();
+  BCS.host.toast&&BCS.host.toast(t.id+' → '+t.status);BCS.host.after&&BCS.host.after();bcsRefresh();
+  const m=document.getElementById('bcs-modal');if(m&&!m.hidden&&BCS.modalArea)bcsArea(BCS.modalArea)}
+
+/* ---------- floor plan: 2D svg + 3D ---------- */
+function bcsSetFMode(m){bLSset('fp_mode',m);bcsRenderFloor(BCS.sel)}
+function bcsRenderFloor(fid){if(!fid)return;const f=bcsFloorById(fid),plan=bcsPlan(fid),svgH=plan?plan.svgH:540,rooms=bcsRooms(fid,svgH);
+  rooms.forEach(r=>{r.rs=bcsAreaRS(r.a);const s=Math.max(.55,Math.min(1,Math.min(r.w,r.h)/110));r.sc=s;r.px=r.x+r.w/2;r.py=r.y+r.h/2+4*s});
+  const lbl=document.getElementById('bcs-flabel');if(lbl)lbl.textContent=f?f.code+' — '+f.name:'';
+  const clr=document.getElementById('bcs-plan-clr');if(clr)clr.hidden=!plan;
+  bcsModeBtns();
+  const svg=document.getElementById('bcs-f2'),el=document.getElementById('bcs-f3');
+  if(bLS('fp_mode','3d')==='3d'&&!BCS.edit&&window.THREE&&F3.ok!==false&&fp3dBuild(fid,svgH,plan,rooms)){if(svg)svg.style.display='none';if(el)el.hidden=false;return}
+  if(el)el.hidden=true;if(svg)svg.style.display='block';bcsFloor2D(fid,svgH,plan,rooms)}
+function bcsFloor2D(fid,svgH,plan,rooms){const svg=document.getElementById('bcs-f2');if(!svg)return;svg.setAttribute('viewBox',`0 0 900 ${svgH}`);svg.classList.toggle('editing',BCS.edit);
+  let s=`<rect width="900" height="${svgH}" fill="#0D1117"/>`;
+  if(plan)s+=`<image href="${plan.dataUrl}" x="0" y="0" width="900" height="${svgH}" preserveAspectRatio="none" opacity=".92"/>`;
+  if(!rooms.length)s+=`<text x="450" y="${svgH/2}" text-anchor="middle" fill="#6E7681" font-size="15" font-family="sans-serif">${bT('ยังไม่มีพื้นที่ในชั้นนี้ — กำหนด “ชั้น” ของพื้นที่ใน Area Master','No areas on this floor — set the area floor in Area Master')}</text>`;
+  const AC={Running:'#22C55E',Standby:'#3B82F6',Warning:'#EAB308',Down:'#EF4444'};
+  rooms.forEach(r=>{const bad=!BCS.edit&&r.rs.bad,crit=!BCS.edit&&r.rs.crit;
+    s+=`<g data-aid="${r.a.id}" ${BCS.edit?`class="bcs-redit" onpointerdown="bcsRoomDown(event,'${r.a.id}','move')"`:''}>`;
+    s+=`<rect x="${r.x}" y="${r.y}" width="${r.w}" height="${r.h}" rx="8" fill="${bad?(crit?'#EF4444':'#F97316'):'#21262D'}" fill-opacity="${bad?.14:(plan?.35:1)}" stroke="${BCS.edit?'#F97316':bad?(crit?'#EF4444':'#F97316'):(plan?'#F97316':'#30363D')}" stroke-width="${bad?3:1.5}" ${plan&&!bad?'stroke-dasharray="5 3"':''}>${bad?'<animate attributeName="stroke-opacity" values="1;.2;1" dur=".9s" repeatCount="indefinite"/><animate attributeName="fill-opacity" values=".26;.05;.26" dur=".9s" repeatCount="indefinite"/>':''}</rect>`;
+    const cut=Math.max(6,Math.floor(r.w/7.2));
+    s+=`<text x="${r.x+10}" y="${r.y+17}" fill="${bad||plan?'#FDBA74':'#C9D1D9'}" font-size="11.5" font-weight="700" font-family="sans-serif" style="pointer-events:none">${esc(String(r.a.name).substring(0,cut))}</text>`;
+    s+=`<text x="${r.x+10}" y="${r.y+31}" fill="#6E7681" font-size="9.5" font-family="sans-serif" style="pointer-events:none">${esc(r.a.type||'')} · ${fmtN(r.a.sqm)} m²</text>`;
+    if(BCS.edit){s+=`<rect class="bcs-rh" x="${r.x+r.w-14}" y="${r.y+r.h-14}" width="16" height="16" rx="3" fill="#F97316" onpointerdown="bcsRoomDown(event,'${r.a.id}','resize')"/></g>`;return}
+    // asset dots
+    r.rs.as.slice(0,Math.max(1,Math.floor((r.w-20)/16))).forEach((x,i)=>{s+=`<circle cx="${r.x+14+i*16}" cy="${r.y+r.h-12}" r="5.5" fill="${AC[x.status]||'#6B7280'}" stroke="#0D1117" stroke-width="1.5"><title>${esc(x.name)} — ${esc(x.status)}</title>${x.status==='Down'?'<animate attributeName="opacity" values="1;.3;1" dur=".8s" repeatCount="indefinite"/>':''}</circle>`});
+    // 4-ring pin (outer SOFT → inner WR)
+    const sc=r.sc,px=r.px,py=r.py;
+    s+=`<g class="bcs-pin" onclick="bcsArea('${r.a.id}')" onmouseenter="bcsPinTip(event,'${r.a.id}')" onmousemove="bcsTipMove(event)" onmouseleave="bcsTipHide()">`;
+    if(r.rs.crit)s+=`<circle cx="${px}" cy="${py}" r="${32*sc}" fill="none" stroke="#EF4444" stroke-width="1.5"><animate attributeName="r" values="${32*sc};${49*sc};${32*sc}" dur="1.4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".8;0;.8" dur="1.4s" repeatCount="indefinite"/></circle>`;
+    [[32,'r4','0s'],[26,'r3','.15s'],[20,'r2','.3s'],[13,'r1','.45s']].forEach(([rr,k,dl])=>{const q=r.rs[k],c=q.bad?q.c:'#22C55E';
+      s+=`<circle cx="${px}" cy="${py}" r="${rr*sc}" fill="${c}" fill-opacity="${q.bad?.15:.08}" stroke="${c}" stroke-width="${2.8*sc}">${q.bad?`<animate attributeName="stroke-opacity" values="1;.15;1" dur=".75s" begin="${dl}" repeatCount="indefinite"/><animate attributeName="fill-opacity" values=".2;.05;.2" dur=".75s" begin="${dl}" repeatCount="indefinite"/>`:''}</circle>`});
+    const core=r.rs.crit?'#EF4444':r.rs.bad?'#F97316':'#22C55E';
+    s+=`<circle cx="${px}" cy="${py}" r="${11*sc}" fill="${core}"/><text x="${px}" y="${py+.5}" text-anchor="middle" dominant-baseline="middle" fill="#fff" font-size="${10*sc}" font-weight="800" font-family="sans-serif">${r.rs.ow.length||'✓'}</text></g></g>`});
+  svg.innerHTML=s}
+function bcsPinTip(evt,aid){const a=D.areas.find(x=>x.id===aid),tip=document.getElementById('bcs-tip');if(!a||!tip)return;const rs=bcsAreaRS(a);
+  tip.innerHTML=`<div class="t">${esc(a.name)}</div><div class="s">${esc(a.type||'')} · ${bT('ชั้น ','Floor ')}${esc(a.floor)}</div>`+BR_KEY.map((k,i)=>`<div class="r"><span style="color:${BR_COL[i]}">● ${BR_NAME[i]}</span><b style="color:${rs[k].bad?rs[k].c:'#22C55E'}">${esc(rs[k].n)}</b></div>`).join('')+`<div class="s" style="margin-top:4px">${bT('คลิกเพื่อดูรายละเอียด','Click for details')}</div>`;
+  tip.hidden=false;bcsTipMove(evt)}
+
+/* room edit (pointer events: mouse + touch) */
+function bcsToggleEdit(){if(!BCS.sel){const f=bcsFloors().find(x=>(BCS.st[x.id]||{}).n);if(f)bcsSelect(f.id);else return}BCS.edit=!BCS.edit;bcsRenderPanel()}
+function bcsSvgPt(evt){const svg=document.getElementById('bcs-f2'),r=svg.getBoundingClientRect(),vb=svg.viewBox.baseVal;return{x:(evt.clientX-r.left)*vb.width/r.width,y:(evt.clientY-r.top)*vb.height/r.height}}
+function bcsRoomDown(evt,aid,mode){if(!BCS.edit)return;evt.preventDefault();evt.stopPropagation();
+  const plan=bcsPlan(BCS.sel),r=bcsRooms(BCS.sel,plan?plan.svgH:540).find(x=>x.a.id===aid);if(!r)return;
+  BCS.rd={aid,mode,p:bcsSvgPt(evt),o:{x:r.x,y:r.y,w:r.w,h:r.h}};
+  bcsRooms(BCS.sel,plan?plan.svgH:540).forEach(x=>{if(!D.bldg.rooms[x.a.id])D.bldg.rooms[x.a.id]={x:Math.round(x.x),y:Math.round(x.y),w:Math.round(x.w),h:Math.round(x.h)}});
+  window.addEventListener('pointermove',bcsRoomMove);window.addEventListener('pointerup',bcsRoomUp)}
+function bcsRoomMove(evt){const d=BCS.rd;if(!d)return;const r=D.bldg.rooms[d.aid];if(!r)return;const p=bcsSvgPt(evt),dx=p.x-d.p.x,dy=p.y-d.p.y,o=d.o;
+  if(d.mode==='move'){r.x=Math.round(o.x+dx);r.y=Math.round(o.y+dy)}else{r.w=Math.max(60,Math.round(o.w+dx));r.h=Math.max(50,Math.round(o.h+dy))}
+  if(!BCS.raf)BCS.raf=requestAnimationFrame(()=>{BCS.raf=0;bcsRenderFloor(BCS.sel)})}
+function bcsRoomUp(){window.removeEventListener('pointermove',bcsRoomMove);window.removeEventListener('pointerup',bcsRoomUp);if(!BCS.rd)return;BCS.rd=null;save();bcsRenderFloor(BCS.sel)}
+function bcsResetRooms(){D.areas.filter(a=>bcsAreaFloor(a)===BCS.sel).forEach(a=>{delete D.bldg.rooms[a.id]});save();bcsRenderFloor(BCS.sel)}
+
+/* 3D floor plan */
+const F3={ok:null,renderer:null,scene:null,cam:null,group:null,el:null,pick:[],anim:[],th:0.6,ph:0.95,rad:20,rmin:5,rmax:80,drag:null,rc:null,floor:null,tex:{},info:{}};
+const F3_PAL=['#232B3A','#212F3F','#2A2A3C','#24332F','#30283A','#2B3445','#33302A'];
+function f3Text(txt,w,h,font,color,bg){const cv=document.createElement('canvas');cv.width=w;cv.height=h;const c=cv.getContext('2d');
+  if(bg){c.fillStyle=bg;if(c.roundRect){c.beginPath();c.roundRect(0,0,w,h,14);c.fill()}else c.fillRect(0,0,w,h)}
+  c.fillStyle=color;c.font=font;c.textBaseline='middle';c.textAlign='center';c.fillText(txt,w/2,h/2);
+  const t=new THREE.CanvasTexture(cv);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t}
+function f3Pick(e){const cv=F3.renderer.domElement,b=cv.getBoundingClientRect();F3.rc.setFromCamera({x:((e.clientX-b.left)/b.width)*2-1,y:-((e.clientY-b.top)/b.height)*2+1},F3.cam);const h=F3.rc.intersectObjects(F3.pick,false)[0];return h?h.object.userData.aid:null}
+function f3Hover(e,aid){const t=document.getElementById('bcs-ftip'),el=F3.el;if(!t||!el)return;
+  if(aid&&F3.info[aid]){const it=F3.info[aid],b=el.getBoundingClientRect();
+    t.innerHTML=`<div style="font-weight:800;color:#F97316">${esc(it.a.name)}</div>`+BR_KEY.map((k,i)=>`<div style="color:${BR_COL[i]}">● ${BR_NAME[i]}: <b style="color:${it.rs[k].bad?it.rs[k].c:'#22C55E'}">${esc(it.rs[k].n)}</b></div>`).join('');
+    t.style.left=Math.min(e.clientX-b.left+14,b.width-200)+'px';t.style.top=(e.clientY-b.top+12)+'px';t.hidden=false}else t.hidden=true}
+function fp3dInit(){const el=document.getElementById('bcs-f3');if(!el)return false;
+  if(F3.renderer){if(F3.el!==el){el.insertBefore(F3.renderer.domElement,el.firstChild);F3.el=el;F3._w=0}return true}
+  try{const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.outputEncoding=THREE.sRGBEncoding;r.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    F3.renderer=r;F3.el=el;F3.scene=new THREE.Scene();F3.cam=new THREE.PerspectiveCamera(32,1.5,0.1,300);F3.rc=new THREE.Raycaster();
+    F3.scene.add(new THREE.HemisphereLight(0xffffff,0x3a4658,0.8));const d=new THREE.DirectionalLight(0xffffff,0.55);d.position.set(8,16,9);F3.scene.add(d);
+    el.insertBefore(r.domElement,el.firstChild);r.domElement.style.display='block';r.domElement.style.touchAction='none';
+    bcsOrbit(r.domElement,F3,{pick:f3Pick,hover:f3Hover,click:aid=>{const t=document.getElementById('bcs-ftip');if(t)t.hidden=true;bcsArea(aid)},leave:()=>{const t=document.getElementById('bcs-ftip');if(t)t.hidden=true}});
+    F3.ok=true;
+    const loop=t=>{requestAnimationFrame(loop);if(!F3.el||!document.body.contains(F3.el)||F3.el.offsetParent===null)return;
+      const w=F3.el.clientWidth||640,h=Math.max(300,Math.min(640,Math.round(w*(BCS.kind==='mob'?0.85:0.62))));
+      if(F3._w!==w||F3._h!==h){F3._w=w;F3._h=h;F3.renderer.setSize(w,h);F3.cam.aspect=w/h;F3.cam.updateProjectionMatrix()}
+      const s=t/1000;
+      F3.anim.forEach(a=>{if(a.k==='blink'){const v=0.5+0.5*Math.sin(s*7+a.ph);a.m.opacity=0.2+0.8*v;if(a.fill)a.fill.opacity=0.05+0.25*v}
+        else if(a.k==='radar'){const p=(s*0.8+a.ph)%1;a.o.scale.set(1+p*0.9,1+p*0.9,1);a.m.opacity=0.8*(1-p)}
+        else if(a.k==='pillar'){const q=0.5+0.5*Math.sin(s*7+a.ph),c=a.cols[Math.floor(s*1.5)%a.cols.length];a.ms.forEach(m=>{m.color.copy(c);m.emissive.copy(c);m.emissiveIntensity=0.15+0.85*q})}
+        else if(a.k==='room'){const q=0.5+0.5*Math.sin(s*6+a.ph);a.m.opacity=0.08+0.34*q;if(a.w)a.w.emissiveIntensity=0.15+0.6*q}});
+      const rp=F3.rad*Math.sin(F3.ph);F3.cam.position.set(rp*Math.sin(F3.th),F3.rad*Math.cos(F3.ph),rp*Math.cos(F3.th));F3.cam.lookAt(0,0.2,0);F3.renderer.render(F3.scene,F3.cam)};
+    requestAnimationFrame(loop);return true}catch(err){console.warn('3D floor plan unavailable, using 2D',err);F3.ok=false;return false}}
+function fp3dBuild(fid,svgH,plan,rooms){
+  if(!window.THREE||!fp3dInit())return false;
+  if(F3.group){F3.group.traverse(o=>{if(o.geometry)o.geometry.dispose();if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{const cached=Object.values(F3.tex).some(x=>x.t===m.map);if(m.map&&!cached)m.map.dispose();m.dispose()})});F3.scene.remove(F3.group)}
+  const g=new THREE.Group();F3.group=g;F3.pick=[];F3.anim=[];F3.info={};
+  const U=50,W=900/U,Dp=svgH/U,X=px=>(px-450)/U,Z=py=>(py-svgH/2)/U;
+  const slab=new THREE.Mesh(new THREE.BoxGeometry(W+0.6,0.2,Dp+0.6),new THREE.MeshStandardMaterial({color:F3C(plan?'#0D1117':'#161B22'),roughness:.9}));slab.position.y=-0.1;g.add(slab);
+  if(plan&&plan.dataUrl){const pm=new THREE.MeshBasicMaterial({color:0xffffff});const tc=F3.tex[fid]&&F3.tex[fid].u===plan.dataUrl?F3.tex[fid].t:null;
+    if(tc)pm.map=tc;else new THREE.TextureLoader().load(plan.dataUrl,tx=>{tx.encoding=THREE.sRGBEncoding;F3.tex[fid]={u:plan.dataUrl,t:tx};pm.map=tx;pm.needsUpdate=true});
+    const pl=new THREE.Mesh(new THREE.PlaneGeometry(W,Dp),pm);pl.rotation.x=-Math.PI/2;pl.position.y=0.011;g.add(pl)}
+  const AC={Running:'#22C55E',Standby:'#3B82F6',Warning:'#EAB308',Down:'#EF4444'};
+  rooms.forEach((r,ci)=>{const bad=r.rs.bad,w=r.w/U,h=r.h/U,cx=X(r.x+r.w/2),cz=Z(r.y+r.h/2);
+    const wallM=new THREE.MeshStandardMaterial({color:bad?F3C('#7C3A12'):F3C('#3B4659'),roughness:.7,transparent:!!plan,opacity:plan?.6:1,emissive:new THREE.Color(0xF97316),emissiveIntensity:bad?.3:0});
+    if(bad){const gm=new THREE.MeshBasicMaterial({color:r.rs.crit?0xEF4444:0xF97316,transparent:true,opacity:.3,depthWrite:false,side:THREE.DoubleSide});const gl=new THREE.Mesh(new THREE.PlaneGeometry(w,h),gm);gl.rotation.x=-Math.PI/2;gl.position.set(cx,0.125,cz);g.add(gl);F3.anim.push({k:'room',m:gm,w:wallM,ph:ci})}
+    if(!plan){const tile=new THREE.Mesh(new THREE.BoxGeometry(w,0.1,h),new THREE.MeshStandardMaterial({color:F3C(F3_PAL[ci%F3_PAL.length]),roughness:.85}));tile.position.set(cx,0.05,cz);g.add(tile)}
+    const T=0.08,hb=plan?0.25:0.8,hf=plan?0.25:0.3;
+    [[0,-h/2,w,T,hb],[0,h/2,w,T,hf],[-w/2,0,T,h,hb],[w/2,0,T,h,hf]].forEach(q=>{const m=new THREE.Mesh(new THREE.BoxGeometry(q[2],q[4],q[3]),wallM);m.position.set(cx+q[0],q[4]/2,cz+q[1]);g.add(m)});
+    const tx=f3Text(String(r.a.name).substring(0,24),512,96,'bold 40px Arial',plan||bad?'#FDBA74':'#9AA4B2',plan?'rgba(0,0,0,.55)':null);
+    const lw=Math.min(w-0.3,3.6),lp=new THREE.Mesh(new THREE.PlaneGeometry(lw,lw*96/512),new THREE.MeshBasicMaterial({map:tx,transparent:true,depthWrite:false}));lp.rotation.x=-Math.PI/2;lp.position.set(cx,0.13,cz-h/2+0.4);g.add(lp);
+    r.rs.as.slice(0,8).forEach((a,i)=>{const cm=new THREE.MeshStandardMaterial({color:F3C(AC[a.status]||'#6B7280'),roughness:.5,emissive:F3C(AC[a.status]||'#6B7280'),emissiveIntensity:a.status==='Down'?.6:.15});
+      const cb=new THREE.Mesh(new THREE.BoxGeometry(0.22,0.22,0.22),cm);cb.position.set(cx-w/2+0.35+i*0.32,0.21,cz+h/2-0.3);g.add(cb);if(a.status==='Down')F3.anim.push({k:'pillar',ms:[cm],cols:[F3C('#EF4444')],ph:i})});
+    // area pin: pillar + 4 rings (outer SOFT → inner WR)
+    const x=X(r.px),z=Z(r.py),rs=r.rs,sc=Math.max(.7,Math.min(1.2,Math.min(w,h)/2.2));F3.info[r.a.id]={a:r.a,rs};
+    const abn=BR_KEY.filter(k=>rs[k].bad).map(k=>F3C(rs[k].c));
+    const bm=new THREE.MeshStandardMaterial({color:abn.length?abn[0]:F3C('#22C55E'),roughness:.5,emissive:abn.length?abn[0].clone():new THREE.Color(0x000000),emissiveIntensity:abn.length?.6:0});
+    const body=new THREE.Mesh(new THREE.BoxGeometry(0.5*sc,0.5,0.5*sc),bm);body.position.set(x,0.3,z);body.userData.aid=r.a.id;g.add(body);F3.pick.push(body);
+    const tm2=new THREE.MeshStandardMaterial({color:abn.length?abn[0]:F3C('#CBD5E1'),roughness:.5,emissive:abn.length?abn[0].clone():new THREE.Color(0x000000),emissiveIntensity:abn.length?.6:0});
+    const tp=new THREE.Mesh(new THREE.CylinderGeometry(0.11*sc,0.11*sc,0.25,12),tm2);tp.position.set(x,0.67,z);g.add(tp);
+    if(abn.length)F3.anim.push({k:'pillar',ms:[bm,tm2],cols:abn,ph:x+z});
+    const hit=new THREE.Mesh(new THREE.CylinderGeometry(0.67*sc,0.67*sc,0.8,16),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false}));hit.position.set(x,0.4,z);hit.userData.aid=r.a.id;g.add(hit);F3.pick.push(hit);
+    [{r:0.64,k:'r4',p:0},{r:0.52,k:'r3',p:.8},{r:0.39,k:'r2',p:1.6},{r:0.27,k:'r1',p:2.4}].forEach(d=>{const q=rs[d.k],col=F3C(q.bad?q.c:'#22C55E');
+      const fm=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:q.bad?.2:.1,depthWrite:false,side:THREE.DoubleSide});
+      const disc=new THREE.Mesh(new THREE.CircleGeometry(d.r*sc,40),fm);disc.rotation.x=-Math.PI/2;disc.position.set(x,0.075,z);g.add(disc);
+      const tm=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:1});const ring=new THREE.Mesh(new THREE.TorusGeometry(d.r*sc,0.05,8,56),tm);ring.rotation.x=Math.PI/2;ring.position.set(x,0.09,z);g.add(ring);
+      if(q.bad)F3.anim.push({k:'blink',m:tm,fill:fm,ph:d.p})});
+    if(rs.crit){const rm=new THREE.MeshBasicMaterial({color:0xEF4444,transparent:true,opacity:.8});const rr=new THREE.Mesh(new THREE.TorusGeometry(0.64*sc,0.03,8,56),rm);rr.rotation.x=Math.PI/2;rr.position.set(x,0.1,z);g.add(rr);F3.anim.push({k:'radar',m:rm,o:rr,ph:0})}
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:f3Text(String(r.a.name).substring(0,20),320,64,'bold 28px Arial','#fff','rgba(15,23,42,.78)'),transparent:true,depthTest:false}));sp.scale.set(2.0,0.4,1);sp.position.set(x,1.25,z);sp.renderOrder=5;g.add(sp)});
+  if(!rooms.length){const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:f3Text(bT('ยังไม่มีพื้นที่ในชั้นนี้','No areas on this floor'),512,64,'bold 30px Arial','#8B949E',null),transparent:true}));sp.scale.set(6,0.75,1);sp.position.set(0,0.8,0);g.add(sp)}
+  F3.scene.add(g);const fit=Math.max(16,Math.max(W,Dp*1.6)*1.05+3);if(F3.floor!==fid){F3.rad=fit;F3.floor=fid}return true}
+
+/* ---------- area detail ---------- */
+function bcsModalOpen(html){const m=document.getElementById('bcs-modal');if(!m)return;m.innerHTML=`<div class="bcs-mbox" role="dialog" aria-modal="true">${html}</div>`;m.hidden=false;bcsTipHide()}
+function bcsModalClose(){const m=document.getElementById('bcs-modal');if(m){m.hidden=true;m.innerHTML=''}BCS.modalArea=null}
+function bcsArea(aid){const a=D.areas.find(x=>x.id===aid);if(!a)return;BCS.modalArea=aid;const rs=bcsAreaRS(a),fl=bcsFloorById(bcsAreaFloor(a));
+  const AB={Running:'Running',Standby:'Standby',Warning:'Warning',Down:'Down'};
+  const sec=(t,body)=>`<div class="bcs-msec"><div class="bcs-cap">${t}</div>${body}</div>`;
+  const li=(l,r)=>`<div class="bcs-li"><span>${l}</span><span>${r}</span></div>`;
+  const rings=BR_KEY.map((k,i)=>`<div class="bcs-ring ${rs[k].bad?'blink':''}" style="--rc:${BR_COL[i]}"><b><i style="background:${rs[k].bad?rs[k].c:'#22C55E'}"></i>${bT('วง ','Ring ')}${i+1} ${BR_NAME[i]}</b><span style="color:${rs[k].bad?rs[k].c:'#22C55E'}">${esc(rs[k].n)}</span></div>`).join('');
+  const soft=[].concat(rs.hkA!=null?[li(bT('คะแนนความสะอาด 30 วัน','Cleanliness (30 d)'),`<b style="color:${rs.hkA>=P().target.hk?'#22C55E':'#EF4444'}">${rs.hkA}%</b>`)]:[],rs.hkM.map(h=>li('🧹 '+esc(h.task),badge('Missed'))),rs.pst.map(s=>li('🐜 '+esc(s.type)+' · '+esc(s.id),badge(s.activity))),rs.inc.map(s=>li('🛡 '+esc(s.type),badge(s.severity)+' '+badge(s.status))));
+  bcsModalOpen(`<div class="bcs-mh"><div><div class="bcs-muted">${esc(a.id)} · ${fl?esc(fl.code+' — '+fl.name):''} · ${esc(a.type||'')} · ${fmtN(a.sqm)} m²</div><div class="bcs-st" style="font-size:20px">${esc(a.name)}</div></div><button class="bcs-btn" onclick="bcsModalClose()" aria-label="close">✕</button></div>
+  <div class="bcs-rgrid">${rings}</div>
+  ${sec('🎧 Work Request '+bT('ที่เปิดอยู่','open')+' ('+rs.ow.length+')',rs.ow.length?rs.ow.map(bcsWrRow).join(''):`<div class="bcs-okrow">✅ ${bT('ไม่มีงานค้าง','No open work requests')}</div>`)}
+  ${sec('⚙️ '+bT('อุปกรณ์ในพื้นที่','Assets in area')+' ('+rs.as.length+')',rs.as.length?rs.as.map(x=>li(esc(x.name)+` <span class="bcs-muted">${esc(x.system)} · ${bT('PM ถัดไป ','next PM ')}${fmtD(x.nextPM)}</span>`,badge(AB[x.status]||x.status))).join(''):`<div class="bcs-muted">—</div>`)}
+  ${rs.df.length||rs.pmO.length||rs.pm7.length?sec('🏗 Defect / PM',rs.df.map(d=>li('Defect · '+esc(d.desc),badge(d.severity))).join('')+rs.pmO.concat(rs.pm7).map(p=>li('PM · '+esc(p.task)+` <span class="bcs-muted">${fmtD(p.dueDate)}</span>`,badge(p.dueDate<todayS?'Overdue':'Planned'))).join('')):''}
+  ${soft.length?sec('🧹 Soft Service',soft.join('')):''}
+  <div class="bcs-mf"><button class="bcs-btn bcs-pri" onclick="bcsNewWR('${a.id}')">+ ${bT('แจ้งงานพื้นที่นี้','New WR for this area')}</button><button class="bcs-btn" onclick="bcsModalClose()">${bT('ปิด','Close')}</button></div>`)}
+function bcsNewWR(aid){const a=D.areas.find(x=>x.id===aid);bcsModalClose();if(a&&BCS.host.newWR)BCS.host.newWR(a.name)}
+
+/* ---------- floor setup ---------- */
+function bcsSetupOpen(){BCS.rows=bcsFloors().map(f=>({...f}));bcsSetupRender()}
+function bcsSetupRender(){const rows=BCS.rows,b=rows.filter(f=>bIsBase(f.code)).length,t=Math.max(1,...rows.map(f=>/^\d+$/.test(f.code)?+f.code:1)),roof=rows.some(f=>/^roof$/i.test(f.code));
+  bcsModalOpen(`<div class="bcs-mh"><div class="bcs-st" style="font-size:19px">🏗 ${bT('ตั้งค่าอาคาร','Building floors')}</div><button class="bcs-btn" onclick="bcsModalClose()">✕</button></div>
+  <div class="bcs-muted" style="margin-bottom:10px">${bT('พื้นที่จะถูกวางลงชั้นตามช่อง “ชั้น” ใน Area Master (เช่น G, 3, B1, Roof)','Areas are placed on floors by their “floor” field in Area Master (e.g. G, 3, B1, Roof)')}</div>
+  <div class="bcs-gen"><label>${bT('ชั้นใต้ดิน','Basements')}<input class="bcs-in" type="number" id="bs-b" min="0" max="10" value="${b}"></label><label>${bT('ชั้นบนสุด','Top floor')}<input class="bcs-in" type="number" id="bs-t" min="1" max="80" value="${t}"></label><label class="ck"><input type="checkbox" id="bs-r" ${roof?'checked':''}> Roof</label><button class="bcs-btn" onclick="bcsSetupGen()">${bT('สร้างรายการชั้น','Generate')}</button><button class="bcs-btn" onclick="bcsSetupAuto()">${bT('อ่านจาก Area Master','From Area Master')}</button></div>
+  <div class="bcs-stable">${rows.map((f,i)=>`<div class="bcs-srow"><span class="bcs-muted">${i+1}</span><input class="bcs-in" style="width:80px" value="${esc(f.code)}" oninput="BCS.rows[${i}].code=this.value"><input class="bcs-in" style="flex:1;min-width:0" value="${esc(f.name)}" oninput="BCS.rows[${i}].name=this.value"><button class="bcs-btn" onclick="bcsSetupMove(${i},-1)">▲</button><button class="bcs-btn" onclick="bcsSetupMove(${i},1)">▼</button><button class="bcs-btn bcs-danger" onclick="BCS.rows.splice(${i},1);bcsSetupRender()">✕</button></div>`).join('')}</div>
+  <div class="bcs-mf"><button class="bcs-btn" onclick="BCS.rows.unshift({id:'',code:'',name:'${bT('ชั้นใหม่','New floor')}',order:0});bcsSetupRender()">+ ${bT('เพิ่มชั้น','Add floor')}</button><span class="ferr" id="bs-err" style="margin-right:auto"></span><button class="bcs-btn bcs-pri" onclick="bcsSetupSave()">${bT('บันทึก','Save')}</button></div>`)}
+function bcsSetupGen(){BCS.rows=bcsMakeFloors(+document.getElementById('bs-b').value||0,+document.getElementById('bs-t').value||1,document.getElementById('bs-r').checked,BCS.rows);bcsSetupRender()}
+function bcsSetupAuto(){BCS.rows=bcsAutoFloors();bcsSetupRender()}
+function bcsSetupMove(i,d){const j=i+d,r=BCS.rows;if(j<0||j>=r.length)return;[r[i],r[j]]=[r[j],r[i]];bcsSetupRender()}
+function bcsSetupSave(){const rows=BCS.rows,seen=new Set(),err=m=>{const e=document.getElementById('bs-err');if(e)e.textContent=m};
+  if(!rows.length)return err(bT('ต้องมีอย่างน้อย 1 ชั้น','Add at least one floor'));
+  for(const r of rows){r.code=String(r.code||'').trim();if(!r.code)return err(bT('มีชั้นที่ยังไม่ใส่รหัส','A floor has no code'));const id=r.code.toUpperCase();if(seen.has(id))return err(bT('รหัสชั้นซ้ำ: ','Duplicate code: ')+r.code);seen.add(id);r.name=String(r.name||'').trim()||bcsName(r.code)}
+  D.bldg.floors=rows.map((r,i)=>({id:r.code.toUpperCase(),code:r.code,name:r.name,order:rows.length-i}));save();
+  if(BCS.sel&&!seen.has(BCS.sel))BCS.sel=null;bcsModalClose();B3.n=-1;bcsRefresh();BCS.host.toast&&BCS.host.toast(bT('บันทึกอาคาร ','Saved ')+rows.length+bT(' ชั้น',' floors'))}
+
+/* ---------- floor-plan image / PDF per floor ---------- */
+async function bcsPlanUpload(inp){const file=inp.files[0];inp.value='';if(!file)return;const fid=BCS.sel;const tst=m=>BCS.host.toast&&BCS.host.toast(m);
+  if(!fid){tst(bT('เลือกชั้นก่อน','Pick a floor first'));return}
+  try{tst(bT('⏳ กำลังประมวลผล floor plan…','⏳ Processing floor plan…'));const MAXW=1600,cv=document.createElement('canvas'),ctx=cv.getContext('2d');
+    if(/pdf/i.test(file.type)||/\.pdf$/i.test(file.name)){if(!window.pdfjsLib){tst(bT('⚠ PDF.js ยังโหลดไม่เสร็จ','⚠ PDF.js not loaded'));return}
+      pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise,page=await pdf.getPage(1),v0=page.getViewport({scale:1}),vp=page.getViewport({scale:MAXW/v0.width});
+      cv.width=Math.round(vp.width);cv.height=Math.round(vp.height);ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);await page.render({canvasContext:ctx,viewport:vp}).promise}
+    else{const url=URL.createObjectURL(file),img=new Image();await new Promise((ok,ng)=>{img.onload=ok;img.onerror=ng;img.src=url});const sc=Math.min(1,MAXW/img.naturalWidth);
+      cv.width=Math.round(img.naturalWidth*sc);cv.height=Math.round(img.naturalHeight*sc);ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);ctx.drawImage(img,0,0,cv.width,cv.height);URL.revokeObjectURL(url)}
+    const plan={dataUrl:cv.toDataURL('image/jpeg',.78),svgH:Math.round(cv.height*900/cv.width)};
+    try{localStorage.setItem('psd_ifm_plan_'+BIZK+'_'+fid,JSON.stringify(plan))}catch(e){tst(bT('❌ พื้นที่เก็บในเบราว์เซอร์เต็ม — ใช้ไฟล์ขนาดเล็กลง','❌ Browser storage full — use a smaller file'));return}
+    tst(bT('✅ อัปโหลด floor plan ของชั้นนี้แล้ว','✅ Floor plan saved for this floor'));bcsRenderFloor(fid)}
+  catch(err){tst(bT('❌ อ่านไฟล์ไม่ได้: ','❌ Cannot read file: ')+(err.message||err))}}
+function bcsPlanClear(){if(!BCS.sel)return;try{localStorage.removeItem('psd_ifm_plan_'+BIZK+'_'+BCS.sel)}catch(e){}bcsRenderFloor(BCS.sel);BCS.host.toast&&BCS.host.toast(bT('🗑 ลบ floor plan แล้ว','🗑 Floor plan removed'))}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')bcsModalClose()});
+/*@@BCS-END@@*/
+
+BCS.host={toast:m=>toast(m),go:v=>{if(v==='helpdesk'){ST.wrf='open';goTab('tasks')}else openSvc(v)},newWR:area=>openForm2('tickets',null,{service:'eng',area,requester:ST.user?ST.user.name:''}),after:()=>{},user:()=>ST.user?ST.user.name:'',lang:()=>ST.lang};
+function viewBuilding(){return '<div class="stack"><div class="sec-t"><h2>Building Critical Status</h2><small>IFM 4-Ring</small></div>'+BCS.html('mob')+footerLegal()+'</div>'}
+
+/* ---------- render / boot ---------- */
+function render(){const root=document.getElementById('app-root');
+  if(!ST.lang)root.innerHTML=screenSplash();else if(!ST.user)root.innerHTML=screenLogin();else{root.innerHTML=screenMain();if(ST.tab==='bldg')BCS.mount()}
+  document.documentElement.lang=ST.lang==='en'?'en':'th'}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
+window.addEventListener('storage',e=>{if(e.key==='psd_ifm_v1_'+BIZK){load();if(!FM)render()}});
+applyPrefs();load();render();
+</script>
+</body>
+</html>
