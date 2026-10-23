@@ -1284,7 +1284,7 @@ VIEWS.settings=()=>{const S=cap('set'),u=me()||{};const sites=authOnline()?siteO
       <div class="au-sec"><b>🔑 เปลี่ยนรหัสผ่าน</b></div>${pwFormHTML()}
       <div style="margin-top:12px"><button class="btn btn-ghost btn-sm" onclick="doLogout()">⎋ ออกจากระบบ</button></div></div>
     <div class="card no-lift"><div class="card-t">ข้อมูลไซต์ — ${P().ic} ${P().en}</div>
-      ${sites.length?`<div class="fg" style="margin-bottom:12px"><span class="fl">อาคาร (Site Code)</span><div style="display:flex;gap:6px;flex-wrap:wrap">${sites.map(x=>`<button class="btn ${x.site===gasSite()?'btn-primary':'btn-ghost'} btn-sm" onclick="setSite('${esc(x.site)}')">🏢 ${esc(x.site)}${x.name?' · '+esc(x.name):''}</button>`).join('')}</div></div>`:''}
+      ${sites.length?`<div class="fg" style="margin-bottom:12px"><span class="fl">อาคาร (Site Code)</span><div style="display:flex;gap:6px;flex-wrap:wrap">${sites.map(x=>`<button class="btn ${x.site===gasSite()?'btn-primary':'btn-ghost'} btn-sm" onclick="setSite('${esc(x.site)}')">🏢 ${esc(x.site)}${x.name?' · '+esc(x.name):''}</button>`).join('')}</div>${cap('gas')&&gasSite()?`<div style="margin-top:8px"><button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="siteDel(this)">🗑 ลบอาคาร ${esc(gasSite())} ออกจากระบบ</button><div class="sec-sub" style="margin:4px 0 0">ย้ายโฟลเดอร์อาคาร (Spreadsheet + รูป) ไปถังขยะ Google Drive กู้คืนได้ 30 วัน · ถอดสิทธิ์อาคารนี้จากผู้ใช้</div></div>`:''}</div>`:''}
       <div class="fg" style="margin-bottom:12px"><label class="fl" for="site-name">ชื่อโครงการ / ไซต์</label><input class="fc" id="site-name" value="${esc(D.site)}" ${S?'':'disabled'} onchange="D.site=this.value.trim()||P().site;save();buildChrome();toast('บันทึกชื่อไซต์แล้ว')"></div>
       <div class="fg" style="margin-bottom:12px"><span class="fl">ธีมการแสดงผล</span><div style="display:flex;gap:8px;flex-wrap:wrap">${[['system','ตามระบบ'],['dark','Dark'],['light','Light']].map(t=>`<button class="btn ${themeMode()===t[0]?'btn-primary':'btn-ghost'} btn-sm" onclick="setTheme('${t[0]}')">${t[1]}</button>`).join('')}</div></div>
       ${S?`<div class="fg"><span class="fl">ข้อมูลตัวอย่าง</span><div><button class="btn btn-ghost btn-sm" onclick="resetData(this)">รีเซ็ตเป็นข้อมูลตัวอย่าง</button></div><div class="sec-sub">ล้างข้อมูลของ ${P().en}${gasSite()?' · '+esc(gasSite()):''} และสร้างชุดตัวอย่างใหม่ (ธุรกิจอื่นไม่ได้รับผลกระทบ)</div></div>`:`<div class="sec-sub">ตั้งค่า Module / KPI / Google Sheets ทำโดย Admin หรือ FM</div>`}
@@ -1293,6 +1293,15 @@ VIEWS.settings=()=>{const S=cap('set'),u=me()||{};const sites=authOnline()?siteO
   ${S?`<div style="margin-top:16px">${platformCard()}</div>`:''}
   ${cap('gas')?gasCard():''}
   ${S?kpiTargetCard():''}`};
+let siteDelArm='';
+async function siteDel(btn){const code=gasSite();if(!code||!cap('gas')){denied();return}
+  if(siteDelArm!==code){siteDelArm=code;btn.textContent='⚠ กดอีกครั้งเพื่อยืนยันลบ '+code;btn.className='btn btn-danger btn-sm';setTimeout(()=>{if(siteDelArm===code){siteDelArm='';if(btn.isConnected){btn.textContent='🗑 ลบอาคาร '+code+' ออกจากระบบ';btn.className='btn btn-ghost btn-sm';btn.style.color='var(--red)'}}},4000);return}
+  siteDelArm='';btn.disabled=true;btn.textContent='กำลังลบ…';
+  try{const j=await gasCall('siteDelete',{site:code});clearTimeout(SYNC.t);
+    ['psd_ifm_v1_'+BIZK+'@'+code,'psd_ifm_synch_'+BIZK+'_'+code,'psd_ifm_syncrow_'+BIZK+'_'+code,'psd_ifm_siteurl_'+BIZK+'_'+code].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+    LS.set('psd_ifm_site_'+BIZK,'');await authRefresh();const nx=mySitesFor(BIZK)[0];LS.set('psd_ifm_site_'+BIZK,nx?nx.site:'');load();SYNC.last=null;buildChrome();render();if(nx)syncBoot(()=>{buildChrome();render()});
+    toast('🗑 ลบอาคาร '+code+' แล้ว'+(j.users?' · ถอดสิทธิ์ '+j.users+' ผู้ใช้':'')+(nx?' · เปลี่ยนเป็น '+nx.site:''))}
+  catch(e){toast('❌ '+e.message);btn.disabled=false;btn.textContent='🗑 ลบอาคาร '+code+' ออกจากระบบ'}}
 VIEWS.users=()=>{Q.push(usrMount);return`<div class="sec-head"><div><div class="sec-title">👥 ผู้ใช้งาน & สิทธิ์</div><div class="sec-sub">User / Password · บทบาท 6 ระดับ · สิทธิ์แยกตามธุรกิจ / อาคาร / Module · อนุมัติผู้ลงทะเบียน</div></div></div><div id="usr-root"></div>`};
 TITLES.users='Users & Roles';
 
@@ -1864,7 +1873,7 @@ function gasReadForm(){const g=id=>document.getElementById(id);const c={url:g('g
   const site=g('gas-site').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');const oldSite=gasSite();LS.set('psd_ifm_site_'+BIZK,site);g('gas-site').value=site;if(site!==oldSite)load();if((sess()||{}).mode!==(authOnline()?'online':'local'))setTimeout(()=>authLogout(authOnline()?'เชื่อม Google Sheets แล้ว — เข้าสู่ระบบด้วยบัญชีบน Sheets (admin + รหัสจาก Execution log)':'เปลี่ยนเป็นโหมดสาธิต — กรุณาเข้าสู่ระบบอีกครั้ง'),0);return c}
 function gasSave(){gasReadForm();setSyncStatus(gasReady()?'manual':'off');toast('บันทึกการตั้งค่า Google Sheets แล้ว');render()}
 async function gasTest(){gasReadForm();try{const j=await gasCall('ping');toast('✅ เชื่อมต่อได้ · Apps Script v'+j.version)}catch(e){toast('❌ '+e.message)}}
-async function gasRegister(){gasReadForm();if(!gasSite()){toast('ใส่รหัสอาคาร (Site Code) ก่อน');return}try{const j=await gasCall('register');LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);authRefresh();toast((j.created?'✅ สร้าง Spreadsheet ':'✅ เชื่อม Spreadsheet ')+gasSite()+' แล้ว');render()}catch(e){toast('❌ '+e.message)}}
+async function gasRegister(){gasReadForm();if(!gasSite()){toast('ใส่รหัสอาคาร (Site Code) ก่อน');return}try{const j=await gasCall('register');LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);authRefresh();toast((j.created?'✅ สร้าง Spreadsheet ':'✅ เชื่อม Spreadsheet ')+gasSite()+' แล้ว — กำลังส่งข้อมูลขึ้น Sheet…');render();const got=await syncPull();toast(SYNC.status==='ok'?(got?'⬇ โหลดข้อมูลอาคาร '+gasSite()+' จาก Sheet แล้ว':'⬆ ส่งข้อมูลทั้งหมดขึ้น Sheet ของ '+gasSite()+' แล้ว'):'❌ '+SYNC.msg);buildChrome();render()}catch(e){toast('❌ '+e.message)}}
 async function gasPushAll(){gasReadForm();if(!gasReady()){toast('ตั้งค่า URL, API Key และ Site Code ให้ครบก่อน');return}await syncPush(true);toast(SYNC.status==='ok'?'⬆ ส่งข้อมูลทั้งหมดขึ้น Sheet แล้ว':'❌ '+SYNC.msg);render()}
 let gasPullArm=false;
 async function gasPullNow(btn){gasReadForm();if(!gasReady()){toast('ตั้งค่า URL, API Key และ Site Code ให้ครบก่อน');return}
