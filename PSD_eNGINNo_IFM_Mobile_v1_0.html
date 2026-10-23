@@ -477,8 +477,14 @@ let BIZK=LS.get('psd_ifm_biz','hospital');if(!BIZ[BIZK])BIZK='hospital';
 let D=null;const P=()=>BIZ[BIZK];
 const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
 let CUR='dashboard';let Q=[];const TB={};let charts={};
-function save(){LS.set('psd_ifm_v1_'+BIZK,D)}
-function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}}
+function save(){ensureD();LS.set('psd_ifm_v1_'+BIZK,D)}
+function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
+/* enabled services + KPI targets (per business, kept inside D) */
+function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets()}
+const svcOn=k=>!(D&&D.svcOff&&D.svcOff[k]);
+const SVC_ON=()=>Object.keys(SVC).filter(svcOn);
+const _BT={};Object.keys(BIZ).forEach(k=>_BT[k]=Object.assign({comp:100,defect:85,hkTask:95,incident:90,gdnTask:90,linLoss:2},BIZ[k].target));
+function applyTargets(){BIZ[BIZK].target=Object.assign({},_BT[BIZK],(D&&D.targetOv)||{})}
 
 // ---------- seed (demo data, deterministic per business) ----------
 function rng(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
@@ -545,7 +551,7 @@ function seed(bk){
 
 // ---------- schema (drives tables + forms) ----------
 const AREAS=()=>D.areas.map(a=>a.name);
-const SVCO=()=>Object.keys(SVC).map(k=>[k,SVC[k].n]);
+const SVCO=()=>Object.keys(SVC).filter(svcOn).map(k=>[k,SVC[k].n]);
 const BC={Running:'green',Standby:'blue',Warning:'yellow',Down:'red',New:'blue',Assigned:'purple','In Progress':'yellow','On Hold':'gray',Completed:'teal',Closed:'green',Planned:'blue',Done:'green',Overdue:'red',Open:'red',Investigating:'yellow',Compliant:'green','Due Soon':'yellow',Scheduled:'blue',Missed:'red',Delayed:'orange',None:'green',Low:'teal',Medium:'yellow',High:'red',Critical:'red',Good:'green',Fair:'yellow',Poor:'red','On Duty':'green',Off:'gray',Leave:'yellow',Active:'green',Expiring:'yellow',Expired:'red',A:'red',B:'yellow',C:'gray',P1:'red',P2:'orange',P3:'blue',P4:'gray','In-house':'blue',Outsource:'purple',Met:'green',Breached:'red'};
 const badge=v=>v===''||v==null?'—':`<span class="badge b-${BC[v]||'gray'}">${esc(v)}</span>`;
 const chip=k=>SVC[k]?`<span class="svc-chip" style="--sc:${SVC[k].c}">${SVC[k].ic} ${SVC[k].n}</span>`:esc(k);
@@ -656,7 +662,7 @@ function slaOf(t){const S=SLA[t.priority]||SLA.P3,f=S.f*6e4,st=new Date(t.date).
   if(t.completedAt){return{s:(new Date(t.completedAt).getTime()-st)<=f?'met':'breach'}}
   if(t.status==='On Hold')return{s:'hold'};
   const left=st+f-Date.now();return left<0?{s:'breach',open:1}:{s:'open',left:left/6e4}}
-function slaPct(svc){let m=0,b=0;D.tickets.forEach(t=>{if(svc&&t.service!==svc)return;const s=slaOf(t).s;if(s==='met')m++;else if(s==='breach')b++});return m+b?Math.round(m/(m+b)*100):100}
+function slaPct(svc){let m=0,b=0;D.tickets.forEach(t=>{if(svc?t.service!==svc:!svcOn(t.service))return;const s=slaOf(t).s;if(s==='met')m++;else if(s==='breach')b++});return m+b?Math.round(m/(m+b)*100):100}
 function pmPct(svc){const t=D.pm.filter(p=>p.service===svc&&p.dueDate<=todayS);return t.length?Math.round(t.filter(p=>p.status==='Done').length/t.length*100):100}
 function compRows(svc){return D.compliance.filter(x=>!svc||x.service===svc).map(SCH.compliance.derive)}
 function compPct(svc){const c=compRows(svc);return c.length?Math.round(c.filter(x=>x.status!=='Overdue').length/c.length*100):100}
@@ -681,16 +687,16 @@ const SCORE={
   lin:()=>avg([slaPct('lin'),linPct()]),
 };
 function KPIS(){const T=P().target;return[
-  ['eng','SLA งานแจ้งซ่อม',()=>slaPct('eng'),T.sla,'%'],['eng','PM Compliance',()=>pmPct('eng'),T.pm,'%'],['eng','Asset Uptime',uptime,T.uptime,'%'],['eng','Statutory Compliance',()=>compPct('eng'),100,'%'],
-  ['fac','SLA งานแจ้งซ่อม',()=>slaPct('fac'),T.sla,'%'],['fac','PM Compliance (อาคาร)',()=>pmPct('fac'),T.pm,'%'],['fac','Life-safety Compliance',()=>compPct('fac'),100,'%'],['fac','Defect Closure',defClose,85,'%'],
-  ['hk','SLA งานแจ้ง',()=>slaPct('hk'),T.sla,'%'],['hk','Cleanliness Score (30 วัน)',()=>hkScore(),T.hk,'%'],['hk','Task Completion',hkDone,95,'%'],
-  ['sec','SLA งานแจ้ง',()=>slaPct('sec'),T.sla,'%'],['sec','Patrol Compliance (7 วัน)',()=>patrolPct(),T.patrol,'%'],['sec','Incident Closure',incClose,90,'%'],
-  ['pest','SLA งานแจ้ง',()=>slaPct('pest'),T.sla,'%'],['pest','Station Clean Rate',pestPct,T.pest,'%'],
-  ['gdn','SLA งานแจ้ง',()=>slaPct('gdn'),T.sla,'%'],['gdn','Zone Health',gdnPct,T.gdn,'%'],['gdn','Task On-time',gdnOnTime,90,'%'],
-  ['lin','SLA งานแจ้ง',()=>slaPct('lin'),T.sla,'%'],['lin','Linen Availability',linPct,T.lin,'%'],['lin','Reject + Lost Rate',linLoss,2,'%',1],
-]}
+  ['eng','SLA งานแจ้งซ่อม',()=>slaPct('eng'),T.sla,'%',0,'sla'],['eng','PM Compliance',()=>pmPct('eng'),T.pm,'%',0,'pm'],['eng','Asset Uptime',uptime,T.uptime,'%',0,'uptime'],['eng','Statutory Compliance',()=>compPct('eng'),T.comp,'%',0,'comp'],
+  ['fac','SLA งานแจ้งซ่อม',()=>slaPct('fac'),T.sla,'%',0,'sla'],['fac','PM Compliance (อาคาร)',()=>pmPct('fac'),T.pm,'%',0,'pm'],['fac','Life-safety Compliance',()=>compPct('fac'),T.comp,'%',0,'comp'],['fac','Defect Closure',defClose,T.defect,'%',0,'defect'],
+  ['hk','SLA งานแจ้ง',()=>slaPct('hk'),T.sla,'%',0,'sla'],['hk','Cleanliness Score (30 วัน)',()=>hkScore(),T.hk,'%',0,'hk'],['hk','Task Completion',hkDone,T.hkTask,'%',0,'hkTask'],
+  ['sec','SLA งานแจ้ง',()=>slaPct('sec'),T.sla,'%',0,'sla'],['sec','Patrol Compliance (7 วัน)',()=>patrolPct(),T.patrol,'%',0,'patrol'],['sec','Incident Closure',incClose,T.incident,'%',0,'incident'],
+  ['pest','SLA งานแจ้ง',()=>slaPct('pest'),T.sla,'%',0,'sla'],['pest','Station Clean Rate',pestPct,T.pest,'%',0,'pest'],
+  ['gdn','SLA งานแจ้ง',()=>slaPct('gdn'),T.sla,'%',0,'sla'],['gdn','Zone Health',gdnPct,T.gdn,'%',0,'gdn'],['gdn','Task On-time',gdnOnTime,T.gdnTask,'%',0,'gdnTask'],
+  ['lin','SLA งานแจ้ง',()=>slaPct('lin'),T.sla,'%',0,'sla'],['lin','Linen Availability',linPct,T.lin,'%',0,'lin'],['lin','Reject + Lost Rate',linLoss,T.linLoss,'%',1,'linLoss'],
+].concat((D.kpiCustom||[]).map(c=>[c.service,c.name,()=>(c.actual===''||c.actual==null)?null:+c.actual,+c.target||0,c.unit||'',c.dir==='≤'?1:0,c.id,true])).filter(k=>svcOn(k[0]))}
 const scoreColor=v=>v>=90?'var(--green)':v>=75?'var(--yellow)':'var(--red)';
-const openWR=svc=>D.tickets.filter(t=>(!svc||t.service===svc)&&t.status!=='Closed'&&t.status!=='Completed').length;
+const openWR=svc=>D.tickets.filter(t=>(svc?t.service===svc:svcOn(t.service))&&t.status!=='Closed'&&t.status!=='Completed').length;
 
 function alerts(){const A=[];
   D.tickets.forEach(t=>{const s=slaOf(t);if(s.s==='breach'&&s.open)A.push({lv:'red',svc:t.service,m:`${t.id} เกิน SLA — ${t.desc}`,s:`${t.area} · ${t.priority}`,v:'helpdesk'})});
@@ -700,7 +706,7 @@ function alerts(){const A=[];
   D.pestSt.filter(s=>s.activity==='High').forEach(s=>A.push({lv:'yellow',svc:'pest',m:`พบความเคลื่อนไหวสูง — ${s.type}`,s:`${s.id} · ${s.area}`,v:'pest'}));
   D.linenItems.map(SCH.linenItems.derive).filter(x=>x._avail<90).forEach(x=>A.push({lv:'yellow',svc:'lin',m:`ผ้าต่ำกว่า Par: ${x.name}`,s:`Availability ${x._avail}%`,v:'lin'}));
   compRows().filter(c=>c.status==='Due Soon').forEach(c=>A.push({lv:'blue',svc:c.service,m:`ใกล้ครบกำหนด: ${c.item}`,s:`อีก ${c._dl} วัน`,v:c.service}));
-  const o={red:0,yellow:1,blue:2};return A.sort((a,b)=>o[a.lv]-o[b.lv]);
+  const o={red:0,yellow:1,blue:2};return A.filter(a=>!SVC[a.svc]||svcOn(a.svc)).sort((a,b)=>o[a.lv]-o[b.lv]);
 }
 
 
@@ -808,8 +814,8 @@ function openSvc(k){ST.tab='svc';ST.svc=k;ST.q='';render();window.scrollTo(0,0)}
 
 /* ---------- HOME ---------- */
 function viewHome(){
-  const B=P(),sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
-  const hard=avg([sc.eng,sc.fac]),soft=avg([sc.hk,sc.sec,sc.pest,sc.gdn,sc.lin]),idx=Math.round((hard+soft)/2);
+  const B=P(),sc={};SVC_ON().forEach(k=>sc[k]=SCORE[k]());
+  const hK=['eng','fac'].filter(svcOn),sK=['hk','sec','pest','gdn','lin'].filter(svcOn),hard=avg(hK.map(k=>sc[k])),soft=avg(sK.map(k=>sc[k])),idx=hK.length&&sK.length?Math.round((hard+soft)/2):hK.length?hard:soft;
   const AL=alerts().slice(0,5),pmA=avg([pmPct('eng'),pmPct('fac')]);
   const mine=D.tickets.filter(t=>t.assignee===ST.user.name&&t.status!=='Closed'&&t.status!=='Completed');
   return '<div class="stack">'
@@ -829,7 +835,7 @@ function viewHome(){
   +'<div class="sec-t"><h2>'+tx('ต้องดำเนินการ','Needs attention')+'</h2><small>'+alerts().length+tx(' รายการ',' items')+'</small></div>'
   +'<div class="list">'+(AL.length?AL.map(a=>'<button class="blueprint tap alert-row" style="--ac:'+({red:'var(--red)',yellow:'var(--yellow)',blue:'var(--sky)'}[a.lv])+';text-align:left" onclick="'+(SVC[a.v]?"openSvc('"+a.v+"')":"ST.wrf='breach';goTab('tasks')")+'"><span class="m">'+esc(a.m)+'</span><span class="s">'+(SVC[a.svc]?SVC[a.svc].ic+' '+SVC[a.svc].n+' · ':'')+esc(a.s)+'</span></button>').join(''):'<div class="note">'+tx('ไม่มีรายการค้าง','Nothing pending')+'</div>')+'</div>'
   +footerLegal()+'</div>'}
-function svcGroup(type,keys,sc){return '<div class="kick" style="margin-bottom:-6px;color:var(--'+(type==='Hard'?'hard':'soft')+')">'+type+' Service</div><div class="list two">'+keys.map(k=>{const S=SVC[k];return '<button class="blueprint tap svc-row" style="--bc:'+S.c+';--sc:'+S.c+';text-align:left" onclick="openSvc(\''+k+'\')"><span class="svc-ic">'+S.ic+'</span><span style="flex:1;min-width:0"><span class="n" style="display:block">'+S.n+'</span><span class="th" style="display:block">'+S.th+'</span><span style="display:block;margin-top:6px">'+bar(sc[k],S.c)+'</span></span><span class="sc" style="color:'+scol(sc[k])+'">'+sc[k]+'%<small>WR '+openWR(k)+'</small></span></button>'}).join('')+'</div>'}
+function svcGroup(type,keys0,sc){const keys=keys0.filter(svcOn);if(!keys.length)return'';return '<div class="kick" style="margin-bottom:-6px;color:var(--'+(type==='Hard'?'hard':'soft')+')">'+type+' Service</div><div class="list two">'+keys.map(k=>{const S=SVC[k];return '<button class="blueprint tap svc-row" style="--bc:'+S.c+';--sc:'+S.c+';text-align:left" onclick="openSvc(\''+k+'\')"><span class="svc-ic">'+S.ic+'</span><span style="flex:1;min-width:0"><span class="n" style="display:block">'+S.n+'</span><span class="th" style="display:block">'+S.th+'</span><span style="display:block;margin-top:6px">'+bar(sc[k],S.c)+'</span></span><span class="sc" style="color:'+scol(sc[k])+'">'+sc[k]+'%<small>WR '+openWR(k)+'</small></span></button>'}).join('')+'</div>'}
 
 /* ---------- SERVICES ---------- */
 function viewServices(){const sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
@@ -912,7 +918,7 @@ function viewTasks(){const me=ST.user.name;
   const base=t=>!svf||t.service===svf;
   return '<div class="stack"><div class="sec-t"><h2>Work Request</h2><small>SLA '+slaPct()+'%</small></div>'
   +'<div class="chips">'+Object.entries(F).map(([k,f])=>'<button class="chip '+(k===cur?'active':'')+'" onclick="ST.wrf=\''+k+'\';render()">'+f[0]+' ('+D.tickets.filter(t=>base(t)&&f[1](t)).length+')</button>').join('')+'</div>'
-  +'<div class="chips"><button class="chip '+(!svf?'active':'')+'" onclick="ST.wrsvc=\'\';render()">'+tx('ทุกบริการ','All services')+'</button>'+Object.keys(SVC).map(k=>'<button class="chip '+(svf===k?'active':'')+'" onclick="ST.wrsvc=\''+k+'\';render()">'+SVC[k].ic+' '+SVC[k].n+'</button>').join('')+'</div>'
+  +'<div class="chips"><button class="chip '+(!svf?'active':'')+'" onclick="ST.wrsvc=\'\';render()">'+tx('ทุกบริการ','All services')+'</button>'+SVC_ON().map(k=>'<button class="chip '+(svf===k?'active':'')+'" onclick="ST.wrsvc=\''+k+'\';render()">'+SVC[k].ic+' '+SVC[k].n+'</button>').join('')+'</div>'
   +'<input class="search" id="mq" placeholder="'+tx('ค้นหาเลขงาน พื้นที่ รายละเอียด…','Search ID, area, description…')+'" value="'+esc(ST.q)+'" oninput="ST.q=this.value;render();refocusM()">'
   +'<div class="list two">'+wrList(t=>base(t)&&F[cur][1](t))+'</div></div>'}
 function advanceM(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const i=FLOW.indexOf(t.status);if(i<0||i>=FLOW.length-1)return;
@@ -931,6 +937,8 @@ function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(M
   +'<div class="sec-t"><h2>'+tx('ประเภทธุรกิจ','Business type')+'</h2><small>'+tx('ข้อมูลแยกตามธุรกิจ','Data kept per business')+'</small></div>'
   +'<div class="list two">'+Object.entries(BIZ).map(([k,b])=>'<button class="blueprint tap biz-opt '+(k===BIZK?'on':'')+'" onclick="switchBiz(\''+k+'\')"><span class="i">'+b.ic+'</span><span style="flex:1;min-width:0"><b style="font-family:var(--font-heading);font-size:17px;display:block">'+tx(b.n,b.en)+'</b><span style="font-size:12.5px;color:var(--color-neutral-700);display:block;line-height:1.3">'+esc(b.desc)+'</span></span>'+(k===BIZK?'<span class="badge b-green">✓</span>':'')+'</button>').join('')+'</div>'
   +'<div class="field"><label for="site-in">'+tx('ชื่อไซต์ / โครงการ','Site / project name')+'</label><input class="input" id="site-in" value="'+esc(D.site)+'" onchange="D.site=this.value.trim()||P().site;save();toast(\''+tx('บันทึกแล้ว','Saved')+'\')"></div>'
+  +'<div class="sec-t"><h2>'+tx('บริการที่ใช้ในไซต์นี้','Services used at this site')+'</h2></div>'
+  +['Hard','Soft'].map(g=>{const ks=g==='Hard'?['eng','fac']:['hk','sec','pest','gdn','lin'];return '<div class="blueprint pad" style="display:flex;flex-direction:column;gap:8px"><div class="kick" style="color:var(--'+(g==='Hard'?'hard':'soft')+')">'+g+' Service · '+ks.filter(svcOn).length+'/'+ks.length+'</div>'+ks.map(k=>'<label class="row" style="justify-content:space-between;cursor:pointer"><span>'+SVC[k].ic+' <b>'+SVC[k].n+'</b> <span style="font-size:12.5px;color:var(--color-neutral-700)">'+SVC[k].th+'</span></span><input type="checkbox" style="width:20px;height:20px;accent-color:var(--color-accent)" '+(svcOn(k)?'checked':'')+' onchange="toggleSvcM(\''+k+'\',this.checked)"></label>').join('')+'</div>'}).join('')
   +'<div class="sec-t"><h2>'+tx('การแสดงผล','Display')+'</h2></div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ภาษา','Language')+'</div>'+segLang()+'</div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ธีม','Theme')+'</div><div style="display:flex;gap:8px">'+[['system',tx('ตามระบบ','System')],['light','Light'],['dark','Dark']].map(o=>'<button class="pref-opt '+(th===o[0]?'active':'')+'" onclick="LS.set(MK.theme,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
@@ -939,6 +947,7 @@ function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(M
   +'<div class="note">'+tx('ข้อมูลเก็บในเครื่องนี้และใช้ร่วมกับ IFM เดสก์ท็อปเมื่อเปิดจากเว็บไซต์เดียวกัน','Data lives on this device and is shared with IFM desktop when opened from the same site')+'</div>'
   +'<button class="btn" id="reset-btn" onclick="resetM(this)">'+tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data')+'</button>'
   +'<a class="link" href="'+DESKTOP_URL+'">'+tx('เปิด IFM เวอร์ชันเดสก์ท็อป ›','Open IFM desktop version ›')+'</a>'+footerLegal()+'</div>'}
+function toggleSvcM(k,on){const off={...(D.svcOff||{})};if(on)delete off[k];else off[k]=true;if(Object.keys(SVC).every(x=>off[x])){toast(tx('ต้องเปิดใช้อย่างน้อย 1 บริการ','Keep at least one service on'));render();return}D.svcOff=off;save();render()}
 function switchBiz(k){if(!BIZ[k])return;BIZK=k;LS.set('psd_ifm_biz',k);load();ST.svc=null;ST.q='';render();toast(BIZ[k].ic+' '+tx(BIZ[k].n,BIZ[k].en))}
 function signOut(){ST.user=null;try{localStorage.removeItem(MK.user)}catch(e){}render()}
 function resetM(btn){if(!ST.resetArm){ST.resetArm=true;btn.textContent=tx('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm');btn.className='btn btn-danger';setTimeout(()=>{ST.resetArm=false;if(btn.isConnected){btn.textContent=tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data');btn.className='btn'}},4000);return}
@@ -949,7 +958,7 @@ function markDone(ent,id){const r=D[ent].find(x=>x.id===id);if(!r)return;if(ent=
 function setField(ent,id,k,v){const r=D[ent].find(x=>x.id===id);if(!r)return;r[k]=v;if(ent==='tickets')SCH.tickets.onSave(r);save();closeSheet();render();toast(id+' → '+v)}
 function checkout(id){const v=D.visitors.find(x=>x.id===id);if(v){v.timeOut=isoDT(new Date());save();render();toast(v.name+tx(' ออกจากพื้นที่',' checked out'))}}
 function pestCheck(id,l){const s=D.pestSt.find(x=>x.id===id);if(!s)return;s.activity=l;s.lastCheck=todayS;save();render();toast(id+' · '+l)}
-function newWR(){openForm2('tickets',null,{service:ST.tab==='svc'&&ST.svc?ST.svc:(ST.wrsvc||'eng'),requester:ST.user.name})}
+function newWR(){openForm2('tickets',null,{service:ST.tab==='svc'&&ST.svc?ST.svc:(ST.wrsvc||SVC_ON()[0]),requester:ST.user.name})}
 
 /* ---------- bottom sheet + generic form (driven by shared SCH) ---------- */
 let FM=null;
@@ -1028,18 +1037,18 @@ function bcsAreaFloor(a){const fl=bcsFloors(),ids=new Set(fl.map(f=>f.id));
 function bcsOpenWR(t){return t.status!=='Closed'&&t.status!=='Completed'}
 function bcsAreaRS(a){
   const n=a.name,T=P().target,in7=addD(todayS,7);
-  const ow=D.tickets.filter(t=>t.area===n&&bcsOpenWR(t));
+  const ow=D.tickets.filter(t=>t.area===n&&bcsOpenWR(t)&&svcOn(t.service));
   const crW=ow.filter(t=>t.priority==='P1'||slaOf(t).s==='breach');
-  const as=D.assets.filter(x=>x.area===n);
+  const as=svcOn('eng')?D.assets.filter(x=>x.area===n):[];
   const down=as.filter(x=>x.status==='Down'),warn=as.filter(x=>x.status==='Warning');
-  const df=D.defects.filter(d=>d.area===n&&d.status!=='Closed'&&d.severity!=='Low');
+  const df=svcOn('fac')?D.defects.filter(d=>d.area===n&&d.status!=='Closed'&&d.severity!=='Low'):[];
   const items=new Set(as.map(x=>x.name).concat([n]));
-  const pmO=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate<todayS);
-  const pm7=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate>=todayS&&p.dueDate<=in7);
-  const hkM=D.hkTasks.filter(h=>h.area===n&&h.status==='Missed');
-  const ins=D.hkInsp.filter(x=>x.area===n&&x.date>=addD(todayS,-30));const hkA=ins.length?avg(ins.map(x=>x.score)):null;
-  const pst=D.pestSt.filter(s=>s.area===n&&s.activity==='High');
-  const inc=D.secInc.filter(s=>s.area===n&&s.status!=='Closed'&&s.severity!=='Low');
+  const pmO=D.pm.filter(p=>svcOn(p.service)&&items.has(p.item)&&p.status!=='Done'&&p.dueDate<todayS);
+  const pm7=D.pm.filter(p=>svcOn(p.service)&&items.has(p.item)&&p.status!=='Done'&&p.dueDate>=todayS&&p.dueDate<=in7);
+  const hkM=svcOn('hk')?D.hkTasks.filter(h=>h.area===n&&h.status==='Missed'):[];
+  const ins=svcOn('hk')?D.hkInsp.filter(x=>x.area===n&&x.date>=addD(todayS,-30)):[];const hkA=ins.length?avg(ins.map(x=>x.score)):null;
+  const pst=svcOn('pest')?D.pestSt.filter(s=>s.area===n&&s.activity==='High'):[];
+  const inc=svcOn('sec')?D.secInc.filter(s=>s.area===n&&s.status!=='Closed'&&s.severity!=='Low'):[];
   const hkLast=ins.slice().sort((x,y)=>y.date.localeCompare(x.date))[0];const hkLow=hkA!=null&&((hkLast&&+hkLast.score<85)||hkA<Math.min(T.hk,90)-5);
   const j=a=>a.filter(Boolean).join(' · ');
   const r1=ow.length?{bad:1,c:crW.length?'#EF4444':BR_COL[0],k:ow.length,n:crW.length?j([bT('เกิน SLA/P1 ','Over SLA/P1 ')+crW.length,bT('เปิด ','open ')+ow.length]):bT('WR เปิด ','Open WR ')+ow.length}:bOK(bT('ไม่มีงานค้าง','No open WR'));

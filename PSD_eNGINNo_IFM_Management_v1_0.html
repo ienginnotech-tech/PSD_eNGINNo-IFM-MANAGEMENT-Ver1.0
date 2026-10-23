@@ -179,7 +179,7 @@ select.fc option{background:var(--bg3);color:var(--text)}
 .idx{display:flex;align-items:center;gap:18px}
 .idx-v{font-family:var(--font-display);font-size:58px;font-weight:700;line-height:.9;font-variant-numeric:tabular-nums}
 .idx-split{flex:1;display:flex;flex-direction:column;gap:10px;min-width:0}
-.svc-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.svc-grid{display:grid;grid-template-columns:repeat(var(--n,7),minmax(0,1fr));gap:12px;margin-bottom:16px}
 @media(max-width:1500px){.svc-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:700px){.svc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .svc-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;cursor:pointer;text-align:left;color:inherit;display:flex;flex-direction:column;gap:8px;border-top:3px solid var(--sc)}
@@ -220,6 +220,36 @@ select.fc option{background:var(--bg3);color:var(--text)}
 .nav-item{transition:transform .15s ease,background-color .15s ease}
 .nav-item:hover{transform:translateX(2px)}
 @media (prefers-reduced-motion: reduce){.kpi:hover,.card:hover,.svc-card:hover,.biz-card:hover,.al:hover{transform:none}}
+
+/* settings: platform structure + KPI modules */
+.svc-grps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.svc-grp{display:flex;flex-direction:column;gap:6px}
+.svc-grp input[type=checkbox]{width:17px;height:17px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
+.ck-main{display:flex;align-items:center;gap:8px;padding:6px 2px 8px;border-bottom:1px solid var(--border);cursor:pointer}
+.ck-main small{margin-left:auto;font-size:11px;color:var(--text3)}
+.ck-sub{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-left:14px;background:var(--bg3);opacity:.6;transition:transform .15s,border-color .15s,opacity .15s,box-shadow .15s}
+.ck-sub.on{opacity:1;background:var(--bg2);border-left:3px solid var(--sc)}
+.ck-sub:hover{transform:translateY(-2px);border-color:var(--sc);box-shadow:0 8px 16px -10px rgba(0,0,0,.4)}
+.ck-sub .ic{font-size:17px}
+.ck-sub .tx{display:flex;flex-direction:column;min-width:0}
+.ck-sub .tx b{font-size:13px}.ck-sub .tx small{font-size:11px;color:var(--text3)}
+.kpi-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}
+.kpi-mod{border:1px solid var(--border);border-top:3px solid var(--sc);border-radius:var(--radius);padding:10px 12px;background:var(--bg2);display:flex;flex-direction:column;transition:transform .15s,box-shadow .15s}
+.kpi-mod:hover{transform:translateY(-3px);box-shadow:0 12px 22px -14px rgba(0,0,0,.45)}
+.kpi-mod-h{display:flex;align-items:center;gap:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.kpi-mod-h .ic{font-size:20px}.kpi-mod-h b{display:block;font-family:var(--font-display);font-size:15px}.kpi-mod-h small{font-size:11px;color:var(--text3)}
+.kpi-add{width:30px;height:30px;justify-content:center;font-size:16px;padding:0}
+.kpi-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:8px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--border);font-size:12.5px}
+.kpi-row .nm{min-width:0}.kpi-row .nm small{display:block;font-size:10.5px;color:var(--text3)}
+.kpi-row .tg{display:flex;align-items:center;gap:4px;color:var(--text3);font-weight:700}
+.kin{width:64px;padding:4px 6px;font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums}
+.act-in{width:74px}
+.kpi-row .act{font-family:var(--font-display);font-size:15px;min-width:52px;text-align:right}
+.kpi-row .ops{display:flex;gap:2px;justify-content:flex-end;min-width:58px}
+.kpi-addrow{margin-top:8px;border:1px dashed var(--border2);background:transparent;color:var(--text2);border-radius:var(--radius);padding:7px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit}
+.kpi-addrow:hover{border-color:var(--sc);color:var(--text);background:var(--bg3)}
+@media(max-width:700px){.svc-grps{grid-template-columns:1fr}.kpi-mods{grid-template-columns:1fr}}
+.card.no-lift:hover{transform:none;box-shadow:none;border-color:var(--border)}.card.no-lift::after{display:none}
 /* BCS host tokens */
 body{--bcs-card:var(--bg2);--bcs-card2:var(--bg3);--bcs-line:var(--border);--bcs-text:var(--text);--bcs-muted:var(--text3);--bcs-acc:var(--accent);--bcs-r:var(--radius-lg);--bcs-display:var(--font-display)}
 .tag-id{display:inline-block;background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-size:11px;font-family:var(--font-mono);color:var(--text2);white-space:nowrap}
@@ -587,8 +617,14 @@ let BIZK=LS.get('psd_ifm_biz','hospital');if(!BIZ[BIZK])BIZK='hospital';
 let D=null;const P=()=>BIZ[BIZK];
 const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
 let CUR='dashboard';let Q=[];const TB={};let charts={};
-function save(){LS.set('psd_ifm_v1_'+BIZK,D)}
-function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}}
+function save(){ensureD();LS.set('psd_ifm_v1_'+BIZK,D)}
+function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
+/* enabled services + KPI targets (per business, kept inside D) */
+function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets()}
+const svcOn=k=>!(D&&D.svcOff&&D.svcOff[k]);
+const SVC_ON=()=>Object.keys(SVC).filter(svcOn);
+const _BT={};Object.keys(BIZ).forEach(k=>_BT[k]=Object.assign({comp:100,defect:85,hkTask:95,incident:90,gdnTask:90,linLoss:2},BIZ[k].target));
+function applyTargets(){BIZ[BIZK].target=Object.assign({},_BT[BIZK],(D&&D.targetOv)||{})}
 
 // ---------- seed (demo data, deterministic per business) ----------
 function rng(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
@@ -655,7 +691,7 @@ function seed(bk){
 
 // ---------- schema (drives tables + forms) ----------
 const AREAS=()=>D.areas.map(a=>a.name);
-const SVCO=()=>Object.keys(SVC).map(k=>[k,SVC[k].n]);
+const SVCO=()=>Object.keys(SVC).filter(svcOn).map(k=>[k,SVC[k].n]);
 const BC={Running:'green',Standby:'blue',Warning:'yellow',Down:'red',New:'blue',Assigned:'purple','In Progress':'yellow','On Hold':'gray',Completed:'teal',Closed:'green',Planned:'blue',Done:'green',Overdue:'red',Open:'red',Investigating:'yellow',Compliant:'green','Due Soon':'yellow',Scheduled:'blue',Missed:'red',Delayed:'orange',None:'green',Low:'teal',Medium:'yellow',High:'red',Critical:'red',Good:'green',Fair:'yellow',Poor:'red','On Duty':'green',Off:'gray',Leave:'yellow',Active:'green',Expiring:'yellow',Expired:'red',A:'red',B:'yellow',C:'gray',P1:'red',P2:'orange',P3:'blue',P4:'gray','In-house':'blue',Outsource:'purple',Met:'green',Breached:'red'};
 const badge=v=>v===''||v==null?'—':`<span class="badge b-${BC[v]||'gray'}">${esc(v)}</span>`;
 const chip=k=>SVC[k]?`<span class="svc-chip" style="--sc:${SVC[k].c}">${SVC[k].ic} ${SVC[k].n}</span>`:esc(k);
@@ -766,7 +802,7 @@ function slaOf(t){const S=SLA[t.priority]||SLA.P3,f=S.f*6e4,st=new Date(t.date).
   if(t.completedAt){return{s:(new Date(t.completedAt).getTime()-st)<=f?'met':'breach'}}
   if(t.status==='On Hold')return{s:'hold'};
   const left=st+f-Date.now();return left<0?{s:'breach',open:1}:{s:'open',left:left/6e4}}
-function slaPct(svc){let m=0,b=0;D.tickets.forEach(t=>{if(svc&&t.service!==svc)return;const s=slaOf(t).s;if(s==='met')m++;else if(s==='breach')b++});return m+b?Math.round(m/(m+b)*100):100}
+function slaPct(svc){let m=0,b=0;D.tickets.forEach(t=>{if(svc?t.service!==svc:!svcOn(t.service))return;const s=slaOf(t).s;if(s==='met')m++;else if(s==='breach')b++});return m+b?Math.round(m/(m+b)*100):100}
 function pmPct(svc){const t=D.pm.filter(p=>p.service===svc&&p.dueDate<=todayS);return t.length?Math.round(t.filter(p=>p.status==='Done').length/t.length*100):100}
 function compRows(svc){return D.compliance.filter(x=>!svc||x.service===svc).map(SCH.compliance.derive)}
 function compPct(svc){const c=compRows(svc);return c.length?Math.round(c.filter(x=>x.status!=='Overdue').length/c.length*100):100}
@@ -791,16 +827,16 @@ const SCORE={
   lin:()=>avg([slaPct('lin'),linPct()]),
 };
 function KPIS(){const T=P().target;return[
-  ['eng','SLA งานแจ้งซ่อม',()=>slaPct('eng'),T.sla,'%'],['eng','PM Compliance',()=>pmPct('eng'),T.pm,'%'],['eng','Asset Uptime',uptime,T.uptime,'%'],['eng','Statutory Compliance',()=>compPct('eng'),100,'%'],
-  ['fac','SLA งานแจ้งซ่อม',()=>slaPct('fac'),T.sla,'%'],['fac','PM Compliance (อาคาร)',()=>pmPct('fac'),T.pm,'%'],['fac','Life-safety Compliance',()=>compPct('fac'),100,'%'],['fac','Defect Closure',defClose,85,'%'],
-  ['hk','SLA งานแจ้ง',()=>slaPct('hk'),T.sla,'%'],['hk','Cleanliness Score (30 วัน)',()=>hkScore(),T.hk,'%'],['hk','Task Completion',hkDone,95,'%'],
-  ['sec','SLA งานแจ้ง',()=>slaPct('sec'),T.sla,'%'],['sec','Patrol Compliance (7 วัน)',()=>patrolPct(),T.patrol,'%'],['sec','Incident Closure',incClose,90,'%'],
-  ['pest','SLA งานแจ้ง',()=>slaPct('pest'),T.sla,'%'],['pest','Station Clean Rate',pestPct,T.pest,'%'],
-  ['gdn','SLA งานแจ้ง',()=>slaPct('gdn'),T.sla,'%'],['gdn','Zone Health',gdnPct,T.gdn,'%'],['gdn','Task On-time',gdnOnTime,90,'%'],
-  ['lin','SLA งานแจ้ง',()=>slaPct('lin'),T.sla,'%'],['lin','Linen Availability',linPct,T.lin,'%'],['lin','Reject + Lost Rate',linLoss,2,'%',1],
-]}
+  ['eng','SLA งานแจ้งซ่อม',()=>slaPct('eng'),T.sla,'%',0,'sla'],['eng','PM Compliance',()=>pmPct('eng'),T.pm,'%',0,'pm'],['eng','Asset Uptime',uptime,T.uptime,'%',0,'uptime'],['eng','Statutory Compliance',()=>compPct('eng'),T.comp,'%',0,'comp'],
+  ['fac','SLA งานแจ้งซ่อม',()=>slaPct('fac'),T.sla,'%',0,'sla'],['fac','PM Compliance (อาคาร)',()=>pmPct('fac'),T.pm,'%',0,'pm'],['fac','Life-safety Compliance',()=>compPct('fac'),T.comp,'%',0,'comp'],['fac','Defect Closure',defClose,T.defect,'%',0,'defect'],
+  ['hk','SLA งานแจ้ง',()=>slaPct('hk'),T.sla,'%',0,'sla'],['hk','Cleanliness Score (30 วัน)',()=>hkScore(),T.hk,'%',0,'hk'],['hk','Task Completion',hkDone,T.hkTask,'%',0,'hkTask'],
+  ['sec','SLA งานแจ้ง',()=>slaPct('sec'),T.sla,'%',0,'sla'],['sec','Patrol Compliance (7 วัน)',()=>patrolPct(),T.patrol,'%',0,'patrol'],['sec','Incident Closure',incClose,T.incident,'%',0,'incident'],
+  ['pest','SLA งานแจ้ง',()=>slaPct('pest'),T.sla,'%',0,'sla'],['pest','Station Clean Rate',pestPct,T.pest,'%',0,'pest'],
+  ['gdn','SLA งานแจ้ง',()=>slaPct('gdn'),T.sla,'%',0,'sla'],['gdn','Zone Health',gdnPct,T.gdn,'%',0,'gdn'],['gdn','Task On-time',gdnOnTime,T.gdnTask,'%',0,'gdnTask'],
+  ['lin','SLA งานแจ้ง',()=>slaPct('lin'),T.sla,'%',0,'sla'],['lin','Linen Availability',linPct,T.lin,'%',0,'lin'],['lin','Reject + Lost Rate',linLoss,T.linLoss,'%',1,'linLoss'],
+].concat((D.kpiCustom||[]).map(c=>[c.service,c.name,()=>(c.actual===''||c.actual==null)?null:+c.actual,+c.target||0,c.unit||'',c.dir==='≤'?1:0,c.id,true])).filter(k=>svcOn(k[0]))}
 const scoreColor=v=>v>=90?'var(--green)':v>=75?'var(--yellow)':'var(--red)';
-const openWR=svc=>D.tickets.filter(t=>(!svc||t.service===svc)&&t.status!=='Closed'&&t.status!=='Completed').length;
+const openWR=svc=>D.tickets.filter(t=>(svc?t.service===svc:svcOn(t.service))&&t.status!=='Closed'&&t.status!=='Completed').length;
 
 function alerts(){const A=[];
   D.tickets.forEach(t=>{const s=slaOf(t);if(s.s==='breach'&&s.open)A.push({lv:'red',svc:t.service,m:`${t.id} เกิน SLA — ${t.desc}`,s:`${t.area} · ${t.priority}`,v:'helpdesk'})});
@@ -810,7 +846,7 @@ function alerts(){const A=[];
   D.pestSt.filter(s=>s.activity==='High').forEach(s=>A.push({lv:'yellow',svc:'pest',m:`พบความเคลื่อนไหวสูง — ${s.type}`,s:`${s.id} · ${s.area}`,v:'pest'}));
   D.linenItems.map(SCH.linenItems.derive).filter(x=>x._avail<90).forEach(x=>A.push({lv:'yellow',svc:'lin',m:`ผ้าต่ำกว่า Par: ${x.name}`,s:`Availability ${x._avail}%`,v:'lin'}));
   compRows().filter(c=>c.status==='Due Soon').forEach(c=>A.push({lv:'blue',svc:c.service,m:`ใกล้ครบกำหนด: ${c.item}`,s:`อีก ${c._dl} วัน`,v:c.service}));
-  const o={red:0,yellow:1,blue:2};return A.sort((a,b)=>o[a.lv]-o[b.lv]);
+  const o={red:0,yellow:1,blue:2};return A.filter(a=>!SVC[a.svc]||svcOn(a.svc)).sort((a,b)=>o[a.lv]-o[b.lv]);
 }
 
 // ---------- rendering helpers ----------
@@ -921,7 +957,7 @@ function markDone(ent,id){const r=D[ent].find(x=>x.id===id);if(!r)return;
   else{r.status='Done';if(ent==='hkTasks')r.lastDone=todayS;toast(id+' → Done')}
   save();render()}
 function checkout(id){const v=D.visitors.find(x=>x.id===id);if(v){v.timeOut=isoDT(new Date());save();render();toast(v.name+' ออกจากพื้นที่แล้ว')}}
-function quickWR(svc){const s=svc||(SVC[CUR]?CUR:'eng');const u=LS.get('psd_ifm_m_user',null);openForm('tickets',null,{service:s,requester:u?u.name:''})}
+function quickWR(svc){const s=svc||(SVC[CUR]&&svcOn(CUR)?CUR:SVC_ON()[0]);const u=LS.get('psd_ifm_m_user',null);openForm('tickets',null,{service:s,requester:u?u.name:''})}
 
 // ---------- export / backup ----------
 function download(name,text,type){try{const b=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)}catch(e){toast('เบราว์เซอร์นี้ไม่อนุญาตให้ดาวน์โหลดไฟล์')}}
@@ -940,8 +976,9 @@ const VIEWS={};
 const TITLES={dashboard:'IFM Command Center',helpdesk:'Helpdesk / Work Request',eng:'Engineering',fac:'Facility',hk:'Housekeeping',sec:'Security',pest:'Pest Control',gdn:'Garden / Landscape',lin:'Linen Management',manpower:'Manpower',vendors:'Vendor & Contract',kpi:'SLA & KPI Scorecard',reports:'Reports & Data',settings:'Business & Settings'};
 
 VIEWS.dashboard=()=>{
-  const B=P(),sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
-  const hard=avg([sc.eng,sc.fac]),soft=avg([sc.hk,sc.sec,sc.pest,sc.gdn,sc.lin]),idx=Math.round(hard*.5+soft*.5);
+  const B=P(),sc={};SVC_ON().forEach(k=>sc[k]=SCORE[k]());
+  const hK=['eng','fac'].filter(svcOn),sK=['hk','sec','pest','gdn','lin'].filter(svcOn);
+  const hard=avg(hK.map(k=>sc[k])),soft=avg(sK.map(k=>sc[k])),idx=hK.length&&sK.length?Math.round(hard*.5+soft*.5):hK.length?hard:soft;
   const AL=alerts(),T=B.target;
   const mtd=D.tickets.filter(t=>t.date.slice(0,7)===todayS.slice(0,7));
   return`
@@ -954,7 +991,7 @@ VIEWS.dashboard=()=>{
     </div>
     <div class="card"><div class="hero-k" style="margin-bottom:10px">IFM Performance Index</div>
       <div class="idx"><div class="idx-v" style="color:${scoreColor(idx)}">${idx}</div>
-      <div class="idx-split">${barRow('Hard Service · Engineering + Facility',hard,'var(--hard)')}${barRow('Soft Service · HK / Security / Pest / Garden / Linen',soft,'var(--soft)')}</div></div>
+      <div class="idx-split">${hK.length?barRow('Hard Service · '+hK.map(k=>SVC[k].n).join(' + '),hard,'var(--hard)'):''}${sK.length?barRow('Soft Service · '+sK.map(k=>SVC[k].n).join(' / '),soft,'var(--soft)'):''}</div></div>
       <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="showView('bcs')">🏢 เปิด Building Critical Status ›</button>
     </div>
   </div>
@@ -964,15 +1001,15 @@ VIEWS.dashboard=()=>{
     ${kpi('PM Compliance',pct(avg([pmPct('eng'),pmPct('fac')])),`เป้าหมาย ${T.pm}%`,scoreColor(avg([pmPct('eng'),pmPct('fac')])))}
     ${kpi('Statutory Compliance',pct(compPct()),`${compRows().filter(c=>c.status==='Overdue').length} รายการเลยกำหนด`,scoreColor(compPct()))}
   </div>
-  <div class="svc-grid">${Object.keys(SVC).map(k=>{const S=SVC[k];return`<button class="svc-card" style="--sc:${S.c}" onclick="showView('${k}')">
+  <div class="svc-grid" style="--n:${Math.max(1,SVC_ON().length)}">${SVC_ON().map(k=>{const S=SVC[k];return`<button class="svc-card" style="--sc:${S.c}" onclick="showView('${k}')">
     <div class="svc-top"><span class="svc-ic">${S.ic}</span><span class="pill pill-${S.type.toLowerCase()}">${S.type}</span></div>
     <div><div class="svc-n">${S.n}</div><div class="svc-th">${S.th}</div></div>
     <div class="svc-score" style="color:${scoreColor(sc[k])}">${sc[k]}<small style="font-size:14px">%</small></div>
     <div class="bar" style="margin:0"><i style="width:${sc[k]}%;background:${S.c}"></i></div>
     <div class="svc-meta"><span>Open WR ${openWR(k)}</span><span>SLA ${slaPct(k)}%</span></div></button>`}).join('')}</div>
   <div class="grid-2">
-    ${card('Work Request แยกตาม Service',chartBox('cWRsvc',()=>{const ks=Object.keys(SVC);return{type:'bar',data:{labels:ks.map(k=>SVC[k].n),datasets:[{label:'เปิดอยู่',data:ks.map(k=>openWR(k)),backgroundColor:'#F97316',borderRadius:4},{label:'ปิดแล้ว',data:ks.map(k=>D.tickets.filter(t=>t.service===k&&(t.status==='Closed'||t.status==='Completed')).length),backgroundColor:'#22C55E',borderRadius:4}]},options:axOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:tok('--grid')},beginAtZero:true}}})}}),'30 วันล่าสุด')}
-    ${card('Service Health',chartBox('cRadar',()=>({type:'radar',data:{labels:Object.keys(SVC).map(k=>SVC[k].n),datasets:[{label:'Score',data:Object.keys(SVC).map(k=>sc[k]),backgroundColor:'rgba(249,115,22,.15)',borderColor:'#F97316',pointBackgroundColor:'#F97316',borderWidth:2},{label:'Target',data:Object.keys(SVC).map(()=>90),borderColor:tok('--text3'),borderDash:[4,4],borderWidth:1,pointRadius:0,backgroundColor:'transparent'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10}}},scales:{r:{min:50,max:100,ticks:{backdropColor:'transparent',stepSize:10},grid:{color:tok('--grid')},angleLines:{color:tok('--grid')},pointLabels:{color:tok('--text2'),font:{size:11}}}}}})),'คะแนนรวมแต่ละ Service')}
+    ${card('Work Request แยกตาม Service',chartBox('cWRsvc',()=>{const ks=SVC_ON();return{type:'bar',data:{labels:ks.map(k=>SVC[k].n),datasets:[{label:'เปิดอยู่',data:ks.map(k=>openWR(k)),backgroundColor:'#F97316',borderRadius:4},{label:'ปิดแล้ว',data:ks.map(k=>D.tickets.filter(t=>t.service===k&&(t.status==='Closed'||t.status==='Completed')).length),backgroundColor:'#22C55E',borderRadius:4}]},options:axOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,grid:{color:tok('--grid')},beginAtZero:true}}})}}),'30 วันล่าสุด')}
+    ${card('Service Health',chartBox('cRadar',()=>({type:'radar',data:{labels:SVC_ON().map(k=>SVC[k].n),datasets:[{label:'Score',data:SVC_ON().map(k=>sc[k]),backgroundColor:'rgba(249,115,22,.15)',borderColor:'#F97316',pointBackgroundColor:'#F97316',borderWidth:2},{label:'Target',data:SVC_ON().map(()=>90),borderColor:tok('--text3'),borderDash:[4,4],borderWidth:1,pointRadius:0,backgroundColor:'transparent'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:10}}},scales:{r:{min:50,max:100,ticks:{backdropColor:'transparent',stepSize:10},grid:{color:tok('--grid')},angleLines:{color:tok('--grid')},pointLabels:{color:tok('--text2'),font:{size:11}}}}}})),'คะแนนรวมแต่ละ Service')}
   </div>
   <div class="grid-3">
     ${card('แนวโน้ม Work Request & SLA',chartBox('cTrend',()=>{const h=D.hist.concat([{m:todayS.slice(0,7),wr:mtd.length,sla:slaPct()}]);const ml=s=>{const[y,m]=s.split('-');return['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][+m-1]+' '+String(+y+543).slice(2)};
@@ -1048,7 +1085,7 @@ VIEWS.lin=()=>{const B=P(),it=D.linenItems.map(SCH.linenItems.derive);const loss
   <div style="height:16px"></div>
   ${tabs('lin',[{k:'inv',l:'Linen Inventory',h:()=>tbl('linenItems')},{k:'tx',l:'Transactions',h:()=>tbl('linenTx')},wrTab('lin')])}`};
 
-VIEWS.manpower=()=>{const s=D.staff;const ks=Object.keys(SVC);
+VIEWS.manpower=()=>{const s=D.staff;const ks=SVC_ON();
   return`<div class="sec-head"><div><div class="sec-title">👷 Manpower</div><div class="sec-sub">กำลังคนรวมทุก Service · In-house / Outsource · สถานะการปฏิบัติงานวันนี้</div></div></div>
   <div class="kpi-grid">${kpi('พนักงานทั้งหมด',s.length,'ทุก Service','var(--accent)')}${kpi('ปฏิบัติงานวันนี้',s.filter(x=>x.status==='On Duty').length,`${Math.round(s.filter(x=>x.status==='On Duty').length/Math.max(1,s.length)*100)}% ของทั้งหมด`,'var(--green)')}${kpi('In-house',s.filter(x=>x.employment==='In-house').length,'พนักงานประจำ','var(--blue)')}${kpi('Outsource',s.filter(x=>x.employment==='Outsource').length,'ผู้รับจ้างภายนอก','var(--purple)')}${kpi('ลา',s.filter(x=>x.status==='Leave').length,'ต้องจัดคนทดแทน','var(--yellow)')}</div>
   <div class="grid-2">${card('กำลังคนแยกตาม Service',chartBox('cMp',()=>({type:'bar',data:{labels:ks.map(k=>SVC[k].n),datasets:[{label:'In-house',data:ks.map(k=>s.filter(x=>x.service===k&&x.employment==='In-house').length),backgroundColor:'#3B82F6',borderRadius:3},{label:'Outsource',data:ks.map(k=>s.filter(x=>x.service===k&&x.employment==='Outsource').length),backgroundColor:'#A855F7',borderRadius:3}]},options:axOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:tok('--grid')}}}})}),230))}
@@ -1060,14 +1097,14 @@ VIEWS.vendors=()=>{const v=D.vendors.map(SCH.vendors.derive);
   <div class="kpi-grid">${kpi('สัญญาทั้งหมด',v.length,`Active ${v.filter(x=>x.status==='Active').length}`,'var(--accent)')}${kpi('มูลค่ารวม/เดือน','฿'+fmtN(sum(v,x=>x.value)),'฿'+fmtN(sum(v,x=>x.value)*12)+' ต่อปี','var(--blue)')}${kpi('ใกล้หมดสัญญา',v.filter(x=>x.status==='Expiring').length,'ภายใน 60 วัน','var(--yellow)')}${kpi('คะแนนประเมินเฉลี่ย',pct(avg(v.map(x=>x.score))),'Vendor performance',scoreColor(avg(v.map(x=>x.score))))}</div>
   ${tbl('vendors')}`};
 
-VIEWS.kpi=()=>{const K=KPIS();const sc={};Object.keys(SVC).forEach(k=>sc[k]=SCORE[k]());
+VIEWS.kpi=()=>{const K=KPIS();const sc={};SVC_ON().forEach(k=>sc[k]=SCORE[k]());
   return`<div class="sec-head"><div><div class="sec-title">🎯 SLA & KPI Scorecard</div><div class="sec-sub">เป้าหมายตามมาตรฐาน ${P().en} · คำนวณจากข้อมูลจริงในระบบ · ใช้ประกอบการประเมินผู้รับจ้าง</div></div><button class="btn btn-ghost btn-sm" onclick="exportKPI()">⬇ Export Scorecard</button></div>
-  <div class="grid-2">${card('Service Score vs Target 90%',chartBox('cKpiBar',()=>{const ks=Object.keys(SVC);return{type:'bar',data:{labels:ks.map(k=>SVC[k].n),datasets:[{label:'Score',data:ks.map(k=>sc[k]),backgroundColor:ks.map(k=>SVC[k].c),borderRadius:4},{type:'line',label:'Target',data:ks.map(()=>90),borderColor:tok('--text3'),borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:axOpts({scales:{x:{grid:{display:false}},y:{min:50,max:100,grid:{color:tok('--grid')}}}})}},250))}
-  ${card('สรุปผล KPI',(()=>{const met=K.filter(k=>{const v=k[2]();return k[5]?v<=k[3]:v>=k[3]}).length;return`<div class="idx" style="margin-bottom:12px"><div class="idx-v" style="color:${scoreColor(Math.round(met/K.length*100))}">${met}<small style="font-size:22px">/${K.length}</small></div><div class="sec-sub" style="flex:1">KPI ที่ผ่านเป้าหมาย<br>Hard Service ${avg([sc.eng,sc.fac])}% · Soft Service ${avg([sc.hk,sc.sec,sc.pest,sc.gdn,sc.lin])}%</div></div>`+Object.keys(SVC).map(k=>barRow(SVC[k].ic+' '+SVC[k].n,sc[k],SVC[k].c)).join('')})())}</div>
-  <div class="table-wrap"><table><thead><tr><th>Service</th><th>KPI</th><th class="num">เป้าหมาย</th><th class="num">ผลจริง</th><th>ผลประเมิน</th><th style="min-width:140px"></th></tr></thead><tbody>${K.map(k=>{const v=k[2](),ok=k[5]?v<=k[3]:v>=k[3];return`<tr><td>${chip(k[0])}</td><td class="strong">${k[1]}</td><td class="num">${k[5]?'≤ ':'≥ '}${k[3]}${k[4]}</td><td class="num"><b style="color:${ok?'var(--green)':'var(--red)'}">${v}${k[4]}</b></td><td>${badge(ok?'Met':'Breached')}</td><td><div class="bar" style="margin:0"><i style="width:${k[5]?Math.max(0,100-v*10):Math.min(100,v)}%;background:${ok?'var(--green)':'var(--red)'}"></i></div></td></tr>`}).join('')}</tbody></table></div>`};
-function exportKPI(){const K=KPIS();const csv='﻿'+[['Service','KPI','Target','Actual','Result']].concat(K.map(k=>{const v=k[2]();return[SVC[k[0]].n,k[1],(k[5]?'<=':'>=')+k[3],v,(k[5]?v<=k[3]:v>=k[3])?'Met':'Breached']})).map(l=>l.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download(`IFM_KPI_${P().en.replace(/\s/g,'')}_${todayS}.csv`,csv,'text/csv;charset=utf-8')}
+  <div class="grid-2">${card('Service Score vs Target 90%',chartBox('cKpiBar',()=>{const ks=SVC_ON();return{type:'bar',data:{labels:ks.map(k=>SVC[k].n),datasets:[{label:'Score',data:ks.map(k=>sc[k]),backgroundColor:ks.map(k=>SVC[k].c),borderRadius:4},{type:'line',label:'Target',data:ks.map(()=>90),borderColor:tok('--text3'),borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:axOpts({scales:{x:{grid:{display:false}},y:{min:50,max:100,grid:{color:tok('--grid')}}}})}},250))}
+  ${card('สรุปผล KPI',(()=>{const met=K.filter(k=>{const v=k[2]();return v!=null&&(k[5]?v<=k[3]:v>=k[3])}).length;return`<div class="idx" style="margin-bottom:12px"><div class="idx-v" style="color:${scoreColor(Math.round(met/K.length*100))}">${met}<small style="font-size:22px">/${K.length}</small></div><div class="sec-sub" style="flex:1">KPI ที่ผ่านเป้าหมาย<br>Hard Service ${avg(['eng','fac'].filter(svcOn).map(k=>sc[k]))}% · Soft Service ${avg(['hk','sec','pest','gdn','lin'].filter(svcOn).map(k=>sc[k]))}%</div></div>`+SVC_ON().map(k=>barRow(SVC[k].ic+' '+SVC[k].n,sc[k],SVC[k].c)).join('')})())}</div>
+  <div class="table-wrap"><table><thead><tr><th>Service</th><th>KPI</th><th class="num">เป้าหมาย</th><th class="num">ผลจริง</th><th>ผลประเมิน</th><th style="min-width:140px"></th></tr></thead><tbody>${K.map(k=>{const v=k[2](),na=v==null,ok=!na&&(k[5]?v<=k[3]:v>=k[3]);if(na)return`<tr><td>${chip(k[0])}</td><td class="strong">${esc(k[1])} <span class="badge b-purple">Custom</span></td><td class="num">${k[5]?'≤ ':'≥ '}${k[3]}${esc(k[4])}</td><td class="num">—</td><td><span class="badge b-gray">ยังไม่กรอกผล</span></td><td></td></tr>`;return`<tr><td>${chip(k[0])}</td><td class="strong">${esc(k[1])}${k[7]?' <span class="badge b-purple">Custom</span>':''}</td><td class="num">${k[5]?'≤ ':'≥ '}${k[3]}${k[4]}</td><td class="num"><b style="color:${ok?'var(--green)':'var(--red)'}">${v}${k[4]}</b></td><td>${badge(ok?'Met':'Breached')}</td><td><div class="bar" style="margin:0"><i style="width:${k[5]?Math.max(0,100-v*10):Math.min(100,v)}%;background:${ok?'var(--green)':'var(--red)'}"></i></div></td></tr>`}).join('')}</tbody></table></div>`};
+function exportKPI(){const K=KPIS();const csv='﻿'+[['Service','KPI','Target','Actual','Result','Type']].concat(K.map(k=>{const v=k[2]();return[SVC[k[0]].n,k[1],(k[5]?'<=':'>=')+k[3]+k[4],v==null?'':v,v==null?'Not entered':(k[5]?v<=k[3]:v>=k[3])?'Met':'Breached',k[7]?'Custom':'Built-in']})).map(l=>l.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download(`IFM_KPI_${P().en.replace(/\s/g,'')}_${todayS}.csv`,csv,'text/csv;charset=utf-8')}
 
-const GROUPS=[['Overview',['tickets']],['Engineering',['assets','pm','meters','compliance']],['Facility',['defects','areas']],['Housekeeping',['hkTasks','hkInsp']],['Security',['patrols','secInc','visitors']],['Pest Control',['pestSt','pestVisit']],['Garden',['gdnZones','gdnTasks']],['Linen',['linenItems','linenTx']],['Management',['staff','vendors']]];
+const GROUPS=[['Overview',['tickets']],['Engineering',['assets','pm','meters','compliance']],['Facility',['defects','areas']],['Housekeeping',['hkTasks','hkInsp']],['Security',['patrols','secInc','visitors']],['Pest Control',['pestSt','pestVisit']],['Garden',['gdnZones','gdnTasks']],['Linen',['linenItems','linenTx']],['Management',['staff','vendors']],['KPI',['kpiCustom']]];
 VIEWS.reports=()=>`<div class="sec-head"><div><div class="sec-title">📑 Reports & Data</div><div class="sec-sub">Export ทุกตารางเป็น CSV (เปิดใน Excel ได้ภาษาไทย) · สำรอง / กู้คืนข้อมูลทั้งไซต์เป็น JSON</div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="backupJSON()">⬇ สำรองข้อมูล (JSON)</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('restore-file').click()">⬆ กู้คืนข้อมูล</button><button class="btn btn-ghost btn-sm" onclick="exportKPI()">⬇ KPI Scorecard</button></div></div>
   <div class="alert a-info">ข้อมูลเก็บแยกตามประเภทธุรกิจในเบราว์เซอร์นี้ (localStorage) · ชั้นข้อมูลออกแบบให้เปลี่ยนไปใช้ Google Sheets / Apps Script ได้ภายหลังโดยแก้เฉพาะฟังก์ชัน load() / save()</div>
@@ -1081,13 +1118,43 @@ VIEWS.settings=()=>`<div class="sec-head"><div><div class="sec-title">⚙ Busine
       <div class="fg" style="margin-bottom:12px"><span class="fl">ธีมการแสดงผล</span><div style="display:flex;gap:8px;flex-wrap:wrap">${[['system','ตามระบบ'],['dark','Dark'],['light','Light']].map(t=>`<button class="btn ${themeMode()===t[0]?'btn-primary':'btn-ghost'} btn-sm" onclick="setTheme('${t[0]}')">${t[1]}</button>`).join('')}</div></div>
       <div class="fg"><span class="fl">ข้อมูลตัวอย่าง</span><div><button class="btn btn-ghost btn-sm" onclick="resetData(this)">รีเซ็ตเป็นข้อมูลตัวอย่าง</button></div><div class="sec-sub">ล้างข้อมูลของ ${P().en} และสร้างชุดตัวอย่างใหม่ (ธุรกิจอื่นไม่ได้รับผลกระทบ)</div></div>
     </div>
-    <div class="card"><div class="card-t">เป้าหมาย KPI — ${P().en}</div>${Object.entries({sla:'SLA Work Request',pm:'PM Compliance',uptime:'Asset Uptime',hk:'Cleanliness Score',patrol:'Patrol Compliance',pest:'Pest Station Clean Rate',gdn:'Garden Zone Health',lin:'Linen Availability'}).map(([k,l])=>`<div class="metric-row"><span>${l}</span><b style="font-family:var(--font-display);font-size:16px">≥ ${P().target[k]}%</b></div>`).join('')}</div>
+    ${platformCard()}
   </div>
-  <div class="card" style="margin-top:16px"><div class="card-t">โครงสร้างแพลตฟอร์ม IFM</div>
-    <div class="grid-2" style="margin:0">
-      <div><div class="pill pill-hard" style="margin-bottom:8px">Hard Service</div>${['eng','fac'].map(k=>`<div class="metric-row"><span>${SVC[k].ic} ${SVC[k].n}</span><span class="sec-sub" style="margin:0">${SVC[k].th}</span></div>`).join('')}</div>
-      <div><div class="pill pill-soft" style="margin-bottom:8px">Soft Service</div>${['hk','sec','pest','gdn','lin'].map(k=>`<div class="metric-row"><span>${SVC[k].ic} ${SVC[k].n}</span><span class="sec-sub" style="margin:0">${SVC[k].th}</span></div>`).join('')}</div>
-    </div></div>`;
+  ${kpiTargetCard()}`;
+
+
+/* ---------- Settings: platform structure (enable services) + KPI targets per module ---------- */
+SCH.kpiCustom={label:' KPI',pfx:'KP',fields:[
+  {k:'service',l:'Module',t:'select',o:SVCO,req:1},{k:'name',l:'ชื่อ KPI',t:'text',req:1,full:1},
+  {k:'dir',l:'เงื่อนไข',t:'select',o:[['≥','≥ มากกว่าหรือเท่ากับ'],['≤','≤ น้อยกว่าหรือเท่ากับ']],def:'≥'},{k:'target',l:'เป้าหมาย',t:'number',req:1},
+  {k:'unit',l:'หน่วย',t:'text',def:'%'},{k:'actual',l:'ผลจริงล่าสุด',t:'number'},
+  {k:'freq',l:'รอบการวัด',t:'select',o:['รายเดือน','รายไตรมาส','รายครึ่งปี','รายปี'],def:'รายเดือน'},{k:'owner',l:'ผู้รับผิดชอบ',t:'text'},
+  {k:'note',l:'วิธีคำนวณ / หมายเหตุ',t:'textarea',full:1}],
+  cols:['id','service','name','dir','target','unit','actual','freq','owner']};
+const GRP={Hard:['eng','fac'],Soft:['hk','sec','pest','gdn','lin']};
+function platformCard(){Q.push(()=>Object.keys(GRP).forEach(g=>{const e=document.getElementById('grp-'+g),n=GRP[g].filter(svcOn).length;if(e)e.indeterminate=n>0&&n<GRP[g].length}));
+  const grp=g=>{const ks=GRP[g],n=ks.filter(svcOn).length;return`<div class="svc-grp ${g==='Hard'?'g-hard':'g-soft'}">
+    <label class="ck-main"><input type="checkbox" id="grp-${g}" ${n===ks.length?'checked':''} onchange="toggleSvcs(GRP.${g},this.checked)"><span class="pill pill-${g.toLowerCase()}">${g} Service</span><small>${n}/${ks.length} เปิดใช้</small></label>
+    ${ks.map(k=>{const S=SVC[k];return`<label class="ck-sub ${svcOn(k)?'on':''}" style="--sc:${S.c}"><input type="checkbox" ${svcOn(k)?'checked':''} onchange="toggleSvcs(['${k}'],this.checked)"><span class="ic">${S.ic}</span><span class="tx"><b>${S.n}</b><small>${S.th}</small></span></label>`}).join('')}</div>`};
+  return`<div class="card"><div class="card-t">โครงสร้างแพลตฟอร์ม IFM <small>ติ๊กเลือก Service ที่ใช้ในไซต์นี้</small></div>
+    <div class="svc-grps">${grp('Hard')}${grp('Soft')}</div>
+    <div class="sec-sub" style="margin-top:10px">Service ที่ไม่ได้เลือกจะถูกซ่อนจากเมนู, Command Center, KPI, Building Critical Status และ IFM Mobile · ข้อมูลเดิมยังเก็บไว้ครบ เปิดกลับมาได้ทุกเมื่อ</div></div>`}
+function toggleSvcs(keys,on){const off={...(D.svcOff||{})};keys.forEach(k=>{if(on)delete off[k];else off[k]=true});
+  if(Object.keys(SVC).every(k=>off[k])){toast('ต้องเปิดใช้อย่างน้อย 1 Service');render();return}
+  D.svcOff=off;save();buildNav();render();toast((on?'เปิดใช้ ':'ปิด ')+keys.map(k=>SVC[k].n).join(', '))}
+function kpiTargetCard(){const K=KPIS();
+  return`<div class="card no-lift" style="margin-top:16px"><div class="card-t">เป้าหมาย KPI — ${P().en}<small>แยกตาม Module · กด ＋ เพื่อเพิ่ม KPI · แก้ตัวเลขเป้าหมายได้ทันที</small></div>
+  <div class="kpi-mods">${SVC_ON().map(k=>{const S=SVC[k],rows=K.filter(r=>r[0]===k);return`<div class="kpi-mod" style="--sc:${S.c}">
+    <div class="kpi-mod-h"><span class="ic">${S.ic}</span><span style="flex:1;min-width:0"><b>${S.n}</b><small>${S.type} Service · ${rows.length} KPI</small></span><button class="btn btn-primary btn-ic kpi-add" title="เพิ่ม KPI ใน ${S.n}" onclick="openForm('kpiCustom',null,{service:'${k}'})">＋</button></div>
+    ${rows.map(r=>{const v=r[2](),na=v==null,ok=!na&&(r[5]?v<=r[3]:v>=r[3]);const shared=r[6]==='sla'||r[6]==='pm'||r[6]==='comp';
+      return`<div class="kpi-row"><span class="nm">${esc(r[1])}${r[7]?' <span class="badge b-purple">Custom</span>':''}${shared&&!r[7]?'<small>ใช้ร่วมหลาย Module</small>':''}</span>
+      <span class="tg">${r[5]?'≤':'≥'}<input class="fc kin" type="number" step="any" value="${r[3]}" aria-label="เป้าหมาย ${esc(r[1])}" onchange="${r[7]?`setKpiC('${r[6]}','target',this.value)`:`setTarget('${r[6]}',this.value)`}">${esc(r[4])}</span>
+      ${r[7]?`<input class="fc kin act-in" type="number" step="any" placeholder="ผลจริง" value="${na?'':v}" aria-label="ผลจริง ${esc(r[1])}" onchange="setKpiC('${r[6]}','actual',this.value)">`:`<b class="act" style="color:${ok?'var(--green)':'var(--red)'}">${v}${esc(r[4])}</b>`}
+      <span class="ops">${r[7]?`<button class="btn btn-ghost btn-ic" title="แก้ไข" onclick="openForm('kpiCustom','${r[6]}')">✎</button><button class="btn btn-ghost btn-ic" title="ลบ" onclick="delRow('kpiCustom','${r[6]}',this)">🗑</button>`:badge(ok?'Met':'Breached')}</span></div>`}).join('')}
+    <button class="kpi-addrow" onclick="openForm('kpiCustom',null,{service:'${k}'})">＋ เพิ่ม KPI ใน ${S.n}</button></div>`}).join('')}</div>
+  <div class="sec-sub" style="margin-top:10px">KPI ที่เพิ่มเองจะแสดงในหน้า SLA & KPI Scorecard และ Export ได้ · กรอก “ผลจริง” ทุกรอบการวัด · เป้าหมายเก็บแยกตามประเภทธุรกิจ</div></div>`}
+function setTarget(key,val){const v=+val;if(val===''||isNaN(v))return;D.targetOv[key]=v;applyTargets();save();toast('บันทึกเป้าหมาย KPI แล้ว');render()}
+function setKpiC(id,f,val){const c=(D.kpiCustom||[]).find(x=>x.id===id);if(!c)return;c[f]=val===''?'':+val;save();toast('บันทึก '+c.name+' แล้ว');render()}
 
 /*@@BCS-START@@*/
 /* ═══════════════════════════════════════════════════════════════════
@@ -1135,18 +1202,18 @@ function bcsAreaFloor(a){const fl=bcsFloors(),ids=new Set(fl.map(f=>f.id));
 function bcsOpenWR(t){return t.status!=='Closed'&&t.status!=='Completed'}
 function bcsAreaRS(a){
   const n=a.name,T=P().target,in7=addD(todayS,7);
-  const ow=D.tickets.filter(t=>t.area===n&&bcsOpenWR(t));
+  const ow=D.tickets.filter(t=>t.area===n&&bcsOpenWR(t)&&svcOn(t.service));
   const crW=ow.filter(t=>t.priority==='P1'||slaOf(t).s==='breach');
-  const as=D.assets.filter(x=>x.area===n);
+  const as=svcOn('eng')?D.assets.filter(x=>x.area===n):[];
   const down=as.filter(x=>x.status==='Down'),warn=as.filter(x=>x.status==='Warning');
-  const df=D.defects.filter(d=>d.area===n&&d.status!=='Closed'&&d.severity!=='Low');
+  const df=svcOn('fac')?D.defects.filter(d=>d.area===n&&d.status!=='Closed'&&d.severity!=='Low'):[];
   const items=new Set(as.map(x=>x.name).concat([n]));
-  const pmO=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate<todayS);
-  const pm7=D.pm.filter(p=>items.has(p.item)&&p.status!=='Done'&&p.dueDate>=todayS&&p.dueDate<=in7);
-  const hkM=D.hkTasks.filter(h=>h.area===n&&h.status==='Missed');
-  const ins=D.hkInsp.filter(x=>x.area===n&&x.date>=addD(todayS,-30));const hkA=ins.length?avg(ins.map(x=>x.score)):null;
-  const pst=D.pestSt.filter(s=>s.area===n&&s.activity==='High');
-  const inc=D.secInc.filter(s=>s.area===n&&s.status!=='Closed'&&s.severity!=='Low');
+  const pmO=D.pm.filter(p=>svcOn(p.service)&&items.has(p.item)&&p.status!=='Done'&&p.dueDate<todayS);
+  const pm7=D.pm.filter(p=>svcOn(p.service)&&items.has(p.item)&&p.status!=='Done'&&p.dueDate>=todayS&&p.dueDate<=in7);
+  const hkM=svcOn('hk')?D.hkTasks.filter(h=>h.area===n&&h.status==='Missed'):[];
+  const ins=svcOn('hk')?D.hkInsp.filter(x=>x.area===n&&x.date>=addD(todayS,-30)):[];const hkA=ins.length?avg(ins.map(x=>x.score)):null;
+  const pst=svcOn('pest')?D.pestSt.filter(s=>s.area===n&&s.activity==='High'):[];
+  const inc=svcOn('sec')?D.secInc.filter(s=>s.area===n&&s.status!=='Closed'&&s.severity!=='Low'):[];
   const hkLast=ins.slice().sort((x,y)=>y.date.localeCompare(x.date))[0];const hkLow=hkA!=null&&((hkLast&&+hkLast.score<85)||hkA<Math.min(T.hk,90)-5);
   const j=a=>a.filter(Boolean).join(' · ');
   const r1=ow.length?{bad:1,c:crW.length?'#EF4444':BR_COL[0],k:ow.length,n:crW.length?j([bT('เกิน SLA/P1 ','Over SLA/P1 ')+crW.length,bT('เปิด ','open ')+ow.length]):bT('WR เปิด ','Open WR ')+ow.length}:bOK(bT('ไม่มีงานค้าง','No open WR'));
@@ -1572,10 +1639,10 @@ const NAV=[['Overview',null,[['dashboard','📊','Command Center','ภาพร�
   ['Hard Service','var(--hard)',[['eng'],['fac']]],
   ['Soft Service','var(--soft)',[['hk'],['sec'],['pest'],['gdn'],['lin']]],
   ['Management',null,[['manpower','👷','Manpower','กำลังคน'],['vendors','🤝','Vendor & Contract','สัญญาผู้รับจ้าง'],['kpi','🎯','SLA & KPI','Scorecard'],['reports','📑','Reports & Data','Export / Backup'],['settings','⚙','Settings','ธุรกิจ / ไซต์']]]];
-function buildNav(){document.getElementById('nav').innerHTML=NAV.map(([sec,col,items])=>`<div class="sb-sec">${col?`<span class="dot" style="background:${col}"></span>`:''}${sec}</div>`+items.map(it=>{
+function buildNav(){document.getElementById('nav').innerHTML=NAV.map(([sec,col,items0])=>{const items=items0.filter(it=>!SVC[it[0]]||svcOn(it[0]));if(!items.length)return'';return`<div class="sb-sec">${col?`<span class="dot" style="background:${col}"></span>`:''}${sec}</div>`+items.map(it=>{
   const k=it[0],S=SVC[k];const ic=S?S.ic:it[1],n=S?S.n:it[2],th=S?S.th:it[3],c=S?S.c:'var(--accent)';
   const cnt=S?openWR(k):k==='helpdesk'?D.tickets.filter(t=>t.status==='New').length:k==='bcs'?(()=>{try{return Object.values(bcsFloorStatus()).filter(o=>o.crit).length}catch(e){return 0}})():0;
-  return`<button class="nav-item ${CUR===k?'active':''}" style="--nc:${c}" onclick="showView('${k}')"><span class="ic">${ic}</span><span style="min-width:0">${n}<span class="th">${th}</span></span>${cnt?`<span class="nav-badge" ${S?'style="background:var(--bg4);color:var(--text2)"':''}>${cnt}</span>`:''}</button>`}).join('')).join('')}
+  return`<button class="nav-item ${CUR===k?'active':''}" style="--nc:${c}" onclick="showView('${k}')"><span class="ic">${ic}</span><span style="min-width:0">${n}<span class="th">${th}</span></span>${cnt?`<span class="nav-badge" ${S?'style="background:var(--bg4);color:var(--text2)"':''}>${cnt}</span>`:''}</button>`}).join('')}).join('')}
 function buildChrome(){const B=P();
   document.getElementById('sb-biz').innerHTML=`<span class="bi">${B.ic}</span><span style="min-width:0"><span class="bn" style="display:block">${B.n} · ${B.en}</span><span class="bs" style="display:block">${esc(D.site)}</span></span><span style="margin-left:auto;font-size:11px;color:var(--text3)">เปลี่ยน ›</span>`;
   document.getElementById('biz-switch').innerHTML=Object.entries(BIZ).map(([k,b])=>`<option value="${k}" ${k===BIZK?'selected':''}>${b.ic} ${b.n}</option>`).join('');
