@@ -385,6 +385,43 @@ select.fc option{background:var(--bg3);color:var(--text)}
 fieldset.au-fs{border:0;padding:0;margin:0;min-width:0}
 @media(max-width:900px){.au-urow{grid-template-columns:34px 1fr auto}.au-urow>.au-uc{grid-column:2/4}.au-urow>.au-uc:nth-child(2){grid-column:2;grid-row:1}.au-urow>.au-acts{grid-column:3;grid-row:1}.au-urow>.au-uc:nth-child(3){display:flex;gap:8px;align-items:center;flex-wrap:wrap}.au-urow>.au-uc:nth-child(3) .bcs-muted{margin:0!important}.au-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.au-svcs{grid-template-columns:1fr}}
 /*@@AUTHCSS-END@@*/
+/*@@SITECSS-START@@*/
+/* ── building profile & contract ── */
+.si-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.si-st{display:flex;flex-direction:column;gap:2px;background:var(--bcs-card);border:1px solid var(--bcs-line);border-top:3px solid var(--sc);border-radius:10px;padding:10px 12px;transition:transform .15s,box-shadow .15s}
+.si-st:hover{transform:translateY(-3px);box-shadow:0 12px 22px -12px rgba(0,0,0,.45);border-color:var(--sc)}
+.si-st span{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--bcs-muted)}
+.si-st b{font-family:var(--bcs-display);font-size:22px;line-height:1.15;color:var(--sc)}.si-st b small{font-size:12px}
+.si-st small{font-size:11.5px;color:var(--bcs-muted)}
+.si-nav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;position:sticky;top:0;z-index:2;background:var(--bcs-bg,transparent);padding:4px 0}
+.si-sec{background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:12px;padding:14px 16px;margin-bottom:12px;scroll-margin-top:70px}
+.si-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--bcs-line)}
+.si-h b{font-family:var(--bcs-display);font-size:16px}.si-h small{font-size:12px;color:var(--bcs-muted)}
+.si-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px}
+.si-f{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13.5px}
+.si-f>span{font-size:11.5px;font-weight:700;color:var(--bcs-muted)}.si-f>b{font-weight:600;word-break:break-word}
+.si-f a,.si-pcard a{color:var(--bcs-acc);text-decoration:none;font-weight:600}
+.si-fe textarea{resize:vertical;min-height:52px}
+.si-cbar{position:relative;display:flex;gap:10px;flex-wrap:wrap;align-items:center;border:1px solid color-mix(in srgb,var(--sc) 45%,var(--bcs-line));background:color-mix(in srgb,var(--sc) 9%,var(--bcs-card));border-radius:10px;padding:9px 12px 12px;margin-bottom:12px;font-size:13px;overflow:hidden}
+.si-cbar b{color:var(--sc)}.si-cbar i{position:absolute;left:0;bottom:0;height:4px;background:var(--sc)}
+.si-scope{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.si-g{display:flex;flex-direction:column;gap:8px}
+.si-gh{font-weight:800;font-size:12px;letter-spacing:1px;text-transform:uppercase}.si-g.h .si-gh{color:#F97316}.si-g.s .si-gh{color:#14B8A6}.si-gh small{color:var(--bcs-muted);font-weight:600}
+.si-svc{border:1px solid var(--bcs-line);border-left:4px solid var(--sc);border-radius:10px;padding:8px 10px;background:var(--bcs-card2);opacity:.7}
+.si-svc.on{opacity:1;background:color-mix(in srgb,var(--sc) 6%,var(--bcs-card))}
+.si-sh{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.si-hc{font-size:12px;color:var(--bcs-muted);display:inline-flex;gap:5px;align-items:center}
+.si-items{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;align-items:center}
+.au-ck.sm.on{border-color:var(--bcs-acc);background:color-mix(in srgb,var(--bcs-acc) 10%,var(--bcs-card))}
+.si-ppl{display:flex;flex-direction:column;gap:6px}
+.si-prow{display:grid;grid-template-columns:1.3fr 1fr 1fr .8fr 1fr auto;gap:6px}.si-prow .bcs-in{width:100%;box-sizing:border-box}
+.si-ppl:has(.si-pcard){display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.si-pcard{display:flex;flex-direction:column;gap:2px;border:1px solid var(--bcs-line);border-radius:10px;padding:8px 12px;font-size:13px;background:var(--bcs-card2)}
+.si-pcard small{color:var(--bcs-muted);font-weight:700;font-size:11px}
+.si-docs{display:flex;flex-wrap:wrap;gap:6px}
+@media(max-width:900px){.si-grid{grid-template-columns:1fr 1fr}.si-grid>*{grid-column:auto!important}.si-grid>.si-fe:has(textarea),.si-grid>[style*="span 3"]{grid-column:1/-1!important}.si-scope{grid-template-columns:1fr}.si-prow{grid-template-columns:1fr 1fr}.si-prow select{grid-column:1/-1}}
+@media(max-width:520px){.si-grid{grid-template-columns:1fr}}
+/*@@SITECSS-END@@*/
 
 .sync-pill{font-size:11.5px;padding:3px 9px;border-radius:12px;border:1px solid var(--border);color:var(--text3);white-space:nowrap;cursor:pointer;background:var(--bg2)}
 .sync-pill.ok{color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)}.sync-pill.err{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,transparent)}.sync-pill.busy{color:var(--yellow)}
@@ -982,6 +1019,7 @@ function alerts(){const A=[];
   D.pestSt.filter(s=>s.activity==='High').forEach(s=>A.push({lv:'yellow',svc:'pest',m:`พบความเคลื่อนไหวสูง — ${s.type}`,s:`${s.id} · ${s.area}`,v:'pest'}));
   D.linenItems.map(SCH.linenItems.derive).filter(x=>x._avail<90).forEach(x=>A.push({lv:'yellow',svc:'lin',m:`ผ้าต่ำกว่า Par: ${x.name}`,s:`Availability ${x._avail}%`,v:'lin'}));
   compRows().filter(c=>c.status==='Due Soon').forEach(c=>A.push({lv:'blue',svc:c.service,m:`ใกล้ครบกำหนด: ${c.item}`,s:`อีก ${c._dl} วัน`,v:c.service}));
+  if(typeof siContractAlert==='function'&&(cap('set')||myRole()==='client')){const x=siContractAlert();if(x)A.push(x)}
   const o={red:0,yellow:1,blue:2};return A.filter(a=>!SVC[a.svc]||svcOn(a.svc)).sort((a,b)=>o[a.lv]-o[b.lv]);
 }
 
@@ -1302,6 +1340,8 @@ async function siteDel(btn){const code=gasSite();if(!code||!cap('gas')){denied()
     LS.set('psd_ifm_site_'+BIZK,'');await authRefresh();const nx=mySitesFor(BIZK)[0];LS.set('psd_ifm_site_'+BIZK,nx?nx.site:'');load();SYNC.last=null;buildChrome();render();if(nx)syncBoot(()=>{buildChrome();render()});
     toast('🗑 ลบอาคาร '+code+' แล้ว'+(j.users?' · ถอดสิทธิ์ '+j.users+' ผู้ใช้':'')+(nx?' · เปลี่ยนเป็น '+nx.site:''))}
   catch(e){toast('❌ '+e.message);btn.disabled=false;btn.textContent='🗑 ลบอาคาร '+code+' ออกจากระบบ'}}
+VIEWS.site=()=>{ensureSite();Q.push(siRender);return`<div class="sec-head"><div><div class="sec-title">📋 ข้อมูลอาคาร & สัญญาบริการ</div><div class="sec-sub">Building profile · สัญญา · ขอบเขตบริการ Hard / Soft · ผู้ติดต่อ · สิ่งที่ลูกค้าให้ความสำคัญ · ส่งมอบงาน${cap('set')?' — แก้ไขได้ทันที บันทึกอัตโนมัติ':' — ดูอย่างเดียว'}</div></div></div><div id="si-root"></div>`};
+TITLES.site='Building Profile & Contract';
 VIEWS.users=()=>{Q.push(usrMount);return`<div class="sec-head"><div><div class="sec-title">👥 ผู้ใช้งาน & สิทธิ์</div><div class="sec-sub">User / Password · บทบาท 6 ระดับ · สิทธิ์แยกตามธุรกิจ / อาคาร / Module · อนุมัติผู้ลงทะเบียน</div></div></div><div id="usr-root"></div>`};
 TITLES.users='Users & Roles';
 
@@ -1561,7 +1601,7 @@ function omLogMediaCell(r){return`<span class="oml-mini">${(r.photos||[]).map(p=
 
 /* ---------- Google Apps Script / Sheets sync ---------- */
 const SYNC={busy:false,pulling:false,t:null,status:'off',msg:'',last:null,again:false,onStatus:null};
-const SYNC_CFG_KEYS=['_v','site','created','hist','svcOff','targetOv','modCfg','bldg'];
+const SYNC_CFG_KEYS=['_v','site','created','hist','svcOff','targetOv','modCfg','bldg','siteInfo'];
 const SYNC_ENTS=()=>Object.keys(SCH).filter(k=>Array.isArray(D[k]));
 function gasCfg(){return Object.assign({url:'',key:'',auto:true},LS.get('psd_ifm_gas',{}))}
 function gasSite(){return LS.get('psd_ifm_site_'+BIZK,'')}
@@ -1584,7 +1624,7 @@ async function syncPush(all){if(!gasReady())return;if(SYNC.busy){SYNC.again=true
       const deleted=Object.keys(b).filter(id=>!ids.has(id));if(rows.length||deleted.length)tables[e]={rows,deleted,full:false}});
     const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});const ch=hashOf(JSON.stringify(cfg)),sendCfg=H._cfg!==ch&&(typeof cap!=='function'||cap('set'));nh._cfg=ch;
     if(!Object.keys(tables).length&&!sendCfg){setSyncStatus('ok');return}
-    const j=await gasCall('push',{tables,config:sendCfg?cfg:null});
+    const j=await gasCall('push',{tables,config:sendCfg?cfg:null,summary:sendCfg&&D.siteInfo&&typeof siSummary==='function'?siSummary():undefined});
     let merged=false;if(j.tables&&typeof j.tables==='object'){syncNormalize(j.tables);Object.entries(j.tables).forEach(([e,rows])=>{if(!Array.isArray(rows)||!SCH[e])return;D[e]=rows;nh[e]=hashOf(JSON.stringify(D[e]));merged=true});LS.set(DKEY(),D)}
     Object.keys(tables).forEach(e=>{base[e]=rowMap(D[e])});LS.set(syncBaseKey(),base);if(merged&&j.tables&&Object.keys(j.tables).some(e=>!tables[e]||!tables[e].full))SYNC.onMerge&&SYNC.onMerge();
     if(j.url)LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);
@@ -1845,6 +1885,136 @@ async function usrSave(){const E=USR.ed;if(!E)return;E.err='';const m=me();
 /* guard helpers for host apps */
 function authGuard(fn,chk){return function(...a){if(!chk(...a)){denied();return}return fn.apply(this,a)}}
 /*@@AUTH-END@@*/
+/*@@SITE-START@@*/
+/* ═══════════════════════════════════════════════════════════════════
+   IFM v1.0 · Building profile & service contract (shared desktop + mobile)
+   D.siteInfo = { b:building, c:contract, scope:{svc:[items]}, staff:{svc:n}, contacts:[], pri:{}, docs:{} }
+   Stored in the building's own spreadsheet (_config › siteInfo) + summary row in Registry › Sites
+   ═══════════════════════════════════════════════════════════════════ */
+const SITE={host:{}};
+const CAPL={hospital:'จำนวนเตียง',factory:'พนักงาน / กะการผลิต',hotel:'จำนวนห้องพัก',expo:'พื้นที่จัดแสดง (ตร.ม.)',office:'จำนวนผู้เช่า / พนักงานในอาคาร',restaurant:'ที่นั่ง / สาขา'};
+const SUBT={hospital:['โรงพยาบาลเอกชน','โรงพยาบาลรัฐ','คลินิก / ศูนย์การแพทย์','ศูนย์ดูแลผู้สูงอายุ'],factory:['อาหาร / เครื่องดื่ม','ยานยนต์ / ชิ้นส่วน','อิเล็กทรอนิกส์','เคมี / ยา','คลังสินค้า / โลจิสติกส์'],hotel:['City hotel','Resort','Serviced apartment','Boutique hotel'],
+  expo:['ศูนย์แสดงสินค้า','ศูนย์ประชุม','Hall อเนกประสงค์'],office:['อาคารสำนักงานเกรด A','อาคารสำนักงานเกรด B','สำนักงานใหญ่ (Owner occupied)','Co-working / Mixed-use'],restaurant:['Fine dining','Casual dining','QSR / Chain','Central kitchen']};
+const SCOPE0={
+  eng:()=>[...new Set(P().sys.concat(['Operation ห้องควบคุม 24 ชม.','Energy management / มิเตอร์','บำบัดน้ำเสีย (WWTP)']))],
+  fac:()=>['งานซ่อมบำรุงอาคาร (Civil)','งานสี / ฝ้า / พื้น','ประตู / กุญแจ / เฟอร์นิเจอร์','หลังคา / กันซึม','ป้าย / Wayfinding','Space & Move management','ตรวจระบบ Life safety'],
+  hk:()=>['ทำความสะอาดประจำวัน','Deep / Periodic cleaning','ล้างกระจกภายนอก (Façade)','ซักพรม / เคลือบพื้น','ห้องน้ำ / สุขภัณฑ์','จัดการขยะ'].concat(BIZK==='hospital'?['Terminal cleaning / ห้องแยกโรค','ขยะติดเชื้อ']:BIZK==='factory'?['Clean room / GMP area']:BIZK==='hotel'?['Public area / Pool']:BIZK==='expo'?['Event set-up / tear-down']:[]),
+  sec:()=>['รปภ. ประจำจุด','ตรวจตรา (Patrol)','CCTV monitoring','Access control / บัตรผ่าน','ผู้มาติดต่อ (Visitor)','จราจร / ลานจอดรถ','Emergency response'],
+  pest:()=>['หนู','แมลงสาบ / มด','ยุง (พ่นหมอกควัน)','ปลวก','แมลงบิน (ILT)','นก / ค้างคาว','รายงาน Trend / Audit'],
+  gdn:()=>['ตัดหญ้า / ดูแลสนาม','ตัดแต่งไม้พุ่ม / ต้นไม้','ต้นไม้ในอาคาร','ระบบรดน้ำ','ปุ๋ย / ศัตรูพืช','จัดสวนตามฤดู / Event'],
+  lin:()=>['ซักรีด (Laundry)','ชุดยูนิฟอร์มพนักงาน','ผ้าห้องพัก / ผ้าผู้ป่วย','ควบคุมสต็อก Par level','ผ้าติดเชื้อ','ซ่อม / ทดแทนผ้า']};
+const DOCS0=[['asbuilt','แบบ As-built (สถาปัตย์ / MEP)'],['om','คู่มือ O&M / Datasheet อุปกรณ์'],['assetlist','ทะเบียนทรัพย์สิน + ป้าย Asset tag'],['warranty','ใบรับประกันอุปกรณ์ / ผู้รับเหมา'],['permits','ใบอนุญาต / รายงานตรวจตามกฎหมาย'],['keys','กุญแจ / บัตรผ่าน / รหัสระบบ'],['contacts','รายชื่อผู้ติดต่อฉุกเฉิน / ผู้ขาย'],['baseline','สำรวจสภาพก่อนรับงาน (Baseline survey)'],['sla','SLA / KPI ลงนามร่วมกับลูกค้า'],['induction','อบรมพนักงาน + Site induction']];
+const CTYPE=['Lump sum (เหมาจ่ายรายเดือน)','Unit rate (ตามหน่วย / ครั้ง)','Cost plus (ต้นทุน + ค่าบริหาร)','Mixed (เหมา + ตามจริง)'];
+const ROLE_C=['ผู้มีอำนาจลงนาม (ลูกค้า)','ผู้ประสานงานหลัก (ลูกค้า)','ฝ่ายบัญชี / วางบิล (ลูกค้า)','Contract Manager (PSD)','Site / Facility Manager (PSD)','ติดต่อฉุกเฉิน 24 ชม.'];
+const canMoney=()=>{const r=myRole();return r==='admin'||r==='fm'||r==='client'};
+function siSeed(){const B=P(),y=new Date().getFullYear(),k=BIZK;
+  const ex={hospital:['บริษัท ตัวอย่างการแพทย์ จำกัด (มหาชน)','โรงพยาบาลเอกชน',280,9,2,24000,2008,48e6],factory:['บริษัท ตัวอย่างอุตสาหกรรม จำกัด','อาหาร / เครื่องดื่ม',1200,3,0,32000,2012,36e6],hotel:['บริษัท ตัวอย่างโฮเทล จำกัด','City hotel',350,24,3,38000,2015,42e6],
+    expo:['บริษัท ตัวอย่างเอ็กซ์โป จำกัด','ศูนย์แสดงสินค้า',60000,4,1,95000,2004,60e6],office:['บริษัท ตัวอย่างพร็อพเพอร์ตี้ จำกัด','อาคารสำนักงานเกรด A',2400,32,4,68000,2016,54e6],restaurant:['บริษัท ตัวอย่างฟู้ด จำกัด','Casual dining',220,2,0,1800,2019,6e6]}[k];
+  const scope={};Object.keys(SVC).forEach(s=>{if(svcSite(s))scope[s]=SCOPE0[s]().slice(0,5)});
+  const staff={eng:Math.max(2,Math.round(8*B.scale)),fac:Math.max(1,Math.round(3*B.scale)),hk:Math.max(2,Math.round(25*B.scale)),sec:Math.max(2,Math.round(14*B.scale)),pest:1,gdn:Math.max(1,Math.round(3*B.scale)),lin:Math.max(1,Math.round(5*B.scale))};
+  return{_sample:true,b:{client:ex[0],subtype:ex[1],address:'ถนนตัวอย่าง แขวงตัวอย่าง เขตตัวอย่าง',province:'กรุงเทพมหานคร',postcode:'10110',map:'',yearBuilt:ex[6],floorsAbove:ex[3],floorsBelow:ex[4],buildings:1,landRai:k==='expo'?40:k==='factory'?25:4,landNgan:2,landWah:50,gfa:ex[5],serviceArea:ex[5],parking:Math.round(ex[5]/60),capacity:ex[2],occupants:'',hours:k==='office'||k==='expo'?'จ–ศ 07:00–20:00 · ส–อา ตามกิจกรรม':'24 ชั่วโมง / 7 วัน',grade:'',certs:{hospital:'HA, JCI',factory:'GMP, HACCP, ISO 14001',hotel:'Green Hotel',expo:'ISO 20121',office:'LEED Gold, TREES',restaurant:'อย., Clean Food Good Taste'}[k]},
+    c:{no:'PSD-'+k.slice(0,3).toUpperCase()+'-'+(y-1)+'-001',type:CTYPE[0],start:(y-1)+'-01-01',end:(y+1)+'-12-31',value:ex[7],vat:'ไม่รวม VAT 7%',pay:'วางบิลสิ้นเดือน · ชำระ 30 วัน',bond:'5% ของมูลค่าสัญญา',penalty:'ปรับ 0.5% ของค่าบริการเดือนนั้น ต่อ KPI ที่ไม่ผ่าน (สูงสุด 5%)',escalation:'ปรับราคา 3% ต่อปี',renewNotice:90,insurance:'ประกันภัยความรับผิดต่อบุคคลภายนอก 10 ล้านบาท'},
+    scope,staff,contacts:[{role:ROLE_C[0],name:'คุณสมศักดิ์ (ตัวอย่าง)',pos:'ผู้อำนวยการฝ่ายอาคาร',phone:'02-000-0000',email:''},{role:ROLE_C[1],name:'คุณวิไล (ตัวอย่าง)',pos:'ผู้จัดการอาคาร',phone:'08-0000-0000',email:''},{role:ROLE_C[4],name:'คุณวิภา (FM)',pos:'Site Manager',phone:'08-1111-1111',email:''}],
+    pri:{kpis:{hospital:'SLA งานซ่อม ICU / OR ≤ 30 นาที · Uptime ระบบแก๊สทางการแพทย์ 100% · Cleanliness ≥ 95%',factory:'Production downtime จากระบบสาธารณูปโภค = 0 · Compressed air / Boiler uptime ≥ 99.5% · Audit GMP ผ่าน',hotel:'Guest complaint ≤ 2 / 1,000 room-night · Room ready ก่อน 14:00 · Pool / Spa สะอาด 100%',expo:'Event readiness 100% ก่อนเปิดงาน · Move-in / Move-out ตามแผน · Crowd safety',office:'ข้อร้องเรียนผู้เช่าปิดภายใน 24 ชม. · ลิฟต์ Uptime ≥ 99% · ค่าไฟลดลง 5% / ปี',restaurant:'Food safety audit ผ่าน · ห้องเย็นไม่หลุดช่วงอุณหภูมิ · Hood cleaning ตามรอบ'}[k],
+      critAreas:{hospital:'ICU, OR, ER, Isolation room, ห้องยา',factory:'Production line, Clean room, Boiler / Compressor room',hotel:'Guest room, Lobby, Kitchen, Pool',expo:'Exhibition hall, Loading dock, Conference room',office:'Lobby, ลิฟต์, ห้อง Server, ห้องประชุมผู้บริหาร',restaurant:'ครัว, ห้องเย็น, หน้าร้าน'}[k],
+      standards:{hospital:'HA, JCI, IC, ASHRAE 170, HTM 02-01',factory:'GMP, HACCP, ISO 14001, ISO 45001',hotel:'มาตรฐานโรงแรมไทย, Brand standard',expo:'ISO 20121, กฎหมายควบคุมอาคาร',office:'LEED, TREES, กฎหมายควบคุมอาคาร',restaurant:'อย., HACCP, Clean Food Good Taste'}[k],
+      quiet:k==='hospital'?'งานเสียงดังห้ามในหอผู้ป่วย 21:00–06:00':k==='hotel'?'งานในห้องพัก 10:00–17:00 เท่านั้น':k==='office'?'งานเสียงดัง / เจาะ หลัง 18:00':'',safety:'ขอ Work permit ก่อนงานร้อน / งานที่สูง / ที่อับอากาศ · สวม PPE ตลอด · ลงชื่อเข้า–ออก',
+      reports:'Daily report (Line) · Weekly WR summary · Monthly KPI report + ประชุมทบทวน',meeting:'Monthly review ทุกสัปดาห์ที่ 1 ของเดือน',channel:'IFM Mobile / Helpdesk / Line Official',risks:'',notes:''},
+    docs:{asbuilt:true,om:true,assetlist:true,warranty:false,permits:true,keys:true,contacts:true,baseline:false,sla:true,induction:true}}}
+function ensureSite(){if(!D)return null;if(!D.siteInfo||typeof D.siteInfo!=='object')D.siteInfo=siSeed();const s=D.siteInfo;['b','c','scope','staff','pri','docs'].forEach(k=>{if(!s[k]||typeof s[k]!=='object')s[k]={}});if(!Array.isArray(s.contacts))s.contacts=[];return s}
+const siGet=p=>p.split('.').reduce((o,k)=>o==null?undefined:o[k],ensureSite());
+function siSet(p,v,keep){if(!cap('set')){denied();return}const ks=p.split('.'),last=ks.pop();const o=ks.reduce((o,k)=>{if(o[k]==null||typeof o[k]!=='object')o[k]={};return o[k]},ensureSite());o[last]=v;delete D.siteInfo._sample;save();if(!keep)siRender();SITE.host.saved&&SITE.host.saved()}
+const daysTo=d=>d?Math.round((new Date(d+'T00:00:00')-new Date(todayS+'T00:00:00'))/864e5):null;
+function monthsBetween(a,b){if(!a||!b)return 0;const x=new Date(a),y=new Date(b);return Math.max(1,Math.round(((y-x)/864e5+1)/30.4375))}
+function siContract(){const c=siGet('c')||{},left=daysTo(c.end),toStart=daysTo(c.start),mo=monthsBetween(c.start,c.end),val=+c.value||0,rn=+c.renewNotice||90;
+  let st='ยังไม่ระบุ',col='#8B949E';if(c.start&&c.end){if(toStart>0){st='เตรียมเข้าพื้นที่ (Mobilization)';col='#3B82F6'}else if(left<0){st='หมดสัญญา';col='#EF4444'}else if(left<=rn){st='ใกล้หมดสัญญา — ถึงช่วงแจ้งต่ออายุ';col='#F97316'}else{st='มีผลบังคับใช้';col='#22C55E'}}
+  return{left,toStart,mo,years:mo?Math.round(mo/12*10)/10:0,val,perMonth:mo?Math.round(val/mo):0,st,col,rn}}
+function siAge(){const y=+siGet('b.yearBuilt');return y?new Date().getFullYear()-y:null}
+function siLandWah(){const b=siGet('b')||{};return (+b.landRai||0)*400+(+b.landNgan||0)*100+(+b.landWah||0)}
+function siContractAlert(){const s=D&&D.siteInfo;if(!s||!s.c||!s.c.end)return null;const k=siContract();if(k.left==null)return null;
+  if(k.left<0)return{lv:'red',m:'สัญญาบริการหมดอายุแล้ว '+(-k.left)+' วัน',s:'สัญญา '+(s.c.no||'')+' · สิ้นสุด '+fmtD(s.c.end),v:'site'};
+  if(k.left<=k.rn)return{lv:k.left<=30?'red':'yellow',m:'สัญญาบริการจะหมดใน '+k.left+' วัน — เตรียมต่ออายุ',s:'สัญญา '+(s.c.no||'')+' · สิ้นสุด '+fmtD(s.c.end),v:'site'};return null}
+const thb=v=>v?'฿'+fmtN(Math.round(v)):'—';
+
+/* ── render ── */
+let SIV={sec:''};
+function siRoot(){return document.getElementById('si-root')}
+function siRender(){const el=siRoot();if(el)el.innerHTML=siBody()}
+function siBody(){const s=ensureSite(),B=P(),E=cap('set'),M=canMoney(),b=s.b,c=s.c,k=siContract(),age=siAge(),wah=siLandWah();
+  const v=x=>x===''||x==null?'<span class="bcs-muted">—</span>':esc(x);
+  const fld=(p,l,o)=>{o=o||{};const val=siGet(p);const w=o.w?` style="grid-column:span ${o.w}"`:'';
+    if(!E){const d=o.fmt?o.fmt(val):v(val);return`<div class="si-f"${w}><span>${l}</span><b>${d}</b></div>`}
+    let inp;if(o.sel)inp=`<select class="bcs-in au-w" onchange="siSet('${p}',this.value,1)"><option value="">—</option>${o.sel.map(x=>`<option ${String(x)===String(val)?'selected':''}>${esc(x)}</option>`).join('')}${val&&!o.sel.includes(val)?`<option selected>${esc(val)}</option>`:''}</select>`;
+    else if(o.ta)inp=`<textarea class="bcs-in au-w" rows="${o.ta}" onchange="siSet('${p}',this.value,1)">${esc(val==null?'':val)}</textarea>`;
+    else inp=`<input class="bcs-in au-w" ${o.t?`type="${o.t}"`:''} ${o.t==='number'?'step="any" inputmode="decimal"':''} ${o.ph?`placeholder="${esc(o.ph)}"`:''} ${o.list?`list="${o.list}"`:''} value="${esc(val==null?'':val)}" onchange="siSet('${p}',${o.t==='number'?"this.value===''?'':+this.value":'this.value'},${o.re?0:1})">`;
+    return`<label class="ms-f si-fe"${w}><span>${l}</span>${inp}${o.hint?`<small>${o.hint}</small>`:''}</label>`};
+  const stat=(l,val,sub,col)=>`<div class="si-st" style="--sc:${col}"><span>${l}</span><b>${val}</b><small>${sub||''}</small></div>`;
+  const nSvc=Object.keys(SVC).filter(svcSite),nItems=nSvc.reduce((a,x)=>a+((s.scope[x]||[]).length),0),hc=nSvc.reduce((a,x)=>a+(+s.staff[x]||0),0);
+  const docN=DOCS0.filter(d=>s.docs[d[0]]).length;
+  const sec=(id,ic,t,sub,body)=>`<section class="si-sec" id="si-${id}"><div class="si-h"><b>${ic} ${t}</b>${sub?`<small>${sub}</small>`:''}</div>${body}</section>`;
+  return`${s._sample?`<div class="au-banner">🧪 <span style="flex:1;min-width:200px">ข้อมูลนี้เป็น<b>ตัวอย่าง</b> — แก้ไขให้ตรงกับอาคารและสัญญาจริงของลูกค้า${E?'':' (ให้ Admin / FM เป็นผู้กรอก)'}</span></div>`:''}
+  <div class="si-stats">
+    ${stat('อายุอาคาร',age!=null?age+' <small>ปี</small>':'—',b.yearBuilt?'สร้างปี '+b.yearBuilt+' (พ.ศ. '+(+b.yearBuilt+543)+')':'ระบุปีที่สร้าง','#3B82F6')}
+    ${stat('จำนวนชั้น',(b.floorsAbove||'—')+(b.floorsBelow?' <small>+B'+b.floorsBelow+'</small>':''),(b.buildings>1?b.buildings+' อาคาร · ':'')+'เหนือดิน + ใต้ดิน','#A855F7')}
+    ${stat('พื้นที่ใช้สอย',b.gfa?fmtN(b.gfa)+' <small>ตร.ม.</small>':'—',wah?'ที่ดิน '+fmtN(wah)+' ตร.วา ('+(+b.landRai||0)+'-'+(+b.landNgan||0)+'-'+(+b.landWah||0)+' ไร่)':'','#14B8A6')}
+    ${stat('สัญญาบริการ',k.left==null?'—':k.left<0?'หมดแล้ว':k.toStart>0?'อีก '+k.toStart+' <small>วันเริ่ม</small>':k.left+' <small>วัน</small>',k.st,k.col)}
+    ${M?stat('มูลค่าสัญญา',k.val?thb(k.val):'—',k.perMonth?thb(k.perMonth)+' / เดือน · '+k.years+' ปี':'','#F97316'):''}
+    ${stat('ขอบเขตบริการ',nSvc.length+' <small>/ 7 Module</small>',nItems+' รายการย่อย · '+hc+' อัตรากำลัง','#22C55E')}
+  </div>
+  <div class="si-nav">${[['bldg','🏢 อาคาร'],['ct','📄 สัญญา'],['scope','🧩 ขอบเขตบริการ'],['ppl','👥 ผู้ติดต่อ'],['pri','⭐ สิ่งที่ลูกค้าให้ความสำคัญ'],['docs','📦 ส่งมอบ / Mobilization']].map(x=>`<button class="bcs-btn" onclick="siGo('${x[0]}')">${x[1]}</button>`).join('')}</div>
+  ${sec('bldg','🏢','ข้อมูลอาคาร',B.ic+' '+B.en+' · '+esc(D.site),`<div class="si-grid">
+    ${E?`<label class="ms-f si-fe" style="grid-column:span 2"><span>ชื่ออาคาร / โครงการ</span><input class="bcs-in au-w" value="${esc(D.site)}" onchange="siSiteName(this.value)"></label>`:`<div class="si-f" style="grid-column:span 2"><span>ชื่ออาคาร / โครงการ</span><b>${esc(D.site)}</b></div>`}
+    ${fld('b.client','ลูกค้า / เจ้าของอาคาร (นิติบุคคล)',{w:2})}
+    <div class="si-f"><span>ประเภทธุรกิจ</span><b>${B.ic} ${B.n} · ${B.en}</b></div>${fld('b.subtype','ประเภทย่อย',{sel:SUBT[BIZK]})}
+    <div class="si-f"><span>รหัสอาคาร (Site Code)</span><b>${typeof gasSite==='function'&&gasSite()?esc(gasSite()):'<span class="bcs-muted">ยังไม่เชื่อม Sheets</span>'}</b></div>
+    ${fld('b.address','ที่อยู่',{w:3})}${fld('b.province','จังหวัด')}${fld('b.postcode','รหัสไปรษณีย์')}
+    ${fld('b.map','ลิงก์ Google Maps / พิกัด',{w:2,ph:'https://maps.app.goo.gl/…',fmt:x=>x?`<a href="${esc(/^https?:/.test(x)?x:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(x))}" target="_blank" rel="noopener">📍 เปิดแผนที่</a>`:'—'})}
+    ${fld('b.yearBuilt','ปีที่สร้างเสร็จ (ค.ศ.)',{t:'number',ph:'เช่น 2010',hint:age!=null?'อายุอาคาร '+age+' ปี':'',re:1})}
+    ${fld('b.floorsAbove','ชั้นเหนือดิน',{t:'number',re:1})}${fld('b.floorsBelow','ชั้นใต้ดิน',{t:'number',re:1})}${fld('b.buildings','จำนวนอาคาร / ตึก',{t:'number',re:1})}
+    ${fld('b.landRai','ที่ดิน (ไร่)',{t:'number',re:1})}${fld('b.landNgan','งาน',{t:'number',re:1})}${fld('b.landWah','ตารางวา',{t:'number',re:1,hint:wah?'รวม '+fmtN(wah)+' ตร.วา ≈ '+fmtN(wah*4)+' ตร.ม.':''})}
+    ${fld('b.gfa','พื้นที่ใช้สอยรวม GFA (ตร.ม.)',{t:'number',re:1,fmt:x=>x?fmtN(x)+' ตร.ม.':'—'})}${fld('b.serviceArea','พื้นที่ที่ PSD รับผิดชอบ (ตร.ม.)',{t:'number',fmt:x=>x?fmtN(x)+' ตร.ม.':'—'})}
+    ${fld('b.parking','ที่จอดรถ (คัน)',{t:'number'})}${fld('b.capacity',CAPL[BIZK],{t:'number',fmt:x=>x?fmtN(x):'—'})}${fld('b.occupants','ผู้ใช้อาคาร / วัน (คน)',{t:'number',fmt:x=>x?fmtN(x):'—'})}
+    ${fld('b.hours','เวลาทำการ / ช่วงให้บริการ',{w:2})}${fld('b.certs','มาตรฐาน / ใบรับรองอาคาร',{w:2,ph:'เช่น LEED, TREES, HA, GMP'})}
+  </div>`)}
+  ${sec('ct','📄','สัญญาบริการ',k.st,`<div class="si-cbar" style="--sc:${k.col}"><b>${k.st}</b>${c.start&&c.end?`<span>${fmtD(c.start)} → ${fmtD(c.end)} · ${k.years} ปี (${k.mo} เดือน)${k.left>=0?' · เหลือ '+k.left+' วัน':''}</span>`:''}${c.start&&c.end&&k.left>=0&&k.toStart<=0?`<i style="width:${Math.min(100,Math.max(0,Math.round((1-k.left/(k.mo*30.44))*100)))}%"></i>`:''}</div>
+   <div class="si-grid">${fld('c.no','เลขที่สัญญา')}${fld('c.type','รูปแบบสัญญา',{sel:CTYPE,w:2})}
+    ${fld('c.start','วันเริ่มสัญญา',{t:'date',re:1,fmt:x=>x?fmtD(x):'—'})}${fld('c.end','วันสิ้นสุดสัญญา',{t:'date',re:1,fmt:x=>x?fmtD(x):'—'})}
+    <div class="si-f"><span>ระยะสัญญา</span><b>${k.mo?k.years+' ปี · '+k.mo+' เดือน':'—'}</b></div>
+    ${fld('c.renewNotice','แจ้งต่ออายุล่วงหน้า (วัน)',{t:'number',re:1})}
+    ${M?`${fld('c.value','มูลค่าสัญญารวม (บาท)',{t:'number',re:1,fmt:thb})}<div class="si-f"><span>เฉลี่ยต่อเดือน / ต่อปี</span><b>${k.perMonth?thb(k.perMonth)+' · '+thb(k.perMonth*12):'—'}</b></div>
+    ${fld('c.vat','VAT',{sel:['ไม่รวม VAT 7%','รวม VAT 7% แล้ว']})}${fld('c.pay','เงื่อนไขวางบิล / ชำระเงิน',{w:2})}${fld('c.bond','หลักประกันสัญญา',{w:2})}
+    ${fld('c.penalty','ค่าปรับ / Penalty เมื่อ KPI ไม่ผ่าน',{w:3,ta:2})}${fld('c.escalation','การปรับราคา (Escalation)',{w:2})}${fld('c.insurance','ประกันภัย',{w:2})}`
+    :`<div class="si-f" style="grid-column:span 3"><span>มูลค่า / เงื่อนไขการเงิน</span><b class="bcs-muted">🔒 เฉพาะ Admin · FM · ลูกค้า</b></div>`}
+   </div>`)}
+  ${sec('scope','🧩','ขอบเขตบริการ (Scope of Services)','เลือก Hard / Soft และรายการย่อยที่ลูกค้าจ้าง · อัตรากำลังตามสัญญา',`<div class="si-scope">${['Hard','Soft'].map(g=>`<div class="si-g ${g==='Hard'?'h':'s'}"><div class="si-gh">${g} Service <small>${Object.keys(SVC).filter(x=>SVC[x].type===g&&svcSite(x)).length}/${Object.keys(SVC).filter(x=>SVC[x].type===g).length}</small></div>
+    ${Object.keys(SVC).filter(x=>SVC[x].type===g).map(x=>{const S=SVC[x],on=svcSite(x),sel=s.scope[x]||[],all=[...new Set(SCOPE0[x]().concat(sel))];
+      return`<div class="si-svc ${on?'on':''}" style="--sc:${S.c}"><div class="si-sh"><label class="au-ck"><input type="checkbox" ${on?'checked':''} ${E?'':'disabled'} onchange="siSvc('${x}',this.checked)"> <span>${S.ic}</span> <b>${S.n}</b> <span class="bcs-muted">${S.th}</span></label>
+        ${on?`<span class="si-hc">${E?`<input class="bcs-in" type="number" min="0" style="width:58px" value="${esc(s.staff[x]??'')}" onchange="siSet('staff.${x}',this.value===''?'':+this.value,1)">`:`<b>${esc(s.staff[x]??'—')}</b>`} คน</span>`:''}</div>
+        ${on?`<div class="si-items">${(E?all:sel).map(it=>E?`<label class="au-ck sm ${sel.includes(it)?'on':''}"><input type="checkbox" ${sel.includes(it)?'checked':''} onchange="siItem('${x}',this.dataset.v,this.checked)" data-v="${esc(it)}"> ${esc(it)}</label>`:`<span class="au-chip">✓ ${esc(it)}</span>`).join('')||'<span class="bcs-muted">ยังไม่ได้เลือกรายการ</span>'}
+          ${E?`<form class="au-row" onsubmit="event.preventDefault();siItem('${x}',this.v.value,true)"><input class="bcs-in" name="v" placeholder="+ รายการอื่น" style="width:150px"><button class="bcs-btn">เพิ่ม</button></form>`:''}</div>`:''}</div>`}).join('')}</div>`).join('')}</div>
+    <div class="bcs-muted" style="margin-top:8px">การเปิด / ปิด Module ตรงนี้ใช้ค่าเดียวกับ “โครงสร้างแพลตฟอร์ม IFM” — Module ที่ไม่ได้จ้างจะถูกซ่อนจากเมนู KPI และ Building Critical Status</div>`)}
+  ${sec('ppl','👥','ผู้ติดต่อ',s.contacts.length+' รายชื่อ',`<div class="si-ppl">${s.contacts.map((p,i)=>E?`<div class="si-prow"><select class="bcs-in" onchange="siCt(${i},'role',this.value)">${ROLE_C.concat(ROLE_C.includes(p.role)?[]:[p.role]).map(r=>`<option ${r===p.role?'selected':''}>${esc(r)}</option>`).join('')}</select>${['name','pos','phone','email'].map(f=>`<input class="bcs-in" placeholder="${{name:'ชื่อ',pos:'ตำแหน่ง',phone:'โทร',email:'อีเมล'}[f]}" value="${esc(p[f]||'')}" onchange="siCt(${i},'${f}',this.value)">`).join('')}<button class="bcs-btn bcs-danger" title="ลบ" onclick="siCtDel(${i})">✕</button></div>`
+      :`<div class="si-pcard"><small>${esc(p.role)}</small><b>${esc(p.name||'—')}</b><span class="bcs-muted">${esc(p.pos||'')}</span><span>${p.phone?`<a href="tel:${esc(p.phone)}">📞 ${esc(p.phone)}</a>`:''} ${p.email?`<a href="mailto:${esc(p.email)}">✉ ${esc(p.email)}</a>`:''}</span></div>`).join('')||'<div class="bcs-muted">ยังไม่มีผู้ติดต่อ</div>'}</div>
+    ${E?`<button class="bcs-btn" style="margin-top:8px" onclick="siCtAdd()">＋ เพิ่มผู้ติดต่อ</button>`:''}`)}
+  ${sec('pri','⭐','สิ่งที่ลูกค้าให้ความสำคัญ','ข้อมูลที่ทีมต้องรู้ก่อนเข้าทำงานในอาคารนี้',`<div class="si-grid">
+    ${fld('pri.kpis','KPI / ผลลัพธ์ที่ลูกค้าวัดเรา',{w:3,ta:2})}${fld('pri.critAreas','พื้นที่วิกฤต (ห้ามหยุด / ต้องมาก่อน)',{w:3,ta:2})}${fld('pri.standards','มาตรฐาน / Audit ที่ต้องผ่าน',{w:3,ta:2})}
+    ${fld('pri.quiet','ช่วงเวลาห้ามรบกวน / ช่วงพีค',{w:3,ta:2})}${fld('pri.safety','ข้อกำหนดความปลอดภัย / การเข้าพื้นที่',{w:3,ta:2})}${fld('pri.reports','รายงานที่ต้องส่ง (ความถี่ / รูปแบบ)',{w:3,ta:2})}
+    ${fld('pri.meeting','การประชุมทบทวน',{w:3})}${fld('pri.channel','ช่องทางที่ลูกค้าแจ้งงาน',{w:3})}
+    ${fld('pri.risks','ความเสี่ยง / ประเด็นที่ต้องระวัง',{w:3,ta:2})}${fld('pri.notes','หมายเหตุอื่น ๆ',{w:3,ta:2})}</div>`)}
+  ${sec('docs','📦','ส่งมอบ / Mobilization',docN+' / '+DOCS0.length+' รายการ',`<div class="bar" style="height:6px;border-radius:3px;background:var(--bcs-card2);overflow:hidden;margin-bottom:10px"><i style="display:block;height:100%;width:${Math.round(docN/DOCS0.length*100)}%;background:#22C55E"></i></div>
+    <div class="si-docs">${DOCS0.map(d=>`<label class="au-ck sm ${s.docs[d[0]]?'on':''}"><input type="checkbox" ${s.docs[d[0]]?'checked':''} ${E?'':'disabled'} onchange="siSet('docs.${d[0]}',this.checked)"> ${d[1]}</label>`).join('')}</div>`)}`}
+function siGo(id){const e=document.getElementById('si-'+id);if(e)e.scrollIntoView({behavior:'smooth',block:'start'})}
+function siSiteName(v){if(!cap('set')){denied();return}D.site=String(v||'').trim()||P().site;save();SITE.host.saved&&SITE.host.saved();SITE.host.renamed&&SITE.host.renamed()}
+function siSvc(k,on){if(!cap('set')){denied();siRender();return}const off={...(D.svcOff||{})};if(on)delete off[k];else off[k]=true;if(Object.keys(SVC).every(x=>off[x])){SITE.host.toast&&SITE.host.toast('ต้องเปิดใช้อย่างน้อย 1 Service');siRender();return}
+  D.svcOff=off;const s=ensureSite();if(on&&!(s.scope[k]||[]).length)s.scope[k]=SCOPE0[k]().slice(0,3);save();siRender();SITE.host.svc&&SITE.host.svc()}
+function siItem(k,it,on){it=String(it||'').trim();if(!it)return;const s=ensureSite(),L=(s.scope[k]||[]).filter(x=>x!==it);if(on)L.push(it);siSet('scope.'+k,L)}
+function siCt(i,f,v){const s=ensureSite();if(!s.contacts[i])return;s.contacts[i][f]=v;siSet('contacts',s.contacts,1)}
+function siCtAdd(){const s=ensureSite();s.contacts.push({role:ROLE_C[1],name:'',pos:'',phone:'',email:''});siSet('contacts',s.contacts)}
+function siCtDel(i){const s=ensureSite();s.contacts.splice(i,1);siSet('contacts',s.contacts)}
+/* summary for the Registry (Sites sheet) */
+function siSummary(){const s=ensureSite(),k=siContract();return{client:s.b.client||'',address:[s.b.address,s.b.province,s.b.postcode].filter(Boolean).join(' '),floors:(s.b.floorsAbove||'')+(s.b.floorsBelow?'+B'+s.b.floorsBelow:''),gfa:s.b.gfa||'',
+  contractNo:s.c.no||'',contractStart:s.c.start||'',contractEnd:s.c.end||'',contractValue:s.c.value||'',status:k.st,services:Object.keys(SVC).filter(svcSite).map(x=>SVC[x].n+(s.staff[x]?' ('+s.staff[x]+')':'')).join(', ')}}
+/*@@SITE-END@@*/
 
 /* ---------- Google Apps Script / Sheets connection (Settings) ---------- */
 function gasCard(){const c=gasCfg(),site=gasSite(),url=site?LS.get('psd_ifm_siteurl_'+BIZK+'_'+site,''):'';const sug={hospital:'HOSP',factory:'FAC',hotel:'HTL',expo:'EXPO',office:'OFC',restaurant:'RST'}[BIZK]+'-01';
@@ -1882,7 +2052,7 @@ async function gasPullNow(btn){gasReadForm();if(!gasReady()){toast('ตั้ง
 SYNC.onStatus=(st)=>{const p=document.getElementById('sync-pill');if(p){p.hidden=!gasReady();p.className='sync-pill '+(st==='ok'?'ok':st==='err'?'err':st==='busy'?'busy':'');p.textContent=st==='busy'?'⏳ Sync':st==='err'?'⚠ Sync error':st==='ok'?'☁ Synced '+(SYNC.last?SYNC.last.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}):''):'☁ Sheets'}
   const g=document.getElementById('gas-status');if(g)g.innerHTML=gasStatusText()};
 SYNC.onMerge=()=>{buildNav();render()};
-SYNC.blockRefresh=()=>{const o=id=>{const e=document.getElementById(id);if(!e)return false;return id==='modal'?e.classList.contains('open'):!e.hidden};return o('modal')||o('omlog')||o('mset')||o('bcs-modal')};
+SYNC.blockRefresh=()=>{if(CUR==='site'&&document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#si-root'))return true;const o=id=>{const e=document.getElementById(id);if(!e)return false;return id==='modal'?e.classList.contains('open'):!e.hidden};return o('modal')||o('omlog')||o('mset')||o('bcs-modal')};
 MSET.host={toast:m=>toast(m),after:()=>{buildNav();render()},user:()=>{const u=LS.get('psd_ifm_m_user',null);return u?u.name:''}};
 
 /* ---------- Settings: platform structure (enable services) + KPI targets per module ---------- */
@@ -2397,7 +2567,7 @@ TITLES.bcs='Building Critical Status';
 BCS.host={toast:m=>toast(m),go:v=>showView(v),newWR:area=>{const u=LS.get('psd_ifm_m_user',null);openForm('tickets',null,{area,service:'eng',requester:u?u.name:''})},after:()=>buildNav(),user:()=>''};
 
 // ---------- navigation / chrome ----------
-const NAV=[['Overview',null,[['dashboard','📊','Command Center','ภาพรวม IFM'],['bcs','🏢','Building Critical Status','สถานะอาคาร 4-Ring'],['helpdesk','🎧','Helpdesk','ศูนย์รับแจ้งงาน']]],
+const NAV=[['Overview',null,[['dashboard','📊','Command Center','ภาพรวม IFM'],['site','📋','ข้อมูลอาคาร & สัญญา','Building & contract'],['bcs','🏢','Building Critical Status','สถานะอาคาร 4-Ring'],['helpdesk','🎧','Helpdesk','ศูนย์รับแจ้งงาน']]],
   ['Hard Service','var(--hard)',[['eng'],['fac']]],
   ['Soft Service','var(--soft)',[['hk'],['sec'],['pest'],['gdn'],['lin']]],
   ['Management',null,[['manpower','👷','Manpower','กำลังคน'],['vendors','🤝','Vendor & Contract','สัญญาผู้รับจ้าง'],['kpi','🎯','SLA & KPI','Scorecard'],['reports','📑','Reports & Data','Export / Backup'],['users','👥','Users & Roles','ผู้ใช้งาน & สิทธิ์'],['settings','⚙','Settings','ธุรกิจ / ไซต์ / บัญชี']]]];
@@ -2480,6 +2650,7 @@ async function lgSrvSave(btn){const url=lgv('lg-url');btn.disabled=true;btn.text
 function lgSrvDemo(){authServerSet('');LG.srv=false;LG.msg='';LG.ok='🧪 ใช้โหมดสาธิต — admin / ifm2026';lgRender()}
 function afterAuth(){USR.list=null;load();buildChrome();renderUser();if(!viewOk(CUR))CUR='dashboard';render();SYNC.last=null;syncBoot(()=>{buildChrome();render()})}
 function doLogout(){authLogout()}
+SITE.host={toast:m=>toast(m),saved:()=>{},svc:()=>buildNav(),renamed:()=>buildChrome()};
 AUTH.host={toast:m=>toast(m),client:'desktop',after:()=>{buildChrome();renderUser();if(!viewOk(CUR))CUR='dashboard';render()},reload:()=>{load();buildChrome();renderUser();if(!viewOk(CUR))CUR='dashboard';render();SYNC.last=null;syncBoot(()=>{buildChrome();render()})},
   loggedOut:m=>{USR.list=null;renderUser();closeModal();typeof usrEdClose==='function'&&usrEdClose();typeof msetClose==='function'&&msetClose();document.body.classList.remove('sb-open');showLogin(m)}};
 BCS.host.user=()=>{const u=curUser();return u?u.name:''};
