@@ -250,6 +250,79 @@ select.fc option{background:var(--bg3);color:var(--text)}
 .kpi-addrow:hover{border-color:var(--sc);color:var(--text);background:var(--bg3)}
 @media(max-width:700px){.svc-grps{grid-template-columns:1fr}.kpi-mods{grid-template-columns:1fr}}
 .card.no-lift:hover{transform:none;box-shadow:none;border-color:var(--border)}.card.no-lift::after{display:none}
+/*@@IFM2CSS-START@@*/
+/* ── quality metrics strip / panel ── */
+.rm-strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.rm-card{display:flex;flex-direction:column;gap:3px;text-align:left;background:var(--bcs-card);border:1px solid var(--bcs-line);border-top:3px solid var(--rc);border-radius:var(--bcs-r);padding:11px 13px;color:var(--bcs-text);cursor:pointer;font-family:inherit;transition:transform .15s,box-shadow .15s,border-color .15s}
+.rm-card:hover{transform:translateY(-3px);box-shadow:0 12px 22px -12px rgba(0,0,0,.45);border-color:var(--rc)}
+.rm-l{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--bcs-muted)}
+.rm-v{font-family:var(--bcs-display);font-size:26px;font-weight:700;line-height:1.05;color:var(--rc);font-variant-numeric:tabular-nums}
+.rm-v small{font-size:13px;margin-left:2px}
+.rm-s{font-size:11px;color:var(--bcs-muted)}
+.rm-s u{text-decoration:none;color:var(--bcs-acc);font-weight:600}
+.rm-panel{background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:var(--bcs-r);padding:12px 14px;margin-bottom:12px}
+.rm-ph{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:8px}
+.rm-ph b{font-family:var(--bcs-display);font-size:14px}.rm-ph span{font-size:11.5px;color:var(--bcs-muted)}
+.rm-formula{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;line-height:1.8;color:var(--bcs-muted);background:var(--bcs-card2);border-radius:8px;padding:8px 12px;overflow-x:auto}
+.rm-formula b{color:var(--bcs-text)}
+.rm-tw{overflow-x:auto;margin-top:10px}
+.rm-t{width:100%;border-collapse:collapse;font-size:12px}
+.rm-t th,.rm-t td{padding:6px 8px;border-bottom:1px solid var(--bcs-line);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.rm-t th:first-child,.rm-t td:first-child{text-align:left}
+.rm-t th{font-size:10.5px;color:var(--bcs-muted);text-transform:uppercase;letter-spacing:.5px}
+.rm-t .hl{background:color-mix(in srgb,var(--bcs-acc) 9%,transparent);font-weight:700}
+.rm-empty{padding:12px;text-align:center;color:var(--bcs-muted);font-size:12.5px}
+.mod-gear{white-space:nowrap}
+.tabs-row{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.tabs-row .tabs{flex:1;min-width:0;margin-bottom:0}
+/* ── module settings ── */
+.ms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px 14px}
+.ms-f{display:flex;flex-direction:column;gap:4px;font-size:12.5px;min-width:0}
+.ms-f>span:first-child{font-weight:700;color:var(--bcs-muted);font-size:11.5px;letter-spacing:.3px}
+.ms-f small{font-size:10.5px;color:var(--bcs-muted)}
+.ms-i{display:flex;align-items:center;gap:5px;color:var(--bcs-muted);font-weight:600}
+.ms-foot{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:14px;flex-wrap:wrap}
+.ms-list{border:1px solid var(--bcs-line);border-radius:8px;padding:10px 12px;margin-bottom:10px;background:var(--bcs-card2)}
+.ms-lh{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.ms-lh b{font-size:13px}.ms-lh small{font-size:11px;color:var(--bcs-muted);margin-right:auto}
+.ms-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.ms-chip{display:inline-flex;align-items:center;gap:4px;background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:14px;padding:3px 4px 3px 10px;font-size:12px}
+.ms-chip button{border:none;background:transparent;color:var(--bcs-muted);cursor:pointer;border-radius:50%;width:20px;height:20px;font-size:11px}
+.ms-chip button:hover{background:#EF4444;color:#fff}
+.ms-add{display:flex;gap:6px}
+.ms-prow{display:flex;gap:6px;align-items:center;margin-top:5px;flex-wrap:wrap}
+/* ── OM log sheet ── */
+.oml-rows{display:flex;flex-direction:column;gap:2px;margin-top:6px}
+.oml-r{display:grid;grid-template-columns:minmax(0,1fr) auto 100px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--bcs-line);font-size:13px}
+.oml-r .nm small{display:block;font-size:11px;color:var(--bcs-muted)}
+.oml-r input{width:110px;text-align:right}
+.oml-st{font-size:12px;font-weight:700;text-align:right;color:var(--bcs-muted)}
+.oml-st.ok{color:#22C55E}.oml-st.ng{color:#EF4444}
+.oml-seg{display:inline-flex;border:1px solid var(--bcs-line);border-radius:6px;overflow:hidden}
+.oml-seg button{border:none;background:transparent;color:var(--bcs-text);padding:6px 10px;font-size:12px;cursor:pointer;font-family:inherit}
+.oml-seg button+button{border-left:1px solid var(--bcs-line)}
+.oml-seg button.on.ok{background:#22C55E;color:#fff}.oml-seg button.on.ng{background:#EF4444;color:#fff}.oml-seg button.on.na{background:var(--bcs-muted);color:#fff}
+.oml-ph{display:flex;gap:8px;flex-wrap:wrap}
+.oml-img{position:relative;width:150px;height:112px;border-radius:8px;overflow:hidden;border:1px solid var(--bcs-line);background:#000}
+.oml-img img{width:100%;height:100%;object-fit:cover}
+.oml-img button{position:absolute;top:4px;right:4px;border:none;border-radius:50%;width:24px;height:24px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer}
+.oml-add{width:150px;height:112px;border:1.5px dashed var(--bcs-line);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12.5px;color:var(--bcs-muted);cursor:pointer;text-align:center}
+.oml-add:hover{border-color:var(--bcs-acc);color:var(--bcs-acc)}
+.oml-sig{width:100%;max-width:420px;height:128px;border:1.5px dashed var(--bcs-line);border-radius:8px;background:#fff;touch-action:none;cursor:crosshair}
+.oml-sigimg{max-width:260px;height:80px;object-fit:contain;background:#fff;border:1px solid var(--bcs-line);border-radius:6px}
+.oml-ck{display:flex;gap:8px;align-items:center;font-size:13px;margin-top:10px}
+.oml-mini{display:inline-flex;gap:4px;align-items:center}
+.oml-mini img{width:34px;height:26px;object-fit:cover;border-radius:4px;border:1px solid var(--bcs-line)}
+.oml-mini img.sg{background:#fff;object-fit:contain;width:46px}
+.ma-prog{min-width:110px}
+@media(max-width:900px){.rm-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.rm-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.oml-r{grid-template-columns:minmax(0,1fr) auto;}.oml-r .oml-st{grid-column:1/-1;text-align:left}}
+/*@@IFM2CSS-END@@*/
+
+.sync-pill{font-size:11.5px;padding:3px 9px;border-radius:12px;border:1px solid var(--border);color:var(--text3);white-space:nowrap;cursor:pointer;background:var(--bg2)}
+.sync-pill.ok{color:var(--green);border-color:color-mix(in srgb,var(--green) 40%,transparent)}.sync-pill.err{color:var(--red);border-color:color-mix(in srgb,var(--red) 40%,transparent)}.sync-pill.busy{color:var(--yellow)}
+.gas-steps{margin:0;padding-left:20px;font-size:12.5px;line-height:1.75;color:var(--text2)}
+.gas-steps code{font-family:var(--font-mono);font-size:11.5px;background:var(--bg3);padding:1px 5px;border-radius:4px}
 /* BCS host tokens */
 body{--bcs-card:var(--bg2);--bcs-card2:var(--bg3);--bcs-line:var(--border);--bcs-text:var(--text);--bcs-muted:var(--text3);--bcs-acc:var(--accent);--bcs-r:var(--radius-lg);--bcs-display:var(--font-display)}
 .tag-id{display:inline-block;background:var(--bg4);border:1px solid var(--border);border-radius:4px;padding:1px 7px;font-size:11px;font-family:var(--font-mono);color:var(--text2);white-space:nowrap}
@@ -429,6 +502,7 @@ body{--bcs-card:var(--bg2);--bcs-card2:var(--bg3);--bcs-line:var(--border);--bcs
       <div class="tb-bc" id="tb-bc">PSD eNGINNo › IFM</div>
     </div>
     <div class="tb-act">
+      <span id="sync-pill" class="sync-pill" hidden onclick="showView('settings')" title="Google Sheets sync"></span>
       <span id="clock"></span>
       <select class="fc" id="biz-switch" style="width:auto;padding:6px 10px" onchange="setBiz(this.value)" aria-label="ประเภทธุรกิจ"></select>
       <button class="btn btn-ghost btn-sm" onclick="cycleTheme()" id="theme-btn" title="สลับธีม">ธีม</button>
@@ -617,10 +691,10 @@ let BIZK=LS.get('psd_ifm_biz','hospital');if(!BIZ[BIZK])BIZK='hospital';
 let D=null;const P=()=>BIZ[BIZK];
 const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
 let CUR='dashboard';let Q=[];const TB={};let charts={};
-function save(){ensureD();LS.set('psd_ifm_v1_'+BIZK,D)}
+function save(){ensureD();LS.set('psd_ifm_v1_'+BIZK,D);typeof syncAfterSave==='function'&&syncAfterSave()}
 function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
 /* enabled services + KPI targets (per business, kept inside D) */
-function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets()}
+function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets();typeof ensureExtra==='function'&&ensureExtra()}
 const svcOn=k=>!(D&&D.svcOff&&D.svcOff[k]);
 const SVC_ON=()=>Object.keys(SVC).filter(svcOn);
 const _BT={};Object.keys(BIZ).forEach(k=>_BT[k]=Object.assign({comp:100,defect:85,hkTask:95,incident:90,gdnTask:90,linLoss:2},BIZ[k].target));
@@ -855,8 +929,9 @@ const pct=v=>`${v}<small>%</small>`;
 function head(svc,sub,actions=''){const S=SVC[svc];return`<div class="sec-head"><div><div class="sec-title"><span>${S.ic}</span>${S.n} <span class="pill pill-${S.type.toLowerCase()}">${S.type} Service</span></div><div class="sec-sub">${S.th} · ${sub}</div></div><div style="display:flex;gap:8px;flex-wrap:wrap">${actions}<button class="btn btn-ghost btn-sm" onclick="quickWR('${svc}')">+ แจ้งงาน ${S.n}</button></div></div>`}
 function chartBox(id,cfg,h=250){Q.push(()=>mkChart(id,cfg()));return`<div class="chart-wrap" style="height:${h}px"><canvas id="${id}" role="img" aria-label="chart"></canvas></div>`}
 function card(t,body,sub=''){return`<div class="card"><div class="card-t">${t}${sub?`<small>${sub}</small>`:''}</div>${body}</div>`}
-function tabs(vid,list){const act=list.find(t=>t.k===UI.tab[vid])?UI.tab[vid]:list[0].k;
-  return`<div class="tabs" role="tablist">${list.map(t=>`<button class="tab ${t.k===act?'active':''}" role="tab" onclick="UI.tab['${vid}']='${t.k}';render()">${t.l}</button>`).join('')}</div>${list.find(t=>t.k===act).h()}`}
+function tabs(vid,list){const act=list.find(t=>t.k===UI.tab[vid])?UI.tab[vid]:list[0].k;const gear=SVC[vid]?`<button class="btn btn-ghost btn-sm mod-gear" onclick="msetOpen('${vid}')" title="ตั้งค่าการคำนวณ 5 ตัววัด และ Database ของ Module">⚙ ตั้งค่า Module</button>`:'';
+  return`<div class="tabs-row" id="tabs-${vid}"><div class="tabs" role="tablist">${list.map(t=>`<button class="tab ${t.k===act?'active':''}" role="tab" onclick="UI.tab['${vid}']='${t.k}';render()">${t.l}</button>`).join('')}</div>${gear}</div>${list.find(t=>t.k===act).h()}`}
+function metricGo(svc,tab){const has={eng:['pm','wr','om'],fac:['pm','wr']}[svc]||['wr'];UI.tab[svc]=has.includes(tab)?tab:'wr';render();setTimeout(()=>{const t=document.getElementById('tabs-'+svc);if(t)t.scrollIntoView({behavior:'smooth',block:'start'})},60)}
 function barRow(label,v,color,right){return`<div class="metric-row"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">${label}</div><div class="bar"><i style="width:${Math.min(100,v)}%;background:${color}"></i></div></div><div style="font-family:var(--font-display);font-size:16px;font-weight:700;color:${color};min-width:52px;text-align:right">${right??v+'%'}</div></div>`}
 
 // charts
@@ -873,6 +948,10 @@ function tbl(ent,opt={}){const cid='t_'+ent+'_'+(opt.key||CUR);TB[cid]={ent,opt}
 function colLabel(ent,c){const S=SCH[ent];if(S.colL&&S.colL[c])return S.colL[c];if(c==='id')return 'ID';if(c==='_sla')return 'SLA';if(c==='_pct')return '%';const f=S.fields.find(x=>x.k===c);return f?(typeof f.l==='function'?f.l():f.l):c}
 function cell(ent,c,r){
   const S=SCH[ent],v=r[c];
+  if(ent==='omLog'&&c==='_read')return omLogReadCell(r);if(ent==='omLog'&&c==='_media')return omLogMediaCell(r);
+  if(ent==='maContract'&&c==='_prog'){const p=r.visitsYear?Math.min(100,Math.round(r.visitsDone/r.visitsYear*100)):0;return`<div class="ma-prog"><b>${esc(r._prog)}</b> ครั้ง ${r._behind?'<span class="badge b-orange">ช้ากว่าแผน</span>':''}<div class="bar"><i style="width:${p}%;background:${r._behind?'var(--orange)':'var(--green)'}"></i></div></div>`}
+  if(c==='result')return badge(v);
+  if(c==='asset'||c==='test'||(ent==='maContract'&&c==='service'))return`<span style="color:var(--text);font-weight:600">${esc(v)}</span>`;
   if(c==='id')return`<span class="tag">${esc(v)}</span>`;
   if(c==='service')return chip(v);
   if(c==='_sla'){const s=slaOf(r);return s.s==='met'?badge('Met'):s.s==='breach'?badge('Breached'):s.s==='hold'?badge('On Hold'):`<span class="badge b-${s.left<60?'orange':'blue'}">เหลือ ${fmtDur(s.left)}</span>`}
@@ -896,7 +975,10 @@ function rowActs(ent,r){let h='';
   if(ent==='hkTasks'&&r.status!=='Done')h+=`<button class="btn btn-ok btn-ic" onclick="markDone('hkTasks','${r.id}')">✓ Done</button> `;
   if(ent==='compliance')h+=`<button class="btn btn-ok btn-ic" title="บันทึกว่าดำเนินการวันนี้" onclick="markDone('compliance','${r.id}')">✓ ทำแล้ว</button> `;
   if(ent==='visitors'&&!r.timeOut)h+=`<button class="btn btn-ok btn-ic" onclick="checkout('${r.id}')">ออก</button> `;
-  h+=`<button class="btn btn-ghost btn-ic" title="แก้ไข" onclick="openForm('${ent}','${r.id}')">✎</button> <button class="btn btn-ghost btn-ic" title="ลบ" onclick="delRow('${ent}','${r.id}',this)">🗑</button>`;
+  if(ent==='omLog')h+=`<button class="btn btn-ghost btn-ic" title="ดู Log Sheet" onclick="omLogView('${r.id}')">👁</button> `;
+  if(ent==='omTest')h+=`<button class="btn btn-ok btn-ic" onclick="omTestDone('${r.id}')">✓ ทดสอบวันนี้</button> `;
+  if(ent==='maContract'&&(+r.visitsDone||0)<(+r.visitsYear||0))h+=`<button class="btn btn-ok btn-ic" onclick="maVisit('${r.id}')">+1 เข้า PM</button> `;
+  h+=`<button class="btn btn-ghost btn-ic" title="แก้ไข" onclick="${SCH[ent].customEdit?SCH[ent].customEdit+`('${r.id}')`:`openForm('${ent}','${r.id}')`}">✎</button> <button class="btn btn-ghost btn-ic" title="ลบ" onclick="delRow('${ent}','${r.id}',this)">🗑</button>`;
   return h}
 function renderTbl(cid){
   const T=TB[cid];if(!T)return;const{ent,opt}=T,S=SCH[ent],el=document.getElementById(cid);if(!el)return;
@@ -906,7 +988,7 @@ function renderTbl(cid){
   if(q)rows=rows.filter(r=>Object.values(r).join(' ').toLowerCase().includes(q));
   if(S.sort)rows.sort(S.sort);
   const cols=opt.cols||S.cols,total=rows.length;if(opt.limit)rows=rows.slice(0,opt.limit);
-  el.innerHTML=`<div class="tbar"><input class="search" id="s_${cid}" placeholder="ค้นหา${esc(S.label)}…" value="${esc(UI.q[cid]||'')}" oninput="UI.q['${cid}']=this.value;renderTbl('${cid}');refocus('s_${cid}')">${opt.bar||''}<span class="count">${total} รายการ</span>${opt.noAdd?'':`<button class="btn btn-primary btn-sm" onclick="openForm('${ent}',null,'${cid}')">+ เพิ่ม${esc(S.label)}</button>`}<button class="btn btn-ghost btn-sm" onclick="exportCSV('${ent}')">⬇ CSV</button></div>
+  el.innerHTML=`<div class="tbar"><input class="search" id="s_${cid}" placeholder="ค้นหา${esc(S.label)}…" value="${esc(UI.q[cid]||'')}" oninput="UI.q['${cid}']=this.value;renderTbl('${cid}');refocus('s_${cid}')">${opt.bar||''}<span class="count">${total} รายการ</span>${opt.noAdd?'':`<button class="btn btn-primary btn-sm" onclick="${S.customNew?S.customNew+'()':`openForm('${ent}',null,'${cid}')`}">+ เพิ่ม${esc(S.label)}</button>`}<button class="btn btn-ghost btn-sm" onclick="exportCSV('${ent}')">⬇ CSV</button></div>
   <div class="table-wrap"><table><thead><tr>${cols.map(c=>`<th>${esc(colLabel(ent,c))}</th>`).join('')}<th></th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${cols.map(c=>`<td>${cell(ent,c,r)}</td>`).join('')}<td class="act">${rowActs(ent,r)}</td></tr>`).join(''):`<tr><td colspan="${cols.length+1}" class="empty">ยังไม่มีข้อมูล — กด “+ เพิ่ม${esc(S.label)}” เพื่อบันทึกรายการแรก</td></tr>`}</tbody></table></div>`;
 }
 function refocus(id){const i=document.getElementById(id);if(i){i.focus();const n=i.value.length;i.setSelectionRange(n,n)}}
@@ -1025,26 +1107,37 @@ VIEWS.helpdesk=()=>{
   <div class="card" style="margin-bottom:14px"><div class="card-t">เป้าหมาย SLA ตาม Priority</div><div class="kpi-grid" style="margin:0">${Object.keys(SLA).map(k=>`<div class="metric-row" style="border:none;padding:0"><div>${badge(k)} <span style="font-size:12px;color:var(--text2)">${SLA[k].l.split(' ')[1]}</span></div><div style="font-size:12px;color:var(--text3)">ตอบรับ ${fmtDur(SLA[k].r)} · แก้ไข ${fmtDur(SLA[k].f)}</div></div>`).join('')}</div></div>
   ${tbl('tickets',{key:'hd',bar:sel('svc',SVCO(),'Service')+sel('st',FLOW.concat(['On Hold']).map(x=>[x,x]),'สถานะ')+sel('pri',Object.keys(SLA).map(x=>[x,x]),'Priority'),filter:t=>(!h.svc||t.service===h.svc)&&(!h.st||t.status===h.st)&&(!h.pri||t.priority===h.pri),defaults:h.svc?{service:h.svc}:{}})}`};
 
-const wrTab=svc=>({k:'wr',l:`Work Request (${openWR(svc)})`,h:()=>tbl('tickets',{key:svc,filter:t=>t.service===svc,defaults:{service:svc},cols:['id','date','area','category','desc','priority','assignee','status','_sla']})});
+const wrTab=svc=>({k:'wr',l:`Work Request (${openWR(svc)})`,h:()=>relPanel(svc,svc==='eng'||svc==='fac'?['maint','mttr']:['rel','maint','avail','mtbf','mttr'])+tbl('tickets',{key:svc,filter:t=>t.service===svc,defaults:{service:svc},cols:['id','date','area','category','desc','priority','assignee','status','_sla']})});
 
 VIEWS.eng=()=>{const B=P(),a=D.assets;const st=countBy(a,'status');const cr=compRows('eng');
   return head('eng',B.sys.join(' · '))+`
   <div class="kpi-grid">${kpi('ทรัพย์สินทั้งหมด',a.length,`Critical A: ${a.filter(x=>x.crit==='A').length} รายการ`,'var(--orange)')}${kpi('Asset Uptime',pct(uptime()),`Down ${st.Down||0} · Warning ${st.Warning||0}`,scoreColor(uptime()))}${kpi('PM Compliance',pct(pmPct('eng')),`ค้าง ${D.pm.filter(p=>p.service==='eng'&&p.status==='Planned'&&p.dueDate<todayS).length} งาน · 7 วันข้างหน้า ${D.pm.filter(p=>p.service==='eng'&&p.status==='Planned'&&p.dueDate>=todayS&&p.dueDate<=addD(todayS,7)).length}`,scoreColor(pmPct('eng')))}${kpi('Statutory Compliance',pct(compPct('eng')),`${cr.filter(c=>c.status==='Overdue').length} เลยกำหนด · ${cr.filter(c=>c.status==='Due Soon').length} ใกล้ครบ`,scoreColor(compPct('eng')))}${kpi('Open Work Request',openWR('eng'),`SLA ${slaPct('eng')}%`,'var(--blue)')}</div>
+  ${metricStrip('eng','metricGo')}
   <div class="grid-2">${card('สถานะทรัพย์สิน',chartBox('cAsSt',()=>doughnutFrom(st,['Running','Standby','Warning','Down']),220))}${card('จำนวนทรัพย์สินแยกตามระบบ',chartBox('cAsSys',()=>{const o=countBy(a,'system');return{type:'bar',data:{labels:Object.keys(o),datasets:[{label:'รายการ',data:Object.values(o),backgroundColor:'#F97316',borderRadius:4}]},options:axOpts({indexAxis:'y',plugins:{legend:{display:false}}})}},220))}</div>
   ${tabs('eng',[
     {k:'asset',l:'Asset Register',h:()=>tbl('assets')},
-    {k:'pm',l:'PM Plan',h:()=>tbl('pm',{key:'eng',filter:r=>r.service==='eng',defaults:{service:'eng'}})},
+    {k:'om',l:'Operation',h:()=>engOpTab()},
+    {k:'pm',l:'PM Plan',h:()=>relPanel('eng',['rel','mtbf'])+tbl('pm',{key:'eng',filter:r=>r.service==='eng',defaults:{service:'eng'}})},
     {k:'util',l:'Utilities',h:()=>`<div class="card" style="margin-bottom:14px"><div class="card-t">การใช้พลังงาน 12 เดือน<small>ไฟฟ้า (kWh) · น้ำ (m³)</small></div>${chartBox('cUtil',()=>{const m=[...D.meters].sort((x,y)=>x.month.localeCompare(y.month));return{type:'bar',data:{labels:m.map(x=>x.month),datasets:[{label:'ไฟฟ้า kWh',data:m.map(x=>x.elec),backgroundColor:'rgba(234,179,8,.6)',borderRadius:4,yAxisID:'y'},{type:'line',label:'น้ำ m³',data:m.map(x=>x.water),borderColor:'#3B82F6',backgroundColor:'#3B82F6',tension:.35,yAxisID:'y1'}]},options:axOpts({scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:tok('--grid')}},y1:{position:'right',beginAtZero:true,grid:{display:false}}}})}},240)}</div>`+tbl('meters')},
     {k:'comp',l:'Statutory Compliance',h:()=>tbl('compliance',{key:'eng',filter:r=>r.service==='eng',defaults:{service:'eng'}})},
-    wrTab('eng')])}`};
+    wrTab('eng'),
+    {k:'ma',l:'MA Contract',h:()=>maTab()}])}`};
+function engOpTab(){const eq=D.omEquip,ts=D.omTest.map(SCH.omTest.derive),lg=D.omLog,d7=addD(todayS,-7);
+  const f=UI.omf||'';const sel=`<select class="fc" style="width:auto" aria-label="ความถี่" onchange="UI.omf=this.value;render()"><option value="">ทุกความถี่</option>${['Weekly','Monthly','Annually'].map(x=>`<option ${f===x?'selected':''}>${x}</option>`).join('')}</select>`;
+  return relPanel('eng',['avail'])+`<div class="kpi-grid">${kpi('อุปกรณ์หลัก',eq.length,`Running ${eq.filter(e=>e.status==='Running').length} · Standby ${eq.filter(e=>e.status==='Standby').length}`,'var(--orange)')}${kpi('Fault / Stop',eq.filter(e=>e.status==='Fault'||e.status==='Stop').length,'ต้องตรวจสอบ','var(--red)')}${kpi('OM Test เลยกำหนด',ts.filter(t=>t.status==='Overdue').length,`ใกล้ครบ ${ts.filter(t=>t.status==='Due Soon').length} · Fail ${ts.filter(t=>t.result==='Fail').length}`,'var(--yellow)')}${kpi('Log Sheet วันนี้',lg.filter(l=>String(l.dt).slice(0,10)===todayS).length,`7 วัน ${lg.filter(l=>String(l.dt).slice(0,10)>=d7).length} ใบ`,'var(--blue)')}${kpi('Log ผิดปกติ (7 วัน)',lg.filter(l=>l.status==='Abnormal'&&String(l.dt).slice(0,10)>=d7).length,'สร้าง WR อัตโนมัติได้','var(--red)')}</div>`
+  +tabs('eng-om',[{k:'equip',l:'⚙ OM Main Equipment',h:()=>tbl('omEquip')},{k:'test',l:'🧪 OM Test (Weekly / Monthly / Annually)',h:()=>tbl('omTest',{bar:sel,filter:r=>!f||r.freq===f})},{k:'log',l:'📝 OM Log Sheet',h:()=>`<div class="alert a-info">Log Sheet: ค่าที่วัดได้มีช่วงมาตรฐาน min–max · ค่าที่วัดไม่ได้บันทึกเป็น ปกติ / ผิดปกติ · แนบรูปได้ 2 รูป และลงลายเซ็นผู้บันทึก · ปรับแม่แบบได้ที่ ⚙ ตั้งค่า Module → Log Sheet Template</div>`+tbl('omLog')}])}
+function maTab(){const m=D.maContract.map(SCH.maContract.derive);return`<div class="kpi-grid">${kpi('สัญญา MA',m.length,m.map(x=>x.service).slice(0,3).join(' · '),'var(--orange)')}${kpi('มูลค่ารวม / ปี','฿'+fmtN(sum(m,x=>x.value)),'ทุกสัญญา','var(--blue)')}${kpi('ใกล้หมดอายุ',m.filter(x=>x.status!=='Active').length,'ภายใน 60 วัน / หมดแล้ว','var(--yellow)')}${kpi('PM ผู้รับจ้างล่าช้า',m.filter(x=>x._behind).length,'เข้าน้อยกว่าแผนตามสัดส่วนเวลา','var(--red)')}</div>`+tbl('maContract')}
+function omTestDone(id){const r=D.omTest.find(x=>x.id===id);if(!r)return;r.lastDone=todayS;r.result='Pass';save();render();toast(r.test+' → ทดสอบวันนี้ (Pass)')}
+function maVisit(id){const r=D.maContract.find(x=>x.id===id);if(!r)return;r.visitsDone=(+r.visitsDone||0)+1;save();render();toast(r.service+' · เข้า PM ครั้งที่ '+r.visitsDone)}
 
 VIEWS.fac=()=>{const d=D.defects,open=d.filter(x=>x.status!=='Closed');const cr=compRows('fac');
   return head('fac','Building fabric · Space · Life safety · Signage · Furniture')+`
   <div class="kpi-grid">${kpi('Defect เปิดอยู่',open.length,`High/Critical ${open.filter(x=>x.severity==='High'||x.severity==='Critical').length} รายการ`,'var(--red)')}${kpi('Defect Closure',pct(defClose()),'เป้าหมาย 85%',scoreColor(defClose()))}${kpi('PM อาคาร',pct(pmPct('fac')),`${D.pm.filter(p=>p.service==='fac').length} งานในแผน`,scoreColor(pmPct('fac')))}${kpi('Life-safety Compliance',pct(compPct('fac')),`${cr.filter(c=>c.status==='Overdue').length} เลยกำหนด`,scoreColor(compPct('fac')))}${kpi('พื้นที่บริหาร',fmtN(sum(D.areas,a=>a.sqm)),`ตร.ม. · ${D.areas.length} โซน`,'var(--blue)')}</div>
+  ${metricStrip('fac','metricGo')}
   <div class="grid-2">${card('Defect ตามความรุนแรง (เปิดอยู่)',chartBox('cDfSev',()=>doughnutFrom(countBy(open,'severity'),['Critical','High','Medium','Low']),220))}${card('Defect ตามองค์ประกอบอาคาร',chartBox('cDfEl',()=>{const o=countBy(d,'element');return{type:'bar',data:{labels:Object.keys(o),datasets:[{label:'รายการ',data:Object.values(o),backgroundColor:'#3B82F6',borderRadius:4}]},options:axOpts({plugins:{legend:{display:false}}})}},220))}</div>
   ${tabs('fac',[
     {k:'def',l:'Defect / งานซ่อมอาคาร',h:()=>tbl('defects')},
-    {k:'pm',l:'PM อาคาร',h:()=>tbl('pm',{key:'fac',filter:r=>r.service==='fac',defaults:{service:'fac'}})},
+    {k:'pm',l:'PM อาคาร',h:()=>relPanel('fac',['rel','mtbf'])+tbl('pm',{key:'fac',filter:r=>r.service==='fac',defaults:{service:'fac'}})},
     {k:'comp',l:'Life Safety & Compliance',h:()=>tbl('compliance',{key:'fac',filter:r=>r.service==='fac',defaults:{service:'fac'}})},
     {k:'area',l:'Area Master',h:()=>`<div class="alert a-info">Area Master ใช้ร่วมกันทุก Service — แจ้งงาน, ตารางแม่บ้าน, จุด Pest, ผ้า ล้วนอ้างอิงพื้นที่จากตารางนี้</div>`+tbl('areas')},
     wrTab('fac')])}`};
@@ -1054,6 +1147,7 @@ VIEWS.hk=()=>{const B=P(),sc=hkScore();const ins=D.hkInsp;
   const onDuty=D.staff.filter(s=>s.service==='hk'&&s.status==='On Duty').length;
   return head('hk',B.hkTasks.slice(0,3).map(t=>t[0]).join(' · '))+`<div class="alert a-info"><b>มาตรฐาน ${B.en}:</b> ${B.hkNote}</div>
   <div class="kpi-grid">${kpi('Cleanliness Score',pct(sc),`เฉลี่ย 30 วัน · เป้า ${B.target.hk}%`,scoreColor(sc))}${kpi('Task Completion',pct(hkDone()),`Missed ${D.hkTasks.filter(t=>t.status==='Missed').length} งาน`,scoreColor(hkDone()))}${kpi('จำนวนการตรวจ (30 วัน)',ins.filter(x=>x.date>=addD(todayS,-30)).length,'Joint inspection','var(--teal)')}${kpi('พนักงานปฏิบัติงาน',onDuty,`จาก ${D.staff.filter(s=>s.service==='hk').length} คน`,'var(--purple)')}${kpi('Open Work Request',openWR('hk'),`SLA ${slaPct('hk')}%`,'var(--blue)')}</div>
+  ${metricStrip('hk','metricGo')}
   <div class="grid-2">${card('คะแนนความสะอาดแยกพื้นที่',chartBox('cHkArea',()=>{const k=Object.keys(byArea);const v=k.map(x=>avg(byArea[x]));return{type:'bar',data:{labels:k,datasets:[{label:'คะแนน %',data:v,backgroundColor:v.map(x=>x>=B.target.hk?'#14B8A6':x>=85?'#EAB308':'#EF4444'),borderRadius:4}]},options:axOpts({indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{min:60,max:100,grid:{color:tok('--grid')}},y:{grid:{display:false}}}})}},260),'30 วันล่าสุด')}
   ${card('แนวโน้มคะแนนรายสัปดาห์',chartBox('cHkTr',()=>{const w=[];for(let i=8;i>=0;i--){const a=addD(todayS,-(i+1)*7),b=addD(todayS,-i*7);const s=ins.filter(x=>x.date>a&&x.date<=b);w.push({l:fmtD(b).slice(0,5),v:s.length?avg(s.map(x=>x.score)):null})}return{type:'line',data:{labels:w.map(x=>x.l),datasets:[{label:'คะแนนเฉลี่ย',data:w.map(x=>x.v),borderColor:'#14B8A6',backgroundColor:'rgba(20,184,166,.12)',fill:true,tension:.35,spanGaps:true},{label:'เป้าหมาย',data:w.map(()=>B.target.hk),borderColor:tok('--text3'),borderDash:[5,4],pointRadius:0,borderWidth:1}]},options:axOpts({scales:{x:{grid:{display:false}},y:{min:60,max:100,grid:{color:tok('--grid')}}}})}},260),'9 สัปดาห์')}</div>
   ${tabs('hk',[{k:'sch',l:'ตารางทำความสะอาด',h:()=>tbl('hkTasks')},{k:'ins',l:'ผลตรวจความสะอาด',h:()=>tbl('hkInsp')},wrTab('hk')])}`};
@@ -1061,6 +1155,7 @@ VIEWS.hk=()=>{const B=P(),sc=hkScore();const ins=D.hkInsp;
 VIEWS.sec=()=>{const B=P(),pp=patrolPct();const inc=D.secInc;const vis=D.visitors;
   return head('sec',B.posts.join(' · '))+`
   <div class="kpi-grid">${kpi('Patrol Compliance',pct(pp),`7 วัน · เป้า ${B.target.patrol}%`,scoreColor(pp))}${kpi('เหตุการณ์เปิดอยู่',inc.filter(x=>x.status!=='Closed').length,`ทั้งหมด ${inc.length} เหตุใน 30 วัน`,'var(--red)')}${kpi('ผู้มาติดต่อในพื้นที่',vis.filter(v=>!v.timeOut).length,`วันนี้ ${vis.filter(v=>v.timeIn.slice(0,10)===todayS).length} ราย`,'var(--blue)')}${kpi('เจ้าหน้าที่ปฏิบัติงาน',D.staff.filter(s=>s.service==='sec'&&s.status==='On Duty').length,`${B.posts.length} จุดประจำ`,'var(--purple)')}${kpi('Open Work Request',openWR('sec'),`SLA ${slaPct('sec')}%`,'var(--blue)')}</div>
+  ${metricStrip('sec','metricGo')}
   <div class="grid-2">${card('Patrol Compliance แยกตามจุด',chartBox('cPatrol',()=>{const v=B.posts.map(p=>patrolPct(p));return{type:'bar',data:{labels:B.posts,datasets:[{label:'%',data:v,backgroundColor:v.map(x=>x>=B.target.patrol?'#A855F7':x>=90?'#EAB308':'#EF4444'),borderRadius:4}]},options:axOpts({plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{min:70,max:100,grid:{color:tok('--grid')}}}})}},230),'7 วันล่าสุด')}
   ${card('เหตุการณ์ตามประเภท',chartBox('cInc',()=>{const o=countBy(inc,'type');const pal=['#EF4444','#F97316','#EAB308','#A855F7','#3B82F6','#14B8A6'];return{type:'doughnut',data:{labels:Object.keys(o),datasets:[{data:Object.values(o),backgroundColor:pal,borderWidth:0}]},options:pieOpts()}},230),'30 วันล่าสุด')}</div>
   ${tabs('sec',[{k:'pt',l:'Patrol Log',h:()=>tbl('patrols')},{k:'inc',l:'Incident Report',h:()=>tbl('secInc')},{k:'vis',l:'Visitor Log',h:()=>tbl('visitors')},wrTab('sec')])}`};
@@ -1068,6 +1163,7 @@ VIEWS.sec=()=>{const B=P(),pp=patrolPct();const inc=D.secInc;const vis=D.visitor
 VIEWS.pest=()=>{const B=P(),s=D.pestSt,pp=pestPct();const nx=D.pestVisit.filter(v=>v.status==='Scheduled').sort((a,b)=>a.date.localeCompare(b.date))[0];const last=D.pestVisit.filter(v=>v.status==='Done').sort((a,b)=>b.date.localeCompare(a.date))[0];
   return head('pest','แมลงสาบ · หนู · มด · แมลงวัน · ยุง · ปลวก · สัตว์จรจัด / นก')+`<div class="alert a-warn"><b>ข้อกำหนด ${B.en}:</b> ${B.pestNote}</div>
   <div class="kpi-grid">${kpi('จุดติดตั้งทั้งหมด',s.length,Object.entries(countBy(s,'type')).length+' ประเภทอุปกรณ์','var(--lime)')}${kpi('Station Clean Rate',pct(pp),`เป้า ${B.target.pest}% (None/Low)`,scoreColor(pp))}${kpi('พบระดับสูง',s.filter(x=>x.activity==='High').length,`Medium ${s.filter(x=>x.activity==='Medium').length} จุด`,'var(--red)')}${kpi('บริการล่าสุด',last?fmtD(last.date):'—',nx?'ครั้งถัดไป '+fmtD(nx.date):'ยังไม่นัดหมาย','var(--blue)')}${kpi('Open Sightings',openWR('pest'),`SLA ${slaPct('pest')}%`,'var(--yellow)')}</div>
+  ${metricStrip('pest','metricGo')}
   <div class="grid-2">${card('ระดับการพบ (Activity Level)',chartBox('cPestLv',()=>doughnutFrom(countBy(s,'activity'),['None','Low','Medium','High']),220))}
   ${card('จุดที่พบ Medium / High แยกพื้นที่',chartBox('cPestAr',()=>{const ar=[...new Set(s.map(x=>x.area))];return{type:'bar',data:{labels:ar,datasets:[{label:'Medium',data:ar.map(a=>s.filter(x=>x.area===a&&x.activity==='Medium').length),backgroundColor:'#EAB308',borderRadius:3},{label:'High',data:ar.map(a=>s.filter(x=>x.area===a&&x.activity==='High').length),backgroundColor:'#EF4444',borderRadius:3}]},options:axOpts({indexAxis:'y',scales:{x:{stacked:true,beginAtZero:true,ticks:{stepSize:1},grid:{color:tok('--grid')}},y:{stacked:true,grid:{display:false}}}})}},220))}</div>
   ${tabs('pest',[{k:'st',l:'Station Map / Monitoring',h:()=>tbl('pestSt')},{k:'vs',l:'Service Visits',h:()=>tbl('pestVisit')},{k:'wr',l:`Sightings / แจ้งพบ (${openWR('pest')})`,h:()=>tbl('tickets',{key:'pest',filter:t=>t.service==='pest',defaults:{service:'pest'},cols:['id','date','area','category','desc','priority','status','_sla']})}])}`};
@@ -1075,12 +1171,14 @@ VIEWS.pest=()=>{const B=P(),s=D.pestSt,pp=pestPct();const nx=D.pestVisit.filter(
 VIEWS.gdn=()=>{const B=P(),z=D.gdnZones,t=D.gdnTasks;const due=z.map(SCH.gdnZones.derive).filter(x=>x._next<=todayS).length;
   return head('gdn','Lawn · Shrub · Tree · Indoor plants · Irrigation')+`
   <div class="kpi-grid">${kpi('โซนภูมิทัศน์',z.length,fmtN(sum(z,x=>x.sqm))+' ตร.ม.','var(--green)')}${kpi('Zone Health',pct(gdnPct()),`เป้า ${B.target.gdn}%`,scoreColor(gdnPct()))}${kpi('ครบรอบดูแล',due,'โซนที่ถึงกำหนดแล้ว','var(--yellow)')}${kpi('Task On-time',pct(gdnOnTime()),`Delayed ${t.filter(x=>x.status==='Delayed').length} งาน`,scoreColor(gdnOnTime()))}${kpi('Open Work Request',openWR('gdn'),`SLA ${slaPct('gdn')}%`,'var(--blue)')}</div>
+  ${metricStrip('gdn','metricGo')}
   <div class="grid-2">${card('สภาพโซนภูมิทัศน์',chartBox('cGdnH',()=>doughnutFrom(countBy(z,'health'),['Good','Fair','Poor']),220))}${card('สถานะงานสวน',chartBox('cGdnT',()=>doughnutFrom(countBy(t,'status'),['Done','Scheduled','Delayed']),220))}</div>
   ${tabs('gdn',[{k:'z',l:'Landscape Zones',h:()=>tbl('gdnZones')},{k:'t',l:'Garden Tasks',h:()=>tbl('gdnTasks')},wrTab('gdn')])}`};
 
 VIEWS.lin=()=>{const B=P(),it=D.linenItems.map(SCH.linenItems.derive);const lossV=sum(it,x=>((+x.reject||0)+(+x.lost||0))*(+x.cost||0));
   return head('lin','Par level · Soiled → Laundry → Clean → Issue · Reject / Loss')+`<div class="alert a-info"><b>มาตรฐาน ${B.en}:</b> ${B.linNote} · การบันทึก Transaction จะปรับยอดคลังให้อัตโนมัติ</div>
   <div class="kpi-grid">${kpi('ผ้าในระบบทั้งหมด',fmtN(sum(it,x=>x._total)),`Par รวม ${fmtN(sum(it,x=>x.par))} ผืน`,'var(--pink)')}${kpi('Linen Availability',pct(linPct()),`เป้า ${B.target.lin}%`,scoreColor(linPct()))}${kpi('ผ้าสะอาดพร้อมจ่าย',fmtN(sum(it,x=>x.clean)),'ผืน ในคลัง','var(--teal)')}${kpi('Reject + Lost (เดือนนี้)',fmtN(sum(it,x=>(+x.reject||0)+(+x.lost||0))),`${linLoss()}% ของ Par · มูลค่า ฿${fmtN(lossV)}`,linLoss()<=2?'var(--green)':'var(--red)')}${kpi('Open Work Request',openWR('lin'),`SLA ${slaPct('lin')}%`,'var(--blue)')}</div>
+  ${metricStrip('lin','metricGo')}
   ${card('สถานะผ้าเทียบ Par Level',chartBox('cLin',()=>({type:'bar',data:{labels:it.map(x=>x.name.replace(/\s*\(.*\)/,'')),datasets:[{label:'สะอาด (คลัง)',data:it.map(x=>x.clean),backgroundColor:'#14B8A6',stack:'s'},{label:'ใช้งาน',data:it.map(x=>x.inUse),backgroundColor:'#3B82F6',stack:'s'},{label:'ระหว่างซัก',data:it.map(x=>x.laundry),backgroundColor:'#EC4899',stack:'s'},{type:'line',label:'Par level',data:it.map(x=>x.par),borderColor:tok('--text'),backgroundColor:tok('--text'),borderDash:[5,4],pointRadius:4,showLine:false}]},options:axOpts({scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:tok('--grid')}}}})}),270))}
   <div style="height:16px"></div>
   ${tabs('lin',[{k:'inv',l:'Linen Inventory',h:()=>tbl('linenItems')},{k:'tx',l:'Transactions',h:()=>tbl('linenTx')},wrTab('lin')])}`};
@@ -1104,7 +1202,7 @@ VIEWS.kpi=()=>{const K=KPIS();const sc={};SVC_ON().forEach(k=>sc[k]=SCORE[k]());
   <div class="table-wrap"><table><thead><tr><th>Service</th><th>KPI</th><th class="num">เป้าหมาย</th><th class="num">ผลจริง</th><th>ผลประเมิน</th><th style="min-width:140px"></th></tr></thead><tbody>${K.map(k=>{const v=k[2](),na=v==null,ok=!na&&(k[5]?v<=k[3]:v>=k[3]);if(na)return`<tr><td>${chip(k[0])}</td><td class="strong">${esc(k[1])} <span class="badge b-purple">Custom</span></td><td class="num">${k[5]?'≤ ':'≥ '}${k[3]}${esc(k[4])}</td><td class="num">—</td><td><span class="badge b-gray">ยังไม่กรอกผล</span></td><td></td></tr>`;return`<tr><td>${chip(k[0])}</td><td class="strong">${esc(k[1])}${k[7]?' <span class="badge b-purple">Custom</span>':''}</td><td class="num">${k[5]?'≤ ':'≥ '}${k[3]}${k[4]}</td><td class="num"><b style="color:${ok?'var(--green)':'var(--red)'}">${v}${k[4]}</b></td><td>${badge(ok?'Met':'Breached')}</td><td><div class="bar" style="margin:0"><i style="width:${k[5]?Math.max(0,100-v*10):Math.min(100,v)}%;background:${ok?'var(--green)':'var(--red)'}"></i></div></td></tr>`}).join('')}</tbody></table></div>`};
 function exportKPI(){const K=KPIS();const csv='﻿'+[['Service','KPI','Target','Actual','Result','Type']].concat(K.map(k=>{const v=k[2]();return[SVC[k[0]].n,k[1],(k[5]?'<=':'>=')+k[3]+k[4],v==null?'':v,v==null?'Not entered':(k[5]?v<=k[3]:v>=k[3])?'Met':'Breached',k[7]?'Custom':'Built-in']})).map(l=>l.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(',')).join('\r\n');download(`IFM_KPI_${P().en.replace(/\s/g,'')}_${todayS}.csv`,csv,'text/csv;charset=utf-8')}
 
-const GROUPS=[['Overview',['tickets']],['Engineering',['assets','pm','meters','compliance']],['Facility',['defects','areas']],['Housekeeping',['hkTasks','hkInsp']],['Security',['patrols','secInc','visitors']],['Pest Control',['pestSt','pestVisit']],['Garden',['gdnZones','gdnTasks']],['Linen',['linenItems','linenTx']],['Management',['staff','vendors']],['KPI',['kpiCustom']]];
+const GROUPS=[['Overview',['tickets']],['Engineering',['assets','omEquip','omTest','omLog','pm','meters','compliance','maContract']],['Facility',['defects','areas']],['Housekeeping',['hkTasks','hkInsp']],['Security',['patrols','secInc','visitors']],['Pest Control',['pestSt','pestVisit']],['Garden',['gdnZones','gdnTasks']],['Linen',['linenItems','linenTx']],['Management',['staff','vendors']],['KPI',['kpiCustom']]];
 VIEWS.reports=()=>`<div class="sec-head"><div><div class="sec-title">📑 Reports & Data</div><div class="sec-sub">Export ทุกตารางเป็น CSV (เปิดใน Excel ได้ภาษาไทย) · สำรอง / กู้คืนข้อมูลทั้งไซต์เป็น JSON</div></div>
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="backupJSON()">⬇ สำรองข้อมูล (JSON)</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('restore-file').click()">⬆ กู้คืนข้อมูล</button><button class="btn btn-ghost btn-sm" onclick="exportKPI()">⬇ KPI Scorecard</button></div></div>
   <div class="alert a-info">ข้อมูลเก็บแยกตามประเภทธุรกิจในเบราว์เซอร์นี้ (localStorage) · ชั้นข้อมูลออกแบบให้เปลี่ยนไปใช้ Google Sheets / Apps Script ได้ภายหลังโดยแก้เฉพาะฟังก์ชัน load() / save()</div>
@@ -1120,8 +1218,349 @@ VIEWS.settings=()=>`<div class="sec-head"><div><div class="sec-title">⚙ Busine
     </div>
     ${platformCard()}
   </div>
+  ${gasCard()}
   ${kpiTargetCard()}`;
 
+
+/*@@IFM2-START@@*/
+/* ═══════════════════════════════════════════════════════════════════
+   IFM v1.0 · Part 2 (shared desktop + mobile)
+   · Engineering Operation: OM Main Equipment · OM Test (W/M/A) · OM Log Sheet (2 photos + signature)
+   · MA Contract
+   · Quality metrics per module: Reliability · Maintainability · Availability · MTBF · MTTR
+     (formulas follow TKO iMATOMs Reliability Module v1.3)
+   · Module settings (calculation + master-list database) per Hard / Soft module
+   · Google Apps Script / Google Sheets sync — 1 spreadsheet per business per building
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ---------- new entities ---------- */
+const OM_FREQ={Weekly:7,Monthly:30,Annually:365};
+SCH.omEquip={label:'อุปกรณ์หลัก (OM)',pfx:'OE',fields:[
+  {k:'asset',l:'อุปกรณ์หลัก',t:'text',req:1,full:1,list:()=>D.assets.map(a=>a.name)},{k:'system',l:'ระบบ',t:'select',o:()=>modList('eng','sys')},
+  {k:'area',l:'พื้นที่',t:'select',o:AREAS},{k:'rated',l:'พิกัด / ขนาด',t:'text'},
+  {k:'hrsDay',l:'ชั่วโมงเดินเครื่อง/วัน',t:'number',def:24},{k:'runHours',l:'Run hours สะสม',t:'number',def:0},
+  {k:'status',l:'สถานะเดินเครื่อง',t:'select',o:['Running','Standby','Stop','Fault'],def:'Running',b:1},{k:'operator',l:'ผู้ควบคุม',t:'text'},
+  {k:'lastCheck',l:'ตรวจล่าสุด',t:'date',def:()=>todayS}],
+  cols:['id','asset','system','area','rated','hrsDay','runHours','operator','lastCheck','status']};
+SCH.omTest={label:'รายการทดสอบ (OM Test)',pfx:'OT',fields:[
+  {k:'test',l:'รายการทดสอบ',t:'text',req:1,full:1},{k:'equipment',l:'อุปกรณ์',t:'text',list:()=>D.omEquip.map(e=>e.asset).concat(D.assets.map(a=>a.name))},
+  {k:'freq',l:'ความถี่',t:'select',o:[['Weekly','Weekly — รายสัปดาห์'],['Monthly','Monthly — รายเดือน'],['Annually','Annually — รายปี']],def:'Monthly'},
+  {k:'lastDone',l:'ทดสอบล่าสุด',t:'date',def:()=>todayS},{k:'result',l:'ผลการทดสอบ',t:'select',o:['Pass','Fail','Pending'],def:'Pass',b:1},
+  {k:'by',l:'ผู้ทดสอบ',t:'text'},{k:'note',l:'หมายเหตุ / ค่าที่วัดได้',t:'textarea',full:1}],
+  cols:['id','test','equipment','freq','lastDone','_nextDue','by','result','status'],colL:{_nextDue:'ครบกำหนด',status:'สถานะ'},
+  derive:r=>{const nx=addD(r.lastDone||todayS,OM_FREQ[r.freq]||30),dl=dBetween(todayS,nx);return{...r,_nextDue:nx,_dl:dl,status:dl<0?'Overdue':dl<=Math.max(1,Math.round((OM_FREQ[r.freq]||30)*0.2))?'Due Soon':'On Schedule'}},
+  sort:(a,b)=>a._dl-b._dl};
+SCH.omLog={label:'Log Sheet',pfx:'LG',l4:1,customNew:'omLogOpen',customEdit:'omLogOpen',fields:[
+  {k:'dt',l:'วันเวลาบันทึก',t:'datetime',req:1},{k:'equipment',l:'อุปกรณ์',t:'text',req:1},{k:'system',l:'ระบบ',t:'text'},
+  {k:'shift',l:'กะ',t:'select',o:['Morning','Afternoon','Night']},{k:'recorder',l:'ผู้บันทึก',t:'text'},{k:'status',l:'ผล',t:'select',o:['Normal','Abnormal'],b:1},{k:'remark',l:'หมายเหตุ',t:'textarea'}],
+  cols:['id','dt','equipment','shift','_read','_media','recorder','status'],colL:{_read:'ค่าที่บันทึก',_media:'รูป / ลายเซ็น'},
+  sort:(a,b)=>String(b.dt).localeCompare(String(a.dt))};
+SCH.maContract={label:'สัญญา MA',pfx:'MA',fields:[
+  {k:'service',l:'บริการ / ระบบ',t:'text',req:1,list:()=>modList('eng','maTypes')},{k:'vendor',l:'ผู้รับจ้าง',t:'text',req:1},
+  {k:'contractNo',l:'เลขที่สัญญา',t:'text'},{k:'equipment',l:'อุปกรณ์ที่ครอบคลุม',t:'text',full:1},
+  {k:'start',l:'เริ่มสัญญา',t:'date',def:()=>todayS},{k:'end',l:'สิ้นสุดสัญญา',t:'date',def:()=>addD(todayS,365)},
+  {k:'visitsYear',l:'จำนวนเข้า PM / ปี',t:'number',def:12},{k:'visitsDone',l:'เข้าแล้ว (ครั้ง)',t:'number',def:0},
+  {k:'value',l:'มูลค่าสัญญา/ปี (฿)',t:'number'},{k:'respHr',l:'SLA ตอบสนอง (ชม.)',t:'number',def:4},
+  {k:'contact',l:'ผู้ติดต่อ / โทร',t:'text'},{k:'note',l:'ขอบเขตงาน / หมายเหตุ',t:'textarea',full:1}],
+  cols:['id','service','vendor','contractNo','equipment','_prog','value','respHr','end','status'],colL:{_prog:'ความคืบหน้า PM',status:'สถานะ',value:'มูลค่า/ปี'},
+  derive:r=>{const dl=r.end?dBetween(todayS,r.end):999;const el=r.start?Math.max(0,dBetween(r.start,todayS)):0,tot=r.start&&r.end?Math.max(1,dBetween(r.start,r.end)):365;
+    const plan=Math.min(+r.visitsYear||0,Math.round((+r.visitsYear||0)*Math.min(1,el/tot)));return{...r,_plan:plan,_prog:(+r.visitsDone||0)+'/'+(+r.visitsYear||0),_behind:(+r.visitsDone||0)<plan,status:dl<0?'Expired':dl<=60?'Expiring':'Active'}}};
+Object.assign(BC,{Stop:'gray',Fault:'red',Pass:'green',Fail:'red',Pending:'yellow','On Schedule':'green',Normal:'green',Abnormal:'red'});
+
+/* ---------- OM log templates (measurable = m with min/max · check = c) ---------- */
+const LOGTPL0=[
+ {k:'Refrigeration / Cold room',m:'freezer|walk-in|cold room|refrigerat|ice machine',p:[['Cabinet Temperature','°C','m',-22,5],['Door Gasket / ประตูปิดสนิท','','c'],['Defrost Cycle','','c'],['ความสะอาดคอยล์','','c']]},
+ {k:'Chiller / HVAC',m:'chiller|ahu|hvac|cooling|heat pump|split|fcu|air con',p:[['CHW Supply Temp','°C','m',5.5,8],['CHW Return Temp','°C','m',10,14],['Condenser Water Temp','°C','m',28,35],['Compressor Current','A','m',0,350],['Refrigerant Pressure','bar','m',3,6],['เสียง / การสั่นสะเทือน','','c'],['การรั่วซึม (น้ำ/น้ำยา)','','c']]},
+ {k:'Generator',m:'generator|genset',p:[['Battery Voltage','V','m',24,28.5],['Fuel Level','%','m',60,100],['Coolant Temp (standby)','°C','m',25,50],['Oil Level','','c'],['Block Heater','','c'],['สภาพทั่วไป / การรั่ว','','c']]},
+ {k:'Fire Pump / Fire Protection',m:'fire pump|fire protection|sprinkler|fire alarm',p:[['System Pressure','bar','m',6,10],['Jockey Pump Cut-in','bar','m',6,9],['Diesel Fuel Level','%','m',60,100],['Controller Auto Mode','','c'],['Valve Supervisory (Open)','','c']]},
+ {k:'Electrical / UPS',m:'transformer|mdb|ups|electrical|substation|breaker|distribution|panel|22 kv',p:[['Voltage L-L','V','m',380,420],['Load Current','A','m',0,2500],['Power Factor','','m',0.85,1],['Panel / Transformer Temp','°C','m',20,75],['สภาพ Breaker / หน้าสัมผัส','','c']]},
+ {k:'Pump / Plumbing / WWTP',m:'pump|booster|water|ro |plumbing|sewage|wwtp|aerator|grease',p:[['Discharge Pressure','bar','m',2,6],['Motor Current','A','m',0,150],['Tank Level','%','m',40,100],['เสียง / การสั่น','','c'],['การรั่วซึม','','c']]},
+ {k:'Lift / Escalator',m:'lift|escalator|elevator',p:[['Leveling Accuracy','mm','m',0,10],['Door Operation','','c'],['Emergency Phone / Alarm','','c'],['สภาพห้องเครื่อง','','c']]},
+ {k:'Boiler / Steam / Compressed air',m:'boiler|steam|compressor|air dryer|lpg|crane|hoist',p:[['Operating Pressure','bar','m',5,10],['Temperature','°C','m',20,180],['Safety Valve / Interlock','','c'],['Water / Oil Level','','c']]},
+ {k:'Kitchen equipment',m:'oven|wok|dishwasher|hood|kitchen|exhaust',p:[['Operating Temperature','°C','m',60,300],['Gas / Burner Flame','','c'],['Filter / Hood ความสะอาด','','c'],['ระบบตัดไฟ / Safety','','c']]},
+ {k:'General (ทั่วไป)',m:'',p:[['อุณหภูมิ','°C','m',0,60],['สภาพทั่วไป','','c'],['เสียง / กลิ่นผิดปกติ','','c']]}];
+function logTpls(){const c=D.modCfg&&D.modCfg.eng&&D.modCfg.eng.logTpl;return Array.isArray(c)&&c.length?c:LOGTPL0}
+function logTplFor(name,system){const s=(String(name||'')+' '+String(system||'')).toLowerCase(),T=logTpls();
+  return T.find(t=>t.m&&String(t.m).split('|').some(w=>w.trim()&&s.includes(w.trim().toLowerCase())))||T.find(t=>!t.m)||T[T.length-1]}
+
+/* ---------- module config (calculation + master-list database) ---------- */
+const CALC0={units:0,periodDays:30,hrsDay:24,workDays:365,load:80,testTime:720,maintTarget:8,mttrFrom:'report',availMethod:'operational',relMethod:'mttf',countP4:false,t:{rel:90,maint:90,avail:98,mtbf:500,mttr:4}};
+const CALC_SOFT={hrsDay:12,workDays:365,maintTarget:4,t:{rel:90,maint:90,avail:98,mtbf:200,mttr:2}};
+const LISTDEF={
+  eng:[['sys','ระบบวิศวกรรม (Asset system)',()=>P().sys],['cats','หมวดงานแจ้งซ่อม (WR category)',()=>P().sys],['maTypes','ประเภทสัญญา MA',()=>maTypes0()]],
+  fac:[['cats','หมวดงานแจ้งซ่อม (WR category)',()=>CATS.fac],['elements','องค์ประกอบอาคาร (Defect)',()=>['Roof','Ceiling','Wall','Floor','Door','Window','Sanitary','Signage','Furniture','External']]],
+  hk:[['cats','หมวดงานแจ้ง (WR category)',()=>CATS.hk],['taskTypes','ประเภทงานทำความสะอาด',()=>['Routine','Deep','Terminal','Spill','Event','Waste']]],
+  sec:[['cats','หมวดงานแจ้ง (WR category)',()=>CATS.sec],['posts','จุด / ป้อมรักษาการณ์',()=>P().posts]],
+  pest:[['cats','หมวดงานแจ้ง (WR category)',()=>CATS.pest],['stTypes','ประเภทอุปกรณ์ / สถานี',()=>['Bait Station (หนู)','Glue Board','ILT เครื่องดักแมลงวัน','Termite Station','Gel Bait Point','Cage Trap (สัตว์จรจัด)']]],
+  gdn:[['cats','หมวดงานแจ้ง (WR category)',()=>CATS.gdn],['zoneTypes','ประเภทโซนภูมิทัศน์',()=>['Lawn','Shrub','Tree','Indoor','Irrigation']]],
+  lin:[['cats','หมวดงานแจ้ง (WR category)',()=>CATS.lin],['txTypes','ประเภทการเคลื่อนไหวผ้า',()=>['Issue to Dept','Soiled to Laundry','Clean Return','Reject','Lost']]]};
+function maTypes0(){return BIZK==='restaurant'?['Refrigeration / Cold Room','Kitchen Exhaust Hood','Fire Alarm & Suppression','LPG System']:['Chiller','Generator','Fire Alarm','Lift / Escalator','UPS']}
+function modCfg(svc){if(!D.modCfg)D.modCfg={};if(!D.modCfg[svc])D.modCfg[svc]={calc:{},lists:{}};const m=D.modCfg[svc];if(!m.calc)m.calc={};if(!m.lists)m.lists={};return m}
+function modCalc(svc){const base=SVC[svc]&&SVC[svc].type==='Soft'?Object.assign({},CALC0,CALC_SOFT,{t:Object.assign({},CALC0.t,CALC_SOFT.t)}):Object.assign({},CALC0,{t:Object.assign({},CALC0.t)});
+  const c=(D.modCfg&&D.modCfg[svc]&&D.modCfg[svc].calc)||{};const r=Object.assign(base,c);r.t=Object.assign({},base.t,c.t||{});return r}
+function modList(svc,key){const c=D.modCfg&&D.modCfg[svc]&&D.modCfg[svc].lists&&D.modCfg[svc].lists[key];if(Array.isArray(c)&&c.length)return c;const d=(LISTDEF[svc]||[]).find(x=>x[0]===key);return d?d[2]():[]}
+// wire master lists into existing forms
+(function(){const f=(e,k)=>SCH[e]&&SCH[e].fields.find(x=>x.k===k);
+  const c=f('tickets','category');if(c)c.list=v=>modList(v.service||'eng','cats');
+  const s=f('assets','system');if(s)s.o=()=>modList('eng','sys');
+  const p=f('patrols','post');if(p)p.o=()=>modList('sec','posts');
+  const st=f('pestSt','type');if(st)st.o=()=>modList('pest','stTypes');
+  const el=f('defects','element');if(el)el.o=()=>modList('fac','elements');
+  const ht=f('hkTasks','type');if(ht)ht.o=()=>modList('hk','taskTypes');
+  const gz=f('gdnZones','type');if(gz)gz.o=()=>modList('gdn','zoneTypes');
+  const lt=f('linenTx','type');if(lt)lt.o=()=>modList('lin','txTypes');})();
+
+/* ---------- seed new tables for existing datasets ---------- */
+function ensureExtra(){if(!D)return;['omEquip','omTest','omLog','maContract'].forEach(k=>{if(!Array.isArray(D[k]))D[k]=null});
+  if(D.omEquip&&D.omTest&&D.omLog&&D.maContract)return;
+  const r=rng(BIZK+'-om-v1'),ri=(a,b)=>a+Math.floor(r()*(b-a+1)),pick=a=>a[Math.floor(r()*a.length)],person=()=>pick(FN)+' '+pick(LN);
+  if(!D.omEquip){const A=D.assets.filter(a=>a.crit==='A').slice(0,8);D.omEquip=A.map((a,i)=>({id:'OE-'+pad(i+1,3),asset:a.name,system:a.system,area:a.area,rated:(a.name.match(/[\d,.]+\s?(TR|kVA|kW|GPM|t\/h|t|L)\b/i)||[''])[0],hrsDay:/generator|ups|fire pump|standby/i.test(a.name)?0:/lift|escalator/i.test(a.name)?18:24,runHours:ri(4000,42000),status:a.status==='Down'?'Fault':a.status==='Standby'?'Standby':'Running',operator:person(),lastCheck:addD(todayS,-ri(0,2))}))}
+  if(!D.omTest){const T=[];const add=(t,eq,f)=>T.push({id:'OT-'+pad(T.length+1,3),test:t,equipment:eq,freq:f,lastDone:addD(todayS,-ri(0,Math.round(OM_FREQ[f]*1.15))),result:r()<.9?'Pass':'Fail',by:person(),note:''});
+    D.assets.forEach(a=>{const n=a.name.toLowerCase();
+      if(/generator/.test(n)){add('Generator No-load Run Test',a.name,'Weekly');add('Generator Load Test (≥30% load)',a.name,'Monthly');add('Generator Annual Service / Load Bank',a.name,'Annually')}
+      if(/fire pump/.test(n)){add('Fire Pump Churn / Run Test',a.name,'Weekly');add('Fire Pump Flow Test',a.name,'Annually')}
+      if(/^chiller|chiller #/.test(n))add('Chiller Efficiency Test (kW/TR)',a.name,'Annually');
+      if(/ups/.test(n))add('UPS Battery Discharge Test',a.name,'Annually');
+      if(/lift|escalator/.test(n))add('Lift Safety Gear / Brake Test',a.name,'Annually');
+      if(/freezer|walk-in/.test(n))add('Cold Room Alarm & Temp Probe Test',a.name,'Weekly');
+      if(/lpg/.test(n))add('LPG Leak Detector Test',a.name,'Monthly');
+      if(/boiler/.test(n))add('Boiler Safety Valve Test',a.name,'Monthly');
+      if(/compressor/.test(n))add('Air Receiver Safety Valve Test',a.name,'Annually')});
+    add('Fire Alarm Panel & Detector Test','Fire Alarm System','Monthly');add('Emergency Lighting Discharge Test','Emergency Lighting','Monthly');
+    D.omTest=T}
+  if(!D.omLog){D.omLog=[];D.omEquip.slice(0,4).forEach(e=>{for(let d=0;d<3;d++){const tp=logTplFor(e.asset,e.system);const rd=tp.p.map(q=>{if(q[2]==='m'){const lo=+q[3],hi=+q[4],bad=r()<.025;const v=bad?+(hi+(hi-lo)*.15).toFixed(1):+(lo+(hi-lo)*(.2+r()*.6)).toFixed(lo%1||hi%1||hi-lo<5?1:0);return{n:q[0],u:q[1],t:'m',min:lo,max:hi,v,ok:v>=lo&&v<=hi}}const ok=r()>.015;return{n:q[0],u:q[1],t:'c',v:ok?'ok':'ng',ok}});
+      const dt=new Date(NOW.getTime()-(d*24+ri(1,10))*36e5);D.omLog.push({id:'LG-'+pad(D.omLog.length+1,4),dt:isoDT(dt),equipment:e.asset,system:e.system,shift:pick(['Morning','Afternoon','Night']),recorder:e.operator,readings:rd,photos:[],sig:'',status:rd.some(x=>x.ok===false)?'Abnormal':'Normal',remark:''})}})}
+  if(!D.maContract){const V=BIZK==='restaurant'?[['Refrigeration / Cold Room','ColdChain Service Co.','Walk-in Freezer, Walk-in Chiller, Ice Machine',12,85000],['Kitchen Exhaust Hood','HoodClean Pro','Kitchen Exhaust Hood & Fan, Duct',4,48000],['Fire Alarm & Suppression','FireSafe Engineering','Fire alarm panel, Wet chemical hood suppression',4,36000]]
+      :[['Chiller','CoolTech Chiller Service',D.assets.filter(a=>/chiller/i.test(a.name)).map(a=>a.name).join(', ')||'Chiller plant',12,Math.round(480000*(P().scale||1))],['Generator','PowerGen Service Co.',D.assets.filter(a=>/generator/i.test(a.name)).map(a=>a.name).join(', ')||'Generator',4,Math.round(120000*(P().scale||1))],['Fire Alarm','FireSafe Engineering','Fire alarm panel, detectors, Fire pump controller',4,Math.round(150000*(P().scale||1))]];
+    D.maContract=V.map((v,i)=>{const st=addD(todayS,-ri(60,300)),end=addD(st,365);const done=Math.max(0,Math.round(v[3]*Math.min(1,dBetween(st,todayS)/365))-ri(0,1));return{id:'MA-'+pad(i+1,3),service:v[0],vendor:v[1],contractNo:'MA-'+(NOW.getFullYear()+543)+'-'+pad(i+11,3),equipment:v[2],start:st,end,visitsYear:v[3],visitsDone:done,value:v[4],respHr:i===2?2:4,contact:person()+' · 08'+ri(1,9)+'-'+ri(100,999)+'-'+ri(1000,9999),note:''}})}
+}
+
+/* ---------- quality metrics (iMATOMs Reliability Module v1.3 formulas) ----------
+   MTTR            = Σ repair hours ÷ closed jobs                     (repair = report/respond → completed)
+   MTBF            = (Operating hours − Downtime) ÷ Failures           (operating hours = period × hrs/day)
+   Availability    = Operational: (Operating − Downtime) ÷ Operating  |  Inherent: MTBF ÷ (MTBF + MTTR)
+   Maintainability = 1 − e^(−Target repair time ÷ MTTR)
+   Reliability     = e^(−Test time ÷ MTTF), MTTF = [Duty cycle − Repair time/Count] × Load factor,
+                     Duty cycle = hrs/day × working days/yr            (alt: e^(−Test time ÷ MTBF)) */
+function modUnits(svc){const C=modCalc(svc);if(+C.units>0)return +C.units;return Math.max(1,{eng:D.assets.length,fac:D.areas.length,hk:D.areas.length,sec:modList('sec','posts').length,pest:D.areas.length,gdn:D.gdnZones.length,lin:D.linenItems.length}[svc]||1)}
+function relCalc(C,list,units){units=Math.max(1,units||1);
+  const since=addD(todayS,-C.periodDays);const t=list.filter(x=>String(x.date).slice(0,10)>=since&&(C.countP4||x.priority!=='P4'));
+  const rh=t.filter(x=>x.completedAt).map(x=>{const s=new Date(C.mttrFrom==='respond'&&x.respondedAt?x.respondedAt:x.date),e=new Date(x.completedAt);return Math.max(0,(e-s)/36e5)});
+  const fails=t.length,down=rh.reduce((s,v)=>s+v,0),mttr=rh.length?down/rh.length:null,op=C.periodDays*C.hrsDay*units;
+  const mtbf=fails?Math.max(0,(op-down)/fails):op;
+  const availOp=op?Math.max(0,Math.min(100,(op-down)/op*100)):100,availIn=mttr!=null&&mtbf+mttr>0?mtbf/(mtbf+mttr)*100:100;
+  const maint=mttr?(1-Math.exp(-C.maintTarget/mttr))*100:100;
+  const duty=C.hrsDay*C.workDays,mttf=Math.max(1,(duty-(mttr||0))*C.load/100);
+  const rel=C.relMethod==='mtbf'?(mtbf>0?Math.exp(-C.testTime/mtbf)*100:0):Math.exp(-C.testTime/mttf)*100;
+  return{units,mttr,mtbf,avail:C.availMethod==='inherent'?availIn:availOp,availOp,availIn,maint,rel,mttf,duty,down,fails,done:rh.length,op,C,noFail:!fails}}
+function relMetrics(svc){return relCalc(modCalc(svc),D.tickets.filter(x=>x.service===svc),modUnits(svc))}
+function relBySys(svc){const C=modCalc(svc),g={};D.tickets.filter(x=>x.service===svc).forEach(x=>{(g[x.category||'—']=g[x.category||'—']||[]).push(x)});
+  const mu=modUnits(svc);return Object.entries(g).map(([k,l])=>Object.assign({sys:k},relCalc(C,l,svc==='eng'?Math.max(1,D.assets.filter(a=>a.system===k).length):mu))).filter(r=>r.fails>0).sort((a,b)=>a.rel-b.rel)}
+const RM_DEF=[['rel','Reliability','%','pm','PM Plan'],['maint','Maintainability','%','wr','Work Request'],['avail','Availability','%','om','Operation'],['mtbf','MTBF','h','pm','PM Plan'],['mttr','MTTR','h','wr','Work Request']];
+function rmOk(k,v,C){if(v==null)return null;return k==='mttr'?v<=C.t.mttr:v>=C.t[k]}
+function rmFmt(k,v){if(v==null)return'—';return k==='mtbf'||k==='mttr'?(v>=100?Math.round(v).toLocaleString():v.toFixed(1)):v.toFixed(1)}
+function metricStrip(svc,go){const M=relMetrics(svc),C=M.C;
+  return`<div class="rm-strip">${RM_DEF.map(([k,l,u,tab,tl])=>{const v=M[k],ok=rmOk(k,v,C),col=ok==null?'var(--bcs-muted)':ok?'#22C55E':'#EF4444';
+    return`<button class="rm-card" style="--rc:${col}" onclick="${go}('${svc}','${tab}')" title="${l} — เปิดหน้า ${tl}"><span class="rm-l">${l}</span><span class="rm-v">${rmFmt(k,v)}<small>${u}</small>${k==='mtbf'&&M.noFail?'<small> +</small>':''}</span><span class="rm-s">${k==='mttr'?'≤':'≥'} ${C.t[k]}${u} · <u>${tl}</u></span></button>`}).join('')}</div>`}
+function relPanel(svc,focus){const M=relMetrics(svc),C=M.C,rows=relBySys(svc),f=k=>focus.includes(k);const n=x=>x==null?'—':(+x).toLocaleString(undefined,{maximumFractionDigits:2});
+  const lines={rel:C.relMethod==='mtbf'?`Reliability = e^(−${n(C.testTime)} ÷ MTBF ${n(M.mtbf)}) = <b>${M.rel.toFixed(2)}%</b>`:`Duty cycle = ${n(C.hrsDay)} h × ${n(C.workDays)} d = ${n(M.duty)} h · MTTF = (${n(M.duty)} − ${n(M.mttr||0)}) × ${n(C.load)}% = ${n(M.mttf)} h<br>Reliability = e^(−${n(C.testTime)} ÷ ${n(M.mttf)}) = <b>${M.rel.toFixed(2)}%</b>`,
+    mtbf:`Operating = ${n(C.periodDays)} d × ${n(C.hrsDay)} h × ${n(M.units)} หน่วย = ${n(M.op)} h · MTBF = (${n(M.op)} − ${n(M.down)}) ÷ ${n(M.fails)} ครั้ง = <b>${n(M.mtbf)} h</b>${M.noFail?' (ไม่มีความเสียหายในช่วงนี้)':''}`,
+    maint:`Maintainability = 1 − e^(−${n(C.maintTarget)} ÷ MTTR ${n(M.mttr)}) = <b>${M.maint.toFixed(2)}%</b>`,
+    mttr:`MTTR = ${n(M.down)} h ÷ ${n(M.done)} งานที่ปิด = <b>${n(M.mttr)} h</b> (นับจาก${C.mttrFrom==='respond'?'เวลารับงาน':'เวลาแจ้ง'} → แล้วเสร็จ)`,
+    avail:(C.availMethod==='inherent'?'':`Operating = ${n(C.periodDays)} d × ${n(C.hrsDay)} h × ${n(M.units)} หน่วย<br>`)+(C.availMethod==='inherent'?`Availability (Inherent) = MTBF ÷ (MTBF + MTTR) = ${n(M.mtbf)} ÷ (${n(M.mtbf)} + ${n(M.mttr||0)}) = <b>${M.avail.toFixed(2)}%</b>`:`Availability (Operational) = (${n(M.op)} − ${n(M.down)}) ÷ ${n(M.op)} = <b>${M.avail.toFixed(2)}%</b>`)};
+  return`<div class="rm-panel"><div class="rm-ph"><b>📐 ${focus.map(k=>RM_DEF.find(x=>x[0]===k)[1]).join(' · ')}</b><span>ช่วง ${C.periodDays} วันล่าสุด · ${M.fails} ครั้ง · Downtime ${n(M.down)} h · ปรับการคำนวณที่ ⚙ ตั้งค่า Module</span></div>
+  <div class="rm-formula">${focus.map(k=>`<div>${lines[k]}</div>`).join('')}</div>
+  ${rows.length?`<div class="rm-tw"><table class="rm-t"><thead><tr><th>ระบบ / หมวด</th><th>ครั้ง</th><th>Downtime (h)</th>${RM_DEF.map(([k,l])=>`<th class="${f(k)?'hl':''}">${l}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td>${esc(r.sys)}</td><td>${r.fails}</td><td>${n(r.down)}</td>${RM_DEF.map(([k,,u])=>{const ok=rmOk(k,r[k],C);return`<td class="${f(k)?'hl':''}" style="color:${ok==null?'inherit':ok?'#22C55E':'#EF4444'}">${rmFmt(k,r[k])}${r[k]==null?'':u}</td>`}).join('')}</tr>`).join('')}</tbody></table></div>`:'<div class="rm-empty">ยังไม่มีงานในช่วงเวลานี้</div>'}</div>`}
+
+/* ---------- module settings modal (calc + database) ---------- */
+const MSET={svc:null,tab:'calc',host:{}};
+function msetOpen(svc,tab){MSET.svc=svc;MSET.tab=tab||MSET.tab||'calc';if(MSET.tab==='tpl'&&svc!=='eng')MSET.tab='calc';msetRender()}
+function msetClose(){const m=document.getElementById('mset');if(m){m.hidden=true;m.innerHTML=''}}
+function msetRender(){let m=document.getElementById('mset');if(!m){m=document.createElement('div');m.id='mset';m.className='bcs-modal';m.addEventListener('click',e=>{if(e.target===m)msetClose()});document.body.appendChild(m)}
+  const svc=MSET.svc,S=SVC[svc],C=modCalc(svc),tabs=[['calc','📐 การคำนวณ 5 ตัววัด'],['db','🗂 Database / Master list']].concat(svc==='eng'?[['tpl','📝 Log Sheet Template']]:[]);
+  const num=(k,l,u,h)=>`<label class="ms-f"><span>${l}</span><span class="ms-i"><input class="bcs-in" type="number" step="any" value="${C[k]}" onchange="msetCalc('${k}',this.value)">${u||''}</span>${h?`<small>${h}</small>`:''}</label>`;
+  const sel=(k,l,o,h)=>`<label class="ms-f"><span>${l}</span><select class="bcs-in" style="width:auto" onchange="msetCalc('${k}',this.value)">${o.map(x=>`<option value="${x[0]}" ${String(C[k])===String(x[0])?'selected':''}>${x[1]}</option>`).join('')}</select>${h?`<small>${h}</small>`:''}</label>`;
+  const tg=(k,l,u)=>`<label class="ms-f"><span>เป้าหมาย ${l}</span><span class="ms-i">${k==='mttr'?'≤':'≥'}<input class="bcs-in" type="number" step="any" value="${C.t[k]}" onchange="msetTarget('${k}',this.value)">${u}</span></label>`;
+  let body='';
+  if(MSET.tab==='calc')body=`<div class="ms-grid">${num('units','จำนวนหน่วยที่ให้บริการ (Units)','หน่วย','0 = อัตโนมัติ (ตอนนี้ '+modUnits(svc)+' หน่วย: '+({eng:'จำนวน Asset',gdn:'จำนวนโซน',lin:'จำนวนรายการผ้า',sec:'จำนวนจุด รปภ.'}[svc]||'จำนวนพื้นที่')+')')}${num('periodDays','ช่วงเวลาคำนวณ','วัน','ย้อนหลังจากวันนี้')}${num('hrsDay','ชั่วโมงทำงาน / วัน','h','Operating hours ต่อวัน')}${num('workDays','วันทำงาน / ปี','d','ใช้คำนวณ Duty cycle')}${num('load','Load Factor','%','โหลดจริง ÷ โหลดสูงสุด')}${num('testTime','Test time (Mission time)','h','ใช้ใน Reliability')}${num('maintTarget','เวลาซ่อมเป้าหมาย','h','ใช้ใน Maintainability')}
+    ${sel('mttrFrom','MTTR นับจาก',[['report','เวลาแจ้งงาน → แล้วเสร็จ'],['respond','เวลารับงาน → แล้วเสร็จ']])}${sel('availMethod','วิธีคำนวณ Availability',[['operational','Operational = (Operating − Downtime) ÷ Operating'],['inherent','Inherent = MTBF ÷ (MTBF + MTTR)']])}
+    ${sel('relMethod','วิธีคำนวณ Reliability',[['mttf','iMATOMs: e^(−Test time ÷ MTTF)'],['mtbf','Exponential: e^(−Test time ÷ MTBF)']])}${sel('countP4','นับงาน P4 (งานตามแผน) เป็นความเสียหาย',[['false','ไม่นับ'],['true','นับ']])}</div>
+    <div class="bcs-cap" style="margin:14px 0 6px">เป้าหมาย 5 ตัววัด</div><div class="ms-grid">${tg('rel','Reliability','%')}${tg('maint','Maintainability','%')}${tg('avail','Availability','%')}${tg('mtbf','MTBF','h')}${tg('mttr','MTTR','h')}</div>
+    <div class="rm-formula" style="margin-top:12px">Reliability = e^(−Test time ÷ MTTF) · MTTF = [Duty cycle − Repair time/Count] × Load factor · Duty cycle = hrs/day × working days<br>Maintainability = 1 − e^(−Target ÷ MTTR) · MTBF = (Operating − Downtime) ÷ Failures · Operating = วัน × ชม./วัน × Units · MTTR = Σ Repair time ÷ Count</div>
+    <div class="ms-foot"><button class="bcs-btn" onclick="msetResetCalc()">คืนค่าเริ่มต้น</button></div>`;
+  if(MSET.tab==='db')body=`<div class="bcs-muted" style="margin-bottom:10px">รายการหลักของ Module นี้ — ใช้เป็นตัวเลือกในฟอร์ม และเป็น Database ตอน Mobilization ลูกค้าใหม่ (เก็บแยกตามธุรกิจ และซิงค์ขึ้น Google Sheet)</div>`+(LISTDEF[svc]||[]).map(([k,l])=>{const v=modList(svc,k),cust=!!(modCfg(svc).lists[k]&&modCfg(svc).lists[k].length);
+    return`<div class="ms-list"><div class="ms-lh"><b>${l}</b><small>${v.length} รายการ${cust?' · กำหนดเอง':' · ค่าเริ่มต้น'}</small>${cust?`<button class="bcs-btn" onclick="msetListReset('${k}')">คืนค่าเริ่มต้น</button>`:''}</div>
+    <div class="ms-chips">${v.map((x,i)=>`<span class="ms-chip">${esc(x)}<button title="ลบ" onclick="msetListDel('${k}',${i})">✕</button></span>`).join('')}</div>
+    <form class="ms-add" onsubmit="event.preventDefault();msetListAdd('${k}',this.v.value);"><input class="bcs-in" name="v" placeholder="เพิ่มรายการ…" style="flex:1;width:auto"><button class="bcs-btn bcs-pri">＋ เพิ่ม</button></form></div>`}).join('');
+  if(MSET.tab==='tpl'){const T=logTpls();body=`<div class="bcs-muted" style="margin-bottom:10px">แม่แบบ Log Sheet — ระบบเลือกแม่แบบจากชื่อ/ระบบของอุปกรณ์ตามคำค้น (คั่นด้วย |) · ค่าที่วัดได้ใส่ช่วงมาตรฐาน min–max · ค่าที่วัดไม่ได้ (ตรวจด้วยสายตา) เลือกชนิด “ตรวจสภาพ”</div>`+T.map((t,ti)=>`<div class="ms-list"><div class="ms-lh"><input class="bcs-in" style="flex:1;width:auto;font-weight:700" value="${esc(t.k)}" onchange="msetTpl(${ti},'k',this.value)"><input class="bcs-in" style="flex:1;width:auto" placeholder="คำค้น เช่น chiller|ahu" value="${esc(t.m||'')}" onchange="msetTpl(${ti},'m',this.value)"><button class="bcs-btn bcs-danger" onclick="msetTplDel(${ti})">ลบแม่แบบ</button></div>
+    ${t.p.map((q,pi)=>`<div class="ms-prow"><input class="bcs-in" style="flex:2;width:auto" value="${esc(q[0])}" onchange="msetTpl(${ti},'p',[${pi},0,this.value])"><select class="bcs-in" style="width:auto" onchange="msetTpl(${ti},'p',[${pi},2,this.value])"><option value="m" ${q[2]==='m'?'selected':''}>วัดค่าได้</option><option value="c" ${q[2]==='c'?'selected':''}>ตรวจสภาพ</option></select>${q[2]==='m'?`<input class="bcs-in" style="width:64px" placeholder="หน่วย" value="${esc(q[1])}" onchange="msetTpl(${ti},'p',[${pi},1,this.value])"><input class="bcs-in" style="width:70px" type="number" step="any" placeholder="min" value="${q[3]}" onchange="msetTpl(${ti},'p',[${pi},3,this.value])"><input class="bcs-in" style="width:70px" type="number" step="any" placeholder="max" value="${q[4]}" onchange="msetTpl(${ti},'p',[${pi},4,this.value])">`:'<span class="bcs-muted" style="flex:1">ผล: ปกติ / ผิดปกติ / N/A</span>'}<button class="bcs-btn" onclick="msetTpl(${ti},'pdel',${pi})">✕</button></div>`).join('')}
+    <button class="bcs-btn" style="margin-top:6px" onclick="msetTpl(${ti},'padd')">＋ เพิ่มค่าที่ต้องบันทึก</button></div>`).join('')+`<div class="ms-foot"><button class="bcs-btn bcs-pri" onclick="msetTplNew()">＋ แม่แบบใหม่</button><button class="bcs-btn" onclick="msetTplReset()">คืนค่าเริ่มต้นทั้งหมด</button></div>`}
+  m.innerHTML=`<div class="bcs-mbox" style="width:860px"><div class="bcs-mh"><div><div class="bcs-muted">${S.type} Service · ${P().en}</div><div class="bcs-st" style="font-size:20px">⚙ ตั้งค่า Module — ${S.ic} ${S.n}</div></div><button class="bcs-btn" onclick="msetClose()">✕</button></div>
+  <div class="bcs-rchips">${tabs.map(t=>`<button class="bcs-btn ${MSET.tab===t[0]?'on':''}" onclick="MSET.tab='${t[0]}';msetRender()">${t[1]}</button>`).join('')}</div>${body}</div>`;m.hidden=false}
+function msetSaved(msg){save();MSET.host.toast&&MSET.host.toast(msg||'บันทึกการตั้งค่าแล้ว');MSET.host.after&&MSET.host.after();msetRender()}
+function msetCalc(k,v){const c=modCfg(MSET.svc).calc;c[k]=k==='mttrFrom'||k==='availMethod'||k==='relMethod'?v:k==='countP4'?v==='true':+v;msetSaved()}
+function msetTarget(k,v){const c=modCfg(MSET.svc).calc;c.t=Object.assign({},c.t||{},{[k]:+v});msetSaved()}
+function msetResetCalc(){modCfg(MSET.svc).calc={};msetSaved('คืนค่าเริ่มต้นแล้ว')}
+function msetListAdd(k,v){v=String(v||'').trim();if(!v)return;const L=modCfg(MSET.svc).lists;const cur=modList(MSET.svc,k).slice();if(cur.includes(v))return;cur.push(v);L[k]=cur;msetSaved('เพิ่ม “'+v+'” แล้ว')}
+function msetListDel(k,i){const L=modCfg(MSET.svc).lists;const cur=modList(MSET.svc,k).slice();cur.splice(i,1);if(!cur.length){MSET.host.toast&&MSET.host.toast('ต้องมีอย่างน้อย 1 รายการ');return}L[k]=cur;msetSaved()}
+function msetListReset(k){delete modCfg(MSET.svc).lists[k];msetSaved('คืนค่าเริ่มต้นแล้ว')}
+function msetTplGet(){const e=modCfg('eng');if(!Array.isArray(e.logTpl)||!e.logTpl.length)e.logTpl=JSON.parse(JSON.stringify(LOGTPL0));return e.logTpl}
+function msetTpl(ti,f,v){const T=msetTplGet(),t=T[ti];if(!t)return;
+  if(f==='k'||f==='m')t[f]=v;else if(f==='p'){const[pi,ix,val]=v;t.p[pi][ix]=ix>=3?+val:val;if(ix===2&&val==='m'&&t.p[pi][3]==null){t.p[pi][3]=0;t.p[pi][4]=100}}
+  else if(f==='pdel')t.p.splice(v,1);else if(f==='padd')t.p.push(['ค่าใหม่','','m',0,100]);msetSaved()}
+function msetTplDel(ti){const T=msetTplGet();if(T.length<=1)return;T.splice(ti,1);msetSaved()}
+function msetTplNew(){msetTplGet().unshift({k:'แม่แบบใหม่',m:'',p:[['สภาพทั่วไป','','c']]});msetSaved()}
+function msetTplReset(){delete modCfg('eng').logTpl;msetSaved('คืนค่าแม่แบบเริ่มต้นแล้ว')}
+
+/* ---------- OM Log Sheet form (readings · 2 photos · signature) ---------- */
+const OML={rec:null,sigDirty:false};
+function omLogOpen(id){const rec=id&&typeof id==='string'?D.omLog.find(x=>x.id===id):null;const u=(MSET.host.user&&MSET.host.user())||'';
+  OML.rec=rec?JSON.parse(JSON.stringify(rec)):{id:'',dt:isoDT(new Date()),equipment:(D.omEquip[0]||{}).asset||'',system:(D.omEquip[0]||{}).system||'',shift:'Morning',recorder:u,readings:null,photos:[],sig:'',remark:'',status:'Normal',autoWR:true};
+  if(!OML.rec.readings)OML.rec.readings=omLogTplReadings(OML.rec.equipment,OML.rec.system);OML.sigDirty=false;omLogRender()}
+function omLogTplReadings(eq,sys){return logTplFor(eq,sys).p.map(q=>q[2]==='m'?{n:q[0],u:q[1],t:'m',min:+q[3],max:+q[4],v:'',ok:null}:{n:q[0],u:'',t:'c',v:'',ok:null})}
+function omLogEquip(v){const e=D.omEquip.find(x=>x.asset===v)||D.assets.find(x=>x.name===v);OML.rec.equipment=v;OML.rec.system=e?e.system:'';OML.rec.readings=omLogTplReadings(v,OML.rec.system);omLogRender()}
+function omLogVal(i,v){const q=OML.rec.readings[i];if(q.t==='m'){q.v=v===''?'':+v;q.ok=v===''?null:(+v>=q.min&&+v<=q.max)}else{q.v=v;q.ok=v==='ok'?true:v==='ng'?false:null}
+  if(q.t==='c'){omLogRender();return}const el=document.getElementById('oml-st-'+i);if(el){el.textContent=q.ok==null?'—':q.ok?'✓ ปกติ':'✗ นอกเกณฑ์';el.className='oml-st '+(q.ok==null?'':q.ok?'ok':'ng')}omLogSum()}
+function omLogSum(){const ng=OML.rec.readings.filter(q=>q.ok===false).length,el=document.getElementById('oml-sum');if(el)el.innerHTML=ng?`<b style="color:#EF4444">ผิดปกติ ${ng} รายการ</b>`:'<b style="color:#22C55E">ปกติทุกรายการ</b>'}
+function omLogRender(){const cv0=document.getElementById('oml-sig');if(cv0&&OML.sigDirty&&OML.rec){try{OML.rec.sig=cv0.toDataURL('image/png')}catch(e){}}let m=document.getElementById('omlog');if(!m){m=document.createElement('div');m.id='omlog';m.className='bcs-modal';document.body.appendChild(m)}
+  const R=OML.rec,eqs=[...new Set(D.omEquip.map(e=>e.asset).concat(D.assets.map(a=>a.name)))];
+  m.innerHTML=`<div class="bcs-mbox" style="width:820px"><div class="bcs-mh"><div><div class="bcs-muted">Engineering · Operation · OM Log Sheet ${R.id?'· '+esc(R.id):''}</div><div class="bcs-st" style="font-size:20px">📝 ${R.id?'แก้ไข':'บันทึก'} Log Sheet</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  <div class="ms-grid">
+    <label class="ms-f"><span>อุปกรณ์ *</span><select class="bcs-in" style="width:100%" onchange="omLogEquip(this.value)">${eqs.map(x=>`<option ${x===R.equipment?'selected':''}>${esc(x)}</option>`).join('')}</select><small>แม่แบบ: ${esc(logTplFor(R.equipment,R.system).k)}</small></label>
+    <label class="ms-f"><span>วันเวลา *</span><input class="bcs-in" style="width:100%" type="datetime-local" value="${esc(R.dt)}" onchange="OML.rec.dt=this.value"></label>
+    <label class="ms-f"><span>กะ</span><select class="bcs-in" style="width:100%" onchange="OML.rec.shift=this.value">${['Morning','Afternoon','Night'].map(x=>`<option ${x===R.shift?'selected':''}>${x}</option>`).join('')}</select></label>
+    <label class="ms-f"><span>ผู้บันทึก *</span><input class="bcs-in" style="width:100%" value="${esc(R.recorder)}" oninput="OML.rec.recorder=this.value"></label></div>
+  <div class="bcs-cap" style="margin-top:12px">ค่าที่ต้องบันทึก <span id="oml-sum"></span></div>
+  <div class="oml-rows">${R.readings.map((q,i)=>q.t==='m'?`<div class="oml-r"><span class="nm">${esc(q.n)}<small>มาตรฐาน ${q.min} – ${q.max} ${esc(q.u)}</small></span><span class="ms-i"><input class="bcs-in" type="number" step="any" inputmode="decimal" value="${q.v}" oninput="omLogVal(${i},this.value)">${esc(q.u)}</span><span class="oml-st ${q.ok==null?'':q.ok?'ok':'ng'}" id="oml-st-${i}">${q.ok==null?'—':q.ok?'✓ ปกติ':'✗ นอกเกณฑ์'}</span></div>`
+    :`<div class="oml-r"><span class="nm">${esc(q.n)}<small>ตรวจสภาพ (วัดค่าไม่ได้)</small></span><span class="oml-seg">${[['ok','✓ ปกติ'],['ng','✗ ผิดปกติ'],['na','N/A']].map(([v,l])=>`<button type="button" class="${q.v===v?'on '+v:''}" onclick="omLogVal(${i},'${v}')">${l}</button>`).join('')}</span><span></span></div>`).join('')}</div>
+  <div class="ms-grid" style="margin-top:12px">
+    <div class="ms-f"><span>รูปถ่าย (สูงสุด 2 รูป)</span><div class="oml-ph">${[0,1].map(i=>R.photos[i]?`<div class="oml-img"><img src="${esc(R.photos[i])}" alt="photo ${i+1}"><button type="button" onclick="OML.rec.photos.splice(${i},1);omLogRender()">✕</button></div>`:`<label class="oml-add">📷 เพิ่มรูป ${i+1}<input type="file" accept="image/*" capture="environment" hidden onchange="omLogPhoto(this)"></label>`).join('')}</div></div>
+    <div class="ms-f"><span>ลายเซ็นผู้บันทึก</span>${R.sig&&!String(R.sig).startsWith('data:')?`<img class="oml-sigimg" src="${esc(R.sig)}" alt="signature"><small class="bcs-muted">ลายเซ็นเดิม — เซ็นใหม่ด้านล่างหากต้องการเปลี่ยน</small>`:''}<canvas id="oml-sig" class="oml-sig" width="560" height="170"></canvas><span style="display:flex;gap:6px;margin-top:4px"><button type="button" class="bcs-btn" onclick="omLogSigClear()">ล้างลายเซ็น</button><small class="bcs-muted" style="align-self:center">เซ็นด้วยนิ้วหรือเมาส์</small></span></div></div>
+  <label class="ms-f" style="margin-top:10px"><span>หมายเหตุ</span><textarea class="bcs-in" style="width:100%;min-height:60px" oninput="OML.rec.remark=this.value">${esc(R.remark||'')}</textarea></label>
+  ${R.id?'':`<label class="oml-ck"><input type="checkbox" ${R.autoWR?'checked':''} onchange="OML.rec.autoWR=this.checked"> สร้าง Work Request อัตโนมัติเมื่อพบค่าผิดปกติ</label>`}
+  <div class="ms-foot"><span class="ferr" id="oml-err" style="margin-right:auto;color:#EF4444"></span><button class="bcs-btn" onclick="omLogClose()">ยกเลิก</button><button class="bcs-btn bcs-pri" onclick="omLogSave()">💾 บันทึก Log Sheet</button></div></div>`;
+  m.hidden=false;omLogSum();omLogSigInit()}
+function omLogClose(){const m=document.getElementById('omlog');if(m){m.hidden=true;m.innerHTML=''}OML.rec=null}
+function omLogSigInit(){const cv=document.getElementById('oml-sig');if(!cv)return;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);
+  if(OML.rec.sig&&String(OML.rec.sig).startsWith('data:')){const im=new Image();im.onload=()=>c.drawImage(im,0,0,cv.width,cv.height);im.src=OML.rec.sig}
+  c.lineWidth=2.4;c.lineCap='round';c.lineJoin='round';c.strokeStyle='#0F172A';let dn=false;
+  const pt=e=>{const b=cv.getBoundingClientRect();return[(e.clientX-b.left)*cv.width/b.width,(e.clientY-b.top)*cv.height/b.height]};
+  cv.addEventListener('pointerdown',e=>{dn=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}const[x,y]=pt(e);c.beginPath();c.moveTo(x,y);e.preventDefault()});
+  cv.addEventListener('pointermove',e=>{if(!dn)return;const[x,y]=pt(e);c.lineTo(x,y);c.stroke();OML.sigDirty=true;e.preventDefault()});
+  ['pointerup','pointercancel','pointerleave'].forEach(t=>cv.addEventListener(t,()=>{dn=false}))}
+function omLogSigClear(){const cv=document.getElementById('oml-sig');if(!cv)return;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);OML.rec.sig='';OML.sigDirty=false}
+function omLogPhoto(inp){const f=inp.files&&inp.files[0];if(!f)return;const url=URL.createObjectURL(f),im=new Image();
+  im.onload=()=>{const MX=900,sc=Math.min(1,MX/Math.max(im.naturalWidth,im.naturalHeight)),cv=document.createElement('canvas');cv.width=Math.round(im.naturalWidth*sc);cv.height=Math.round(im.naturalHeight*sc);
+    cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(url);if(OML.rec.photos.length<2)OML.rec.photos.push(cv.toDataURL('image/jpeg',.62));omLogRender()};
+  im.onerror=()=>{const e=document.getElementById('oml-err');if(e)e.textContent='อ่านไฟล์รูปไม่ได้'};im.src=url}
+function omLogSave(){const R=OML.rec,err=m=>{const e=document.getElementById('oml-err');if(e)e.textContent=m};
+  if(!R.equipment)return err('เลือกอุปกรณ์');if(!R.recorder||!String(R.recorder).trim())return err('ระบุผู้บันทึก');
+  const miss=R.readings.filter(q=>q.v===''||q.v==null).length;if(miss===R.readings.length)return err('ยังไม่ได้บันทึกค่าใด ๆ');
+  const cv=document.getElementById('oml-sig');if(cv&&OML.sigDirty){try{R.sig=cv.toDataURL('image/png')}catch(e){}}
+  R.status=R.readings.some(q=>q.ok===false)?'Abnormal':'Normal';const auto=R.autoWR;delete R.autoWR;
+  let wr=null;
+  if(!R.id){R.id=nextId('omLog');D.omLog.unshift(R);
+    if(auto&&R.status==='Abnormal'){const bad=R.readings.filter(q=>q.ok===false).map(q=>q.n+(q.t==='m'?' = '+q.v+' '+q.u:'')).join(', ');const eq=D.omEquip.find(x=>x.asset===R.equipment)||D.assets.find(x=>x.name===R.equipment)||{};
+      wr={id:nextId('tickets'),date:isoDT(new Date()),service:'eng',area:eq.area||(D.areas[0]||{}).name||'',category:R.system||'Operation',desc:'Log Sheet '+R.id+' ผิดปกติ: '+R.equipment+' — '+bad,priority:'P2',requester:R.recorder,assignee:'',status:'New',respondedAt:'',completedAt:''};D.tickets.unshift(wr)}}
+  else{const i=D.omLog.findIndex(x=>x.id===R.id);if(i>=0)D.omLog[i]=R}
+  const e=D.omEquip.find(x=>x.asset===R.equipment);if(e)e.lastCheck=String(R.dt).slice(0,10);
+  save();omLogClose();MSET.host.toast&&MSET.host.toast('บันทึก '+R.id+(wr?' · สร้าง '+wr.id+' แล้ว':''));MSET.host.after&&MSET.host.after()}
+function omLogView(id){const R=D.omLog.find(x=>x.id===id);if(!R)return;let m=document.getElementById('omlog');if(!m){m=document.createElement('div');m.id='omlog';m.className='bcs-modal';document.body.appendChild(m)}
+  m.innerHTML=`<div class="bcs-mbox" style="width:760px"><div class="bcs-mh"><div><div class="bcs-muted">${esc(R.id)} · ${fmtDT(R.dt)} · ${esc(R.shift||'')}</div><div class="bcs-st" style="font-size:20px">📝 ${esc(R.equipment)}</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  <div class="oml-rows">${(R.readings||[]).map(q=>`<div class="oml-r"><span class="nm">${esc(q.n)}${q.t==='m'?`<small>มาตรฐาน ${q.min} – ${q.max} ${esc(q.u)}</small>`:''}</span><b>${q.t==='m'?(q.v===''?'—':esc(q.v)+' '+esc(q.u)):({ok:'ปกติ',ng:'ผิดปกติ',na:'N/A'}[q.v]||'—')}</b><span class="oml-st ${q.ok==null?'':q.ok?'ok':'ng'}">${q.ok==null?'—':q.ok?'✓':'✗'}</span></div>`).join('')}</div>
+  ${(R.photos||[]).length?`<div class="oml-ph" style="margin-top:10px">${R.photos.map(p=>`<div class="oml-img"><img src="${esc(p)}" alt="photo"></div>`).join('')}</div>`:''}
+  ${R.sig?`<div class="bcs-cap" style="margin-top:10px">ลายเซ็น · ${esc(R.recorder||'')}</div><img class="oml-sigimg" src="${esc(R.sig)}" alt="signature">`:''}
+  ${R.remark?`<div class="bcs-muted" style="margin-top:8px">หมายเหตุ: ${esc(R.remark)}</div>`:''}
+  <div class="ms-foot"><button class="bcs-btn" onclick="omLogOpen('${R.id}')">✎ แก้ไข</button><button class="bcs-btn bcs-pri" onclick="omLogClose()">ปิด</button></div></div>`;m.hidden=false}
+function omLogReadCell(r){const rd=r.readings||[],ng=rd.filter(q=>q.ok===false).length;return`${rd.length} ค่า${ng?` · <b style="color:#EF4444">ผิดปกติ ${ng}</b>`:''}`}
+function omLogMediaCell(r){return`<span class="oml-mini">${(r.photos||[]).map(p=>`<img src="${esc(p)}" alt="">`).join('')}${r.sig?`<img class="sg" src="${esc(r.sig)}" alt="sig">`:''}${!(r.photos||[]).length&&!r.sig?'—':''}</span>`}
+
+/* ---------- Google Apps Script / Sheets sync ---------- */
+const SYNC={busy:false,pulling:false,t:null,status:'off',msg:'',last:null,again:false,onStatus:null};
+const SYNC_CFG_KEYS=['_v','site','created','hist','svcOff','targetOv','modCfg','bldg'];
+const SYNC_ENTS=()=>Object.keys(SCH).filter(k=>Array.isArray(D[k]));
+function gasCfg(){return Object.assign({url:'',key:'',auto:true},LS.get('psd_ifm_gas',{}))}
+function gasSite(){return LS.get('psd_ifm_site_'+BIZK,'')}
+function gasReady(){const c=gasCfg();return!!(c.url&&c.key&&gasSite())}
+function syncHashKey(){return'psd_ifm_synch_'+BIZK+'_'+gasSite()}
+function syncBaseKey(){return'psd_ifm_syncrow_'+BIZK+'_'+gasSite()}
+const rowMap=a=>{const m={};(a||[]).forEach(r=>{m[String(r.id)]=hashOf(JSON.stringify(r))});return m};
+function hashOf(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h}
+function setSyncStatus(st,msg){SYNC.status=st;SYNC.msg=msg||'';if(st==='ok')SYNC.last=new Date();SYNC.onStatus&&SYNC.onStatus(st,msg)}
+async function gasCall(action,body){const c=gasCfg();if(!c.url)throw new Error('ยังไม่ได้ใส่ Web App URL');
+  const res=await fetch(c.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,key:c.key,site:gasSite(),business:BIZK,siteName:D&&D.site},body||{}))});
+  let j;try{j=await res.json()}catch(e){throw new Error('Web App ตอบกลับไม่ใช่ JSON — ตรวจ URL และสิทธิ์ Deploy (Anyone)')}if(!j.ok)throw new Error(j.error||'Request failed');return j}
+function syncNormalize(tables){Object.entries(tables||{}).forEach(([e,rows])=>{const S=SCH[e];if(!S||!Array.isArray(rows))return;const nums=S.fields.filter(f=>f.t==='number').map(f=>f.k);
+  rows.forEach(r=>{nums.forEach(k=>{if(r[k]!==''&&r[k]!=null&&!isNaN(+r[k]))r[k]=+r[k]});Object.keys(r).forEach(k=>{if(r[k]==null)r[k]=''})})});return tables}
+async function syncPush(all){if(!gasReady())return;if(SYNC.busy){SYNC.again=true;return}SYNC.busy=true;setSyncStatus('busy');
+  try{const H=all?{}:LS.get(syncHashKey(),{}),nh=Object.assign({},H),tables={},base=LS.get(syncBaseKey(),{});
+    SYNC_ENTS().forEach(e=>{const h=hashOf(JSON.stringify(D[e]));if(H[e]===h)return;nh[e]=h;
+      if(all||!base[e]){tables[e]={rows:D[e],full:true};return}
+      const b=base[e],ids=new Set();const rows=D[e].filter(r=>{const id=String(r.id);ids.add(id);return b[id]!==hashOf(JSON.stringify(r))});
+      const deleted=Object.keys(b).filter(id=>!ids.has(id));if(rows.length||deleted.length)tables[e]={rows,deleted,full:false}});
+    const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});const ch=hashOf(JSON.stringify(cfg)),sendCfg=H._cfg!==ch;nh._cfg=ch;
+    if(!Object.keys(tables).length&&!sendCfg){setSyncStatus('ok');return}
+    const j=await gasCall('push',{tables,config:sendCfg?cfg:null});
+    let merged=false;if(j.tables&&typeof j.tables==='object'){syncNormalize(j.tables);Object.entries(j.tables).forEach(([e,rows])=>{if(!Array.isArray(rows)||!SCH[e])return;D[e]=rows;nh[e]=hashOf(JSON.stringify(D[e]));merged=true});LS.set('psd_ifm_v1_'+BIZK,D)}
+    Object.keys(tables).forEach(e=>{base[e]=rowMap(D[e])});LS.set(syncBaseKey(),base);if(merged&&j.tables&&Object.keys(j.tables).some(e=>!tables[e]||!tables[e].full))SYNC.onMerge&&SYNC.onMerge();
+    if(j.url)LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);
+    LS.set(syncHashKey(),nh);setSyncStatus('ok')}
+  catch(e){setSyncStatus('err',e.message)}finally{SYNC.busy=false;if(SYNC.again){SYNC.again=false;setTimeout(()=>syncPush(),300)}}}
+function syncAfterSave(){if(!gasReady()||!gasCfg().auto||SYNC.pulling)return;clearTimeout(SYNC.t);SYNC.t=setTimeout(()=>syncPush(),2500)}
+async function syncPull(){if(!gasReady())return false;SYNC.pulling=true;setSyncStatus('busy');
+  try{const j=await gasCall('pull');if(j.url)LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);
+    if(j.empty){SYNC.pulling=false;await syncPush(true);return false}
+    const nd=Object.assign({},D,j.config||{},syncNormalize(j.tables||{}));nd._v=1;D=nd;ensureD();LS.set('psd_ifm_v1_'+BIZK,D);
+    const nh={},base={};SYNC_ENTS().forEach(e=>{nh[e]=hashOf(JSON.stringify(D[e]));base[e]=rowMap(D[e])});LS.set(syncBaseKey(),base);const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});nh._cfg=hashOf(JSON.stringify(cfg));LS.set(syncHashKey(),nh);
+    setSyncStatus('ok');return true}
+  catch(e){setSyncStatus('err',e.message);return false}finally{SYNC.pulling=false}}
+async function syncBoot(after){SYNC.after=after;if(!gasReady()||!gasCfg().auto){setSyncStatus(gasReady()?'manual':'off');return}const got=await syncPull();if(got&&after)after()}
+/* periodic refresh: push local changes first, then pull what other devices saved */
+async function syncRefresh(){if(!gasReady()||!gasCfg().auto||SYNC.busy||SYNC.pulling||document.hidden)return;if(SYNC.blockRefresh&&SYNC.blockRefresh())return;
+  clearTimeout(SYNC.t);await syncPush();if(SYNC.status==='err')return;const before=hashOf(JSON.stringify(SYNC_ENTS().map(e=>D[e])));const got=await syncPull();
+  if(got&&hashOf(JSON.stringify(SYNC_ENTS().map(e=>D[e])))!==before&&SYNC.after)SYNC.after()}
+setInterval(syncRefresh,120000);
+window.addEventListener('focus',()=>{if(SYNC.last&&Date.now()-SYNC.last.getTime()>30000)syncRefresh()});
+/*@@IFM2-END@@*/
+
+/* ---------- Google Apps Script / Sheets connection (Settings) ---------- */
+function gasCard(){const c=gasCfg(),site=gasSite(),url=site?LS.get('psd_ifm_siteurl_'+BIZK+'_'+site,''):'';const sug={hospital:'HOSP',factory:'FAC',hotel:'HTL',expo:'EXPO',office:'OFC',restaurant:'RST'}[BIZK]+'-01';
+  return`<div class="card no-lift" style="margin-top:16px"><div class="card-t">☁ ฐานข้อมูล Google Sheets (Apps Script)<small>1 Spreadsheet ต่อ 1 อาคาร ต่อ 1 ธุรกิจ — ไม่ปนกัน</small></div>
+  <div class="grid-2" style="margin:0">
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="fg"><label class="fl" for="gas-url">Web App URL</label><input class="fc" id="gas-url" placeholder="https://script.google.com/macros/s/…/exec" value="${esc(c.url)}"></div>
+      <div class="fg"><label class="fl" for="gas-key">API Key</label><input class="fc" id="gas-key" type="password" autocomplete="off" placeholder="ได้จากการรัน setup() ใน Apps Script" value="${esc(c.key)}"></div>
+      <div class="fg"><label class="fl" for="gas-site">รหัสอาคาร (Site Code) — ${P().ic} ${P().n}</label><input class="fc" id="gas-site" placeholder="เช่น ${sug}" value="${esc(site)}" style="text-transform:uppercase"><span class="sec-sub" style="margin:0">ธุรกิจนี้ + รหัสนี้ = Spreadsheet 1 ไฟล์ · แต่ละธุรกิจตั้งรหัสอาคารแยกกัน</span></div>
+      <label style="display:flex;gap:8px;align-items:center;font-size:13px"><input type="checkbox" id="gas-auto" ${c.auto?'checked':''} style="accent-color:var(--accent);width:16px;height:16px"> ซิงค์อัตโนมัติ (ดึงข้อมูลตอนเปิดแอป และส่งขึ้น Sheet หลังบันทึกทุกครั้ง)</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="gasSave()">บันทึกการตั้งค่า</button><button class="btn btn-ghost btn-sm" onclick="gasTest()">ทดสอบการเชื่อมต่อ</button><button class="btn btn-ghost btn-sm" onclick="gasRegister()">สร้าง / เชื่อม Spreadsheet อาคารนี้</button></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-ghost btn-sm" onclick="gasPushAll()">⬆ ส่งข้อมูลทั้งหมดขึ้น Sheet</button><button class="btn btn-ghost btn-sm" id="gas-pull-btn" onclick="gasPullNow(this)">⬇ ดึงข้อมูลจาก Sheet</button></div>
+      <div id="gas-status" class="sec-sub" style="margin:0">${gasStatusText()}</div>
+      ${url?`<a href="${esc(url)}" target="_blank" rel="noopener" style="font-size:13px;color:var(--accent);font-weight:600">📗 เปิด Spreadsheet ของ ${esc(site)} ›</a>`:''}
+    </div>
+    <div><div class="fl" style="margin-bottom:6px">ขั้นตอนติดตั้ง (ครั้งเดียว)</div><ol class="gas-steps">
+      <li>เปิด <code>script.google.com</code> → New project → วางโค้ด <code>PSD_eNGINNo_IFM_Code.gs</code></li>
+      <li>เลือกฟังก์ชัน <code>setup</code> → Run → อนุญาตสิทธิ์ → ดู API Key ใน Execution log</li>
+      <li>Deploy → New deployment → Web app · Execute as: <b>Me</b> · Who has access: <b>Anyone</b> → คัดลอก URL</li>
+      <li>วาง URL + API Key ด้านซ้าย ตั้ง Site Code แล้วกด “สร้าง / เชื่อม Spreadsheet อาคารนี้”</li>
+      <li>กด “ส่งข้อมูลทั้งหมดขึ้น Sheet” ครั้งแรก — จากนั้นระบบซิงค์ให้อัตโนมัติ</li></ol>
+      <div class="sec-sub" style="margin-top:8px">โครงสร้างบน Google Drive: <b>PSD eNGINNo IFM / ธุรกิจ / รหัสอาคาร /</b> → Spreadsheet ของอาคารนั้น (1 ชีตต่อ 1 ตาราง เช่น tickets, assets, omLog) + โฟลเดอร์รูปถ่าย/ลายเซ็น · Registry กลางเก็บรายชื่ออาคารทั้งหมด</div></div>
+  </div></div>`}
+function gasStatusText(){const st=SYNC.status;if(!gasReady())return'ยังไม่ได้เชื่อมต่อ — ข้อมูลอยู่ในเบราว์เซอร์นี้เท่านั้น';if(st==='busy')return'⏳ กำลังซิงค์…';if(st==='err')return'<span style="color:var(--red)">❌ '+esc(SYNC.msg)+'</span>';if(SYNC.last)return'<span style="color:var(--green)">✅ ซิงค์ล่าสุด '+SYNC.last.toLocaleTimeString('th-TH')+'</span>';return gasCfg().auto?'เชื่อมต่อแล้ว · ซิงค์อัตโนมัติ':'เชื่อมต่อแล้ว · ซิงค์ด้วยตนเอง'}
+function gasReadForm(){const g=id=>document.getElementById(id);const c={url:g('gas-url').value.trim(),key:g('gas-key').value.trim(),auto:g('gas-auto').checked};LS.set('psd_ifm_gas',c);
+  const site=g('gas-site').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'');LS.set('psd_ifm_site_'+BIZK,site);g('gas-site').value=site;return c}
+function gasSave(){gasReadForm();setSyncStatus(gasReady()?'manual':'off');toast('บันทึกการตั้งค่า Google Sheets แล้ว');render()}
+async function gasTest(){gasReadForm();try{const j=await gasCall('ping');toast('✅ เชื่อมต่อได้ · Apps Script v'+j.version)}catch(e){toast('❌ '+e.message)}}
+async function gasRegister(){gasReadForm();if(!gasSite()){toast('ใส่รหัสอาคาร (Site Code) ก่อน');return}try{const j=await gasCall('register');LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);toast((j.created?'✅ สร้าง Spreadsheet ':'✅ เชื่อม Spreadsheet ')+gasSite()+' แล้ว');render()}catch(e){toast('❌ '+e.message)}}
+async function gasPushAll(){gasReadForm();if(!gasReady()){toast('ตั้งค่า URL, API Key และ Site Code ให้ครบก่อน');return}await syncPush(true);toast(SYNC.status==='ok'?'⬆ ส่งข้อมูลทั้งหมดขึ้น Sheet แล้ว':'❌ '+SYNC.msg);render()}
+let gasPullArm=false;
+async function gasPullNow(btn){gasReadForm();if(!gasReady()){toast('ตั้งค่า URL, API Key และ Site Code ให้ครบก่อน');return}
+  if(!gasPullArm){gasPullArm=true;btn.textContent='กดอีกครั้ง — ข้อมูลในเครื่องจะถูกแทนที่';btn.className='btn btn-danger btn-sm';setTimeout(()=>{gasPullArm=false;if(btn.isConnected){btn.textContent='⬇ ดึงข้อมูลจาก Sheet';btn.className='btn btn-ghost btn-sm'}},4000);return}
+  gasPullArm=false;const ok=await syncPull();toast(ok?'⬇ ดึงข้อมูลจาก Sheet แล้ว':SYNC.status==='err'?'❌ '+SYNC.msg:'Sheet ยังว่าง — ส่งข้อมูลในเครื่องขึ้นไปแล้ว');buildChrome();render()}
+SYNC.onStatus=(st)=>{const p=document.getElementById('sync-pill');if(p){p.hidden=!gasReady();p.className='sync-pill '+(st==='ok'?'ok':st==='err'?'err':st==='busy'?'busy':'');p.textContent=st==='busy'?'⏳ Sync':st==='err'?'⚠ Sync error':st==='ok'?'☁ Synced '+(SYNC.last?SYNC.last.toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'}):''):'☁ Sheets'}
+  const g=document.getElementById('gas-status');if(g)g.innerHTML=gasStatusText()};
+SYNC.onMerge=()=>{buildNav();render()};
+SYNC.blockRefresh=()=>{const o=id=>{const e=document.getElementById(id);if(!e)return false;return id==='modal'?e.classList.contains('open'):!e.hidden};return o('modal')||o('omlog')||o('mset')||o('bcs-modal')};
+MSET.host={toast:m=>toast(m),after:()=>{buildNav();render()},user:()=>{const u=LS.get('psd_ifm_m_user',null);return u?u.name:''}};
 
 /* ---------- Settings: platform structure (enable services) + KPI targets per module ---------- */
 SCH.kpiCustom={label:' KPI',pfx:'KP',fields:[
@@ -1658,7 +2097,7 @@ function render(){
   document.title='PSD eNGINNo IFM Management';
   buildNav();
 }
-function setBiz(k){if(!BIZ[k])return;BIZK=k;LS.set('psd_ifm_biz',k);load();UI.q={};UI.hd={svc:'',st:'',pri:''};buildChrome();render();toast('เปลี่ยนเป็น '+BIZ[k].ic+' '+BIZ[k].n+' — '+D.site)}
+function setBiz(k){if(!BIZ[k])return;BIZK=k;LS.set('psd_ifm_biz',k);load();UI.q={};UI.hd={svc:'',st:'',pri:''};buildChrome();render();SYNC.last=null;syncBoot(()=>{buildChrome();render()});toast('เปลี่ยนเป็น '+BIZ[k].ic+' '+BIZ[k].n+' — '+D.site)}
 
 // theme
 function themeMode(){return LS.get('psd_ifm_theme','system')}
@@ -1691,6 +2130,7 @@ window.addEventListener('storage',e=>{if(e.key===UKEY){renderUser();if(!curUser(
 
 // boot
 applyTheme();load();buildChrome();renderUser();if(!curUser())showLogin();
+setTimeout(()=>syncBoot(()=>{buildChrome();render()}),50);
 (function(){const h=(location.hash||'').slice(1);CUR=VIEWS[h]?h:'dashboard';render()})();
 </script>
 </body>
