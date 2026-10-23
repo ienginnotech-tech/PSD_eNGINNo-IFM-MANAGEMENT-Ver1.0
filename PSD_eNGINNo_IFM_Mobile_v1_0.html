@@ -377,6 +377,60 @@ body{--bcs-card:var(--color-card);--bcs-card2:var(--color-surface);--bcs-line:va
 @media(max-width:900px){.rm-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:560px){.rm-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.oml-r{grid-template-columns:minmax(0,1fr) auto;}.oml-r .oml-st{grid-column:1/-1;text-align:left}}
 /*@@IFM2CSS-END@@*/
+/*@@AUTHCSS-START@@*/
+/* ── users & permissions ── */
+.au-w,.bcs-in.au-w{width:100%;box-sizing:border-box;padding:8px 10px;font-size:13.5px}
+.au-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.au-msg{font-size:12.5px;font-weight:600}
+.au-pw{display:flex;flex-direction:column;gap:10px;max-width:420px}
+.au-err{background:color-mix(in srgb,#EF4444 12%,transparent);border:1px solid color-mix(in srgb,#EF4444 40%,transparent);color:#EF4444;border-radius:8px;padding:8px 12px;font-size:13px}
+.au-note{font-size:12px;color:var(--bcs-muted);background:var(--bcs-card2);border:1px solid var(--bcs-line);border-radius:8px;padding:8px 12px;margin:10px 0;line-height:1.5}
+.au-chip{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--bcs-card2);border:1px solid color-mix(in srgb,var(--cc,var(--bcs-line)) 60%,var(--bcs-line));color:var(--bcs-text);white-space:nowrap}
+.au-chip.au-warn{border-color:#EAB308;color:#B45309}
+.au-chips{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.au-role{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:999px;color:var(--rc);background:color-mix(in srgb,var(--rc) 14%,transparent);border:1px solid color-mix(in srgb,var(--rc) 45%,transparent);white-space:nowrap}
+.au-av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:18px;color:var(--rc);background:color-mix(in srgb,var(--rc) 15%,transparent);border:1.5px solid color-mix(in srgb,var(--rc) 50%,transparent);flex:none}
+.au-av.sm{width:34px;height:34px;font-size:14px}
+.au-me{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.au-nm{font-weight:700;font-size:16px}
+.au-kv{display:grid;grid-template-columns:80px 1fr;gap:6px 10px;font-size:13px;align-items:start}
+.au-kv>span{color:var(--bcs-muted);font-size:12px;font-weight:700;padding-top:2px}
+.au-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.au-stat{display:flex;flex-direction:column;align-items:flex-start;gap:0;background:var(--bcs-card);border:1px solid var(--bcs-line);border-top:3px solid var(--sc);border-radius:10px;padding:8px 12px;cursor:pointer;color:var(--bcs-text);font:inherit;transition:transform .15s,box-shadow .15s}
+.au-stat:hover{transform:translateY(-2px);box-shadow:0 10px 18px -12px rgba(0,0,0,.45)}
+.au-stat.on{background:color-mix(in srgb,var(--sc) 12%,var(--bcs-card))}
+.au-stat b{font-size:22px;line-height:1.1;color:var(--sc);font-family:var(--bcs-display)}.au-stat span{font-size:11.5px;color:var(--bcs-muted);font-weight:600}
+.au-pend{border:1px solid #EAB308;border-radius:10px;padding:10px 12px;margin-bottom:10px;background:color-mix(in srgb,#EAB308 7%,var(--bcs-card))}
+.au-ph{font-weight:700;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.au-cnt{background:#EAB308;color:#111;border-radius:999px;padding:0 8px;font-size:12px}
+.au-prow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px dashed var(--bcs-line)}
+.au-acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.au-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.au-list{display:flex;flex-direction:column;gap:6px}
+.au-urow{display:grid;grid-template-columns:34px minmax(160px,1.4fr) minmax(120px,.9fr) minmax(150px,1.3fr) minmax(120px,1fr) minmax(110px,.8fr) auto;gap:10px;align-items:center;background:var(--bcs-card);border:1px solid var(--bcs-line);border-radius:10px;padding:8px 12px;transition:transform .15s,box-shadow .15s,border-color .15s}
+.au-urow:hover{transform:translateY(-2px);box-shadow:0 10px 18px -12px rgba(0,0,0,.4);border-color:var(--bcs-acc)}
+.au-urow.off{opacity:.62}
+.au-uc{min-width:0;font-size:13px}
+.au-matrix{margin-top:14px;font-size:13px}.au-matrix summary{cursor:pointer;font-weight:700;margin-bottom:8px}
+.au-matrix .rm-t td,.au-matrix .rm-t th{text-align:center}.au-matrix .rm-t td:first-child,.au-matrix .rm-t th:first-child{text-align:left}
+.au-sec{display:flex;flex-direction:column;gap:2px;margin-top:4px;padding-top:10px;border-top:1px solid var(--bcs-line)}
+.au-sec small{font-size:11.5px;color:var(--bcs-muted)}
+.au-ck{display:inline-flex;gap:8px;align-items:center;font-size:13.5px;cursor:pointer}
+.au-ck input{width:17px;height:17px;accent-color:var(--bcs-acc)}
+.au-ck.sm{font-size:12.5px;padding:3px 8px;border:1px solid var(--bcs-line);border-radius:999px;background:var(--bcs-card2)}
+.au-ck.sm input{width:14px;height:14px}
+.au-accs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.au-acc{border:1px solid var(--bcs-line);border-left:3px solid var(--bz);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px;background:var(--bcs-card2)}
+.au-acc.on{background:color-mix(in srgb,var(--bz) 8%,var(--bcs-card))}
+.au-am{display:flex;gap:6px}
+.au-sites{display:flex;flex-wrap:wrap;gap:5px;align-items:center}
+.au-svcs{display:grid;grid-template-columns:1fr 2fr;gap:10px}.au-svcs>div{display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start}
+.au-svcs>div>.bcs-muted{width:100%}
+.au-banner{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid #EAB308;background:color-mix(in srgb,#EAB308 10%,var(--bcs-card));color:var(--bcs-text);border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:13px}
+.au-ro-note{font-size:12px;color:var(--bcs-muted);padding:6px 10px;border:1px dashed var(--bcs-line);border-radius:8px;text-align:center}
+fieldset.au-fs{border:0;padding:0;margin:0;min-width:0}
+@media(max-width:900px){.au-urow{grid-template-columns:34px 1fr auto}.au-urow>.au-uc{grid-column:2/4}.au-urow>.au-uc:nth-child(2){grid-column:2;grid-row:1}.au-urow>.au-acts{grid-column:3;grid-row:1}.au-urow>.au-uc:nth-child(3){display:flex;gap:8px;align-items:center;flex-wrap:wrap}.au-urow>.au-uc:nth-child(3) .bcs-muted{margin:0!important}.au-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.au-svcs{grid-template-columns:1fr}}
+/*@@AUTHCSS-END@@*/
 
 .m-gear{margin-left:auto;align-self:flex-start}
 .sync-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--color-neutral-500)}
@@ -548,11 +602,13 @@ let BIZK=LS.get('psd_ifm_biz','hospital');if(!BIZ[BIZK])BIZK='hospital';
 let D=null;const P=()=>BIZ[BIZK];
 const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
 let CUR='dashboard';let Q=[];const TB={};let charts={};
-function save(){ensureD();LS.set('psd_ifm_v1_'+BIZK,D);typeof syncAfterSave==='function'&&syncAfterSave()}
-function load(){D=LS.get('psd_ifm_v1_'+BIZK,null);if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
+function save(){ensureD();LS.set(DKEY(),D);typeof syncAfterSave==='function'&&syncAfterSave()}
+function DKEY(){const s=LS.get('psd_ifm_site_'+BIZK,'');return'psd_ifm_v1_'+BIZK+(s?'@'+s:'')}
+function load(){D=LS.get(DKEY(),null);if(!D&&DKEY()!=='psd_ifm_v1_'+BIZK&&!LS.get('psd_ifm_mig_'+BIZK,false)){D=LS.get('psd_ifm_v1_'+BIZK,null);LS.set('psd_ifm_mig_'+BIZK,true)}if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
 /* enabled services + KPI targets (per business, kept inside D) */
 function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets();typeof ensureExtra==='function'&&ensureExtra()}
-const svcOn=k=>!(D&&D.svcOff&&D.svcOff[k]);
+const svcSite=k=>!(D&&D.svcOff&&D.svcOff[k]);
+const svcOn=k=>svcSite(k)&&(typeof uSvc!=='function'||uSvc(k));
 const SVC_ON=()=>Object.keys(SVC).filter(svcOn);
 const _BT={};Object.keys(BIZ).forEach(k=>_BT[k]=Object.assign({comp:100,defect:85,hkTask:95,incident:90,gdnTask:90,linLoss:2},BIZ[k].target));
 function applyTargets(){BIZ[BIZK].target=Object.assign({},_BT[BIZK],(D&&D.targetOv)||{})}
@@ -622,7 +678,7 @@ function seed(bk){
 
 // ---------- schema (drives tables + forms) ----------
 const AREAS=()=>D.areas.map(a=>a.name);
-const SVCO=()=>Object.keys(SVC).filter(svcOn).map(k=>[k,SVC[k].n]);
+const SVCO=()=>Object.keys(SVC).filter(svcSite).map(k=>[k,SVC[k].n]);
 const BC={Running:'green',Standby:'blue',Warning:'yellow',Down:'red',New:'blue',Assigned:'purple','In Progress':'yellow','On Hold':'gray',Completed:'teal',Closed:'green',Planned:'blue',Done:'green',Overdue:'red',Open:'red',Investigating:'yellow',Compliant:'green','Due Soon':'yellow',Scheduled:'blue',Missed:'red',Delayed:'orange',None:'green',Low:'teal',Medium:'yellow',High:'red',Critical:'red',Good:'green',Fair:'yellow',Poor:'red','On Duty':'green',Off:'gray',Leave:'yellow',Active:'green',Expiring:'yellow',Expired:'red',A:'red',B:'yellow',C:'gray',P1:'red',P2:'orange',P3:'blue',P4:'gray','In-house':'blue',Outsource:'purple',Met:'green',Breached:'red'};
 const badge=v=>v===''||v==null?'—':`<span class="badge b-${BC[v]||'gray'}">${esc(v)}</span>`;
 const chip=k=>SVC[k]?`<span class="svc-chip" style="--sc:${SVC[k].c}">${SVC[k].ic} ${SVC[k].n}</span>`:esc(k);
@@ -795,7 +851,7 @@ const MK={user:'psd_ifm_m_user',lang:'psd_ifm_m_lang',theme:'psd_ifm_m_theme',fo
 const ST={lang:LS.get(MK.lang,null),user:LS.get(MK.user,null),tab:'home',svc:null,sub:{},wrf:'open',wrsvc:'',q:'',sheet:null,delArm:null,resetArm:false};
 const tx=(th,en)=>ST.lang==='en'?en:th;
 const ROLES=[['requester','ผู้แจ้งงาน','Requester'],['tech','ช่าง / พนักงานบริการ','Technician / Service staff'],['sup','หัวหน้างาน','Supervisor'],['fm','ผู้จัดการอาคาร (FM)','Facility Manager'],['admin','ผู้ดูแลระบบ (Admin)','Administrator']];
-const roleName=k=>{const r=ROLES.find(x=>x[0]===k)||ROLES[0];return tx(r[1],r[2])};
+const roleName=k=>roleTx(k);
 const svcName=k=>SVC[k]?(ST.lang==='en'?SVC[k].n:SVC[k].th):k;
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._h);toast._h=setTimeout(()=>t.classList.remove('show'),2400)}
@@ -833,23 +889,48 @@ function screenSplash(){
   +'<div style="display:flex;gap:10px"><button class="blueprint tap" style="flex:1;padding:16px 10px;font-family:var(--font-heading);font-size:18px" onclick="setLang(\'th\')">ภาษาไทย</button><button class="blueprint tap" style="flex:1;padding:16px 10px;font-family:var(--font-heading);font-size:18px" onclick="setLang(\'en\')">English</button></div>'
   +'<div style="font-size:12px;text-align:center;color:var(--color-neutral-500);letter-spacing:.04em">IFM MANAGEMENT V1.0 · PSD eNGINNo · 2026</div></div></div>'}
 
-function screenLogin(){
+const LGM={tab:'login',srv:false,msg:'',ok:''};
+function screenLogin(){const on=authOnline(),c=gasCfg(),L=LGM;
+  const f=(id,lab,ty,ac,ph,extra)=>'<div class="field"><label for="'+id+'">'+lab+'</label><input class="input" id="'+id+'"'+(ty?' type="'+ty+'"':'')+(ac?' autocomplete="'+ac+'"':'')+(ph?' placeholder="'+esc(ph)+'"':'')+(extra||'')+'></div>';
+  const pw=(id,lab,ac)=>'<div class="field"><label for="'+id+'">'+lab+'</label><div style="position:relative"><input class="input" id="'+id+'" type="password" autocomplete="'+ac+'" style="padding-right:46px"><button type="button" onclick="lgEyeM(\''+id+'\',this)" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;font-size:18px;cursor:pointer" aria-label="show">👁</button></div></div>';
   return '<div style="display:flex;flex-direction:column;min-height:100vh"><div class="hero">'+atomHtml(96,84,32,18)
   +'<div class="kicker">PSD · eNGINNo</div><div class="title">IFM MANAGEMENT <span class="v">V1.0</span></div><div class="sub">INTEGRATED FACILITY MANAGEMENT · 2026</div></div>'
-  +'<div style="flex:1;padding:22px max(22px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:16px;max-width:560px;width:100%;margin:0 auto">'
-  +'<div><h2 style="font-size:23px;margin-bottom:2px">'+tx('เข้าสู่ระบบ','Sign In')+'</h2><div style="font-size:14px;color:var(--color-neutral-700)">'+tx('ระบุชื่อ บทบาท และไซต์ที่ปฏิบัติงาน','Enter your name, role and the site you work at')+'</div></div>'
-  +'<form id="login-form" onsubmit="event.preventDefault();doLogin()" style="display:flex;flex-direction:column;gap:12px">'
-  +'<div class="field"><label for="li-name">'+tx('ชื่อ-นามสกุล','Full name')+'</label><input class="input" id="li-name" autocomplete="name" required></div>'
-  +'<div class="field"><label for="li-role">'+tx('บทบาท','Role')+'</label><select class="input" id="li-role">'+ROLES.map(r=>'<option value="'+r[0]+'"'+(r[0]==='tech'?' selected':'')+'>'+tx(r[1],r[2])+'</option>').join('')+'</select></div>'
-  +'<div class="field"><label for="li-biz">'+tx('ประเภทธุรกิจ / ไซต์','Business type / site')+'</label><select class="input" id="li-biz">'+Object.entries(BIZ).map(([k,b])=>'<option value="'+k+'"'+(k===BIZK?' selected':'')+'>'+b.ic+' '+tx(b.n,b.en)+'</option>').join('')+'</select></div>'
-  +'<button type="submit" class="btn btn-primary btn-block">'+tx('เข้าสู่ระบบ','Sign In')+'</button>'
-  +'<div class="ferr" id="li-err"></div></form>'
-  +'<div class="note">'+tx('เวอร์ชันนี้บันทึกข้อมูลไว้ในเครื่อง และใช้ข้อมูลชุดเดียวกับ IFM เวอร์ชันเดสก์ท็อปบนเว็บไซต์เดียวกัน · ระบบยืนยันตัวตนจริงจะเปิดใช้เมื่อเชื่อม Google Sheets / Apps Script','This version stores data on the device and shares it with the IFM desktop app on the same site. Real authentication comes with the Google Sheets / Apps Script backend.')+'</div>'
-  +'<div style="display:flex;justify-content:center;margin-top:auto">'+segLang()+'</div>'
+  +'<div style="flex:1;padding:22px max(22px,env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(22px,env(safe-area-inset-left));display:flex;flex-direction:column;gap:14px;max-width:560px;width:100%;margin:0 auto">'
+  +'<div class="seg" style="width:100%"><button class="seg-opt '+(L.tab==='login'?'active':'')+'" style="flex:1" onclick="LGM.tab=\'login\';LGM.msg=\'\';LGM.ok=\'\';render()">🔐 '+tx('เข้าสู่ระบบ','Sign in')+'</button><button class="seg-opt '+(L.tab==='reg'?'active':'')+'" style="flex:1" onclick="LGM.tab=\'reg\';LGM.msg=\'\';LGM.ok=\'\';render()">📝 '+tx('ลงทะเบียน','Register')+'</button></div>'
+  +(L.msg?'<div class="au-err">'+esc(L.msg)+'</div>':'')+(L.ok?'<div class="note" style="color:var(--green);font-weight:600">'+esc(L.ok)+'</div>':'')
+  +(L.tab==='login'
+    ?'<form id="login-form" onsubmit="event.preventDefault();doLogin()" style="display:flex;flex-direction:column;gap:12px">'+f('li-user','Username','','username','',' autocapitalize="none" spellcheck="false"')+pw('li-pass','Password','current-password')
+      +'<button type="submit" class="btn btn-primary btn-block" id="li-go">'+tx('เข้าสู่ระบบ','Sign In')+'</button></form>'
+    :'<form onsubmit="event.preventDefault();doSignupM()" style="display:flex;flex-direction:column;gap:12px">'+f('rm-name',tx('ชื่อ-นามสกุล *','Full name *'),'','name')+f('rm-phone',tx('โทรศัพท์','Phone'),'tel','tel')+f('rm-email',tx('อีเมล','Email'),'email','email')
+      +f('rm-user','Username *','','username','a-z 0-9 . _ -',' autocapitalize="none"')+pw('rm-pass','Password * (6+)','new-password')
+      +'<div class="field"><label for="rm-biz">'+tx('ธุรกิจ','Business')+'</label><select class="input" id="rm-biz">'+Object.entries(BIZ).map(([k,b])=>'<option value="'+k+'"'+(k===BIZK?' selected':'')+'>'+b.ic+' '+tx(b.n,b.en)+'</option>').join('')+'</select></div>'
+      +f('rm-site',tx('รหัสอาคาร','Site code'),'','',tx('เช่น HOSP-01','e.g. HOSP-01'),' style="text-transform:uppercase"')
+      +'<div class="field"><label for="rm-role">'+tx('บทบาทที่ขอ','Requested role')+'</label><select class="input" id="rm-role">'+RL_SIGNUP.map(r=>'<option value="'+r+'"'+(r==='tech'?' selected':'')+'>'+esc(roleTx(r))+'</option>').join('')+'</select></div>'
+      +f('rm-note',tx('หมายเหตุถึงผู้อนุมัติ','Note to approver'),'','',tx('เช่น ทีมช่างกะเช้า','e.g. morning shift'))
+      +'<button type="submit" class="btn btn-primary btn-block" id="rm-go">✅ '+tx('ลงทะเบียน (รออนุมัติ)','Register (needs approval)')+'</button></form>')
+  +'<div class="row" style="justify-content:space-between;font-size:13px;color:var(--color-neutral-700);border-top:1px solid var(--color-divider);padding-top:10px"><span>'+(on?'☁ Google Sheets':tx('🧪 โหมดสาธิต — ข้อมูลในเครื่องนี้','🧪 Demo mode — data on this device'))+'</span><button class="btn btn-sm" onclick="LGM.srv=!LGM.srv;render()">⚙ '+tx('เซิร์ฟเวอร์','Server')+'</button></div>'
+  +(L.srv?'<div class="blueprint pad" style="display:flex;flex-direction:column;gap:8px">'+f('li-url','Web App URL','url','','https://script.google.com/macros/s/…/exec',' value="'+esc(c.url)+'"')+'<div class="row"><button class="btn btn-primary btn-sm" onclick="lgSrvSaveM(this)">'+tx('บันทึก + ทดสอบ','Save + test')+'</button>'+(on?'<button class="btn btn-sm" onclick="lgSrvDemoM()">'+tx('ใช้โหมดสาธิต','Use demo mode')+'</button>':'')+'</div><div style="font-size:12.5px;color:var(--color-neutral-700)">'+tx('หรือเปิดลิงก์ที่ผู้ดูแลส่งให้ (…?srv=URL) ระบบจะเชื่อมให้อัตโนมัติ','Or open the link from your admin (…?srv=URL)')+'</div></div>':'')
+  +(on?'':'<div class="note" style="text-align:center">'+tx('ทดลองใช้','Try it')+': <b>admin</b> / <b>ifm2026</b> · '+tx('บทบาทอื่น','other roles')+': <b>fm</b> · <b>tech</b> · <b>owner</b></div>')
+  +'<div style="display:flex;justify-content:center">'+segLang()+'</div>'
   +'<a class="link" href="'+DESKTOP_URL+'">'+tx('← เปิด IFM เวอร์ชันเดสก์ท็อป','← Open IFM desktop version')+'</a>'+footerLegal()+'</div></div>'}
-function doLogin(){const n=document.getElementById('li-name').value.trim();if(!n){document.getElementById('li-err').textContent=tx('กรุณาระบุชื่อ','Please enter your name');return}
-  const role=document.getElementById('li-role').value,bz=document.getElementById('li-biz').value;
-  ST.user={name:n,role};LS.set(MK.user,ST.user);if(bz!==BIZK){BIZK=bz;LS.set('psd_ifm_biz',bz);load()}ST.tab='home';render();toast(tx('ยินดีต้อนรับ ','Welcome ')+n)}
+function lgEyeM(id,b){const i=document.getElementById(id);if(!i)return;const sh=i.type==='password';i.type=sh?'text':'password';b.textContent=sh?'🙈':'👁'}
+const lgvM=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+function stUser(){const u=me();return u?{name:u.name||u.username,role:u.role,username:u.username}:null}
+async function doLogin(){const b=document.getElementById('li-go');if(b){b.disabled=true;b.textContent=tx('กำลังตรวจสอบ…','Checking…')}
+  try{await authLogin(lgvM('li-user'),document.getElementById('li-pass').value);LGM.msg='';LGM.ok='';ST.user=stUser();ST.tab='home';load();render();SYNC.last=null;syncBoot(()=>{if(!FM)render()});toast(tx('ยินดีต้อนรับ ','Welcome ')+ST.user.name)}
+  catch(e){const u=lgvM('li-user');LGM.msg=e.message;render();const i=document.getElementById('li-user');if(i){i.value=u;document.getElementById('li-pass').focus()}}}
+async function doSignupM(){const d={name:lgvM('rm-name'),phone:lgvM('rm-phone'),email:lgvM('rm-email'),username:lgvM('rm-user'),business:lgvM('rm-biz'),site:lgvM('rm-site'),role:lgvM('rm-role'),note:lgvM('rm-note')},pw=document.getElementById('rm-pass').value;
+  const b=document.getElementById('rm-go');if(b){b.disabled=true;b.textContent=tx('กำลังส่ง…','Sending…')}
+  try{await authSignup(d,pw);LGM.tab='login';LGM.msg='';LGM.ok=tx('✅ ลงทะเบียนแล้ว — รอ Admin / FM อนุมัติ','✅ Registered — waiting for approval');render();const i=document.getElementById('li-user');if(i)i.value=d.username.toLowerCase()}
+  catch(e){LGM.msg=e.message;render();Object.entries({'rm-name':d.name,'rm-phone':d.phone,'rm-email':d.email,'rm-user':d.username,'rm-biz':d.business,'rm-site':d.site,'rm-role':d.role,'rm-note':d.note}).forEach(([k,v])=>{const e=document.getElementById(k);if(e)e.value=v});window.scrollTo(0,0)}}
+async function lgSrvSaveM(btn){const url=lgvM('li-url');btn.disabled=true;
+  try{if(!url){lgSrvDemoM();return}if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(url))throw new Error(tx('URL ต้องเป็น https://script.google.com/macros/s/…/exec','URL must be https://script.google.com/macros/s/…/exec'));await authServerTest(url);authServerSet(url);LGM.srv=false;LGM.msg='';LGM.ok=tx('☁ เชื่อมต่อแล้ว — เข้าสู่ระบบด้วยบัญชีบน Google Sheets','☁ Connected — sign in with your Google Sheets account');render()}
+  catch(e){LGM.msg=tx('เชื่อมต่อไม่ได้: ','Cannot connect: ')+e.message;render()}}
+function lgSrvDemoM(){authServerSet('');LGM.srv=false;LGM.msg='';LGM.ok=tx('🧪 ใช้โหมดสาธิต','🧪 Demo mode');render()}
+function usrOpenM(){let m=document.getElementById('usr-m');if(!m){m=document.createElement('div');m.id='usr-m';m.className='bcs-modal';document.body.appendChild(m)}
+  m.innerHTML='<div class="bcs-mbox" style="width:980px"><div class="bcs-mh"><div><div class="bcs-muted">Admin / FM</div><div class="bcs-st" style="font-size:20px">👥 '+tx('ผู้ใช้งาน & สิทธิ์','Users & roles')+'</div></div><button class="bcs-btn" onclick="usrCloseM()">✕</button></div><div id="usr-root"></div></div>';m.hidden=false;usrMount()}
+function usrCloseM(){const m=document.getElementById('usr-m');if(m){m.hidden=true;m.innerHTML=''}}
+function setSiteM(code){const u=me();if(!u||(u.role!=='admin'&&!hasAcc(u,BIZK,code))){denied();return}LS.set('psd_ifm_site_'+BIZK,code);load();SYNC.last=null;render();syncBoot(()=>render());toast('🏢 '+code)}
 
 /* ---------- small renderers ---------- */
 const stat=(l,v,s,c,act)=>'<div class="blueprint stat '+(act?'tap':'')+'" style="--sc:'+(c||'var(--color-accent)')+'"'+(act?' onclick="'+act+'" role="button" tabindex="0"':'')+'><div class="kick">'+l+(act?' ›':'')+'</div><div class="v" style="color:'+(c||'inherit')+'">'+v+'</div><div class="s">'+(s||'')+'</div></div>';
@@ -889,7 +970,7 @@ function viewHome(){
   const hK=['eng','fac'].filter(svcOn),sK=['hk','sec','pest','gdn','lin'].filter(svcOn),hard=avg(hK.map(k=>sc[k])),soft=avg(sK.map(k=>sc[k])),idx=hK.length&&sK.length?Math.round((hard+soft)/2):hK.length?hard:soft;
   const AL=alerts().slice(0,5),pmA=avg([pmPct('eng'),pmPct('fac')]);
   const mine=D.tickets.filter(t=>t.assignee===ST.user.name&&t.status!=='Closed'&&t.status!=='Completed');
-  return '<div class="stack">'
+  return '<div class="stack">'+(authNoSite()?'<div class="au-banner">⚠ '+tx('ยังไม่ได้เลือกอาคาร — ข้อมูลที่เห็นเป็นข้อมูลตัวอย่างในเครื่องนี้','No building selected — you are seeing sample data on this device')+(cap('gas')?'':' · '+tx('ติดต่อ Admin / FM','contact your Admin / FM'))+'</div>':'')
   +'<div><h2 style="font-size:24px">'+tx('สวัสดี, ','Hello, ')+esc(ST.user.name)+'</h2><div style="font-size:14px;color:var(--color-neutral-700)">'+roleName(ST.user.role)+' · '+esc(D.site)+'</div></div>'
   +'<div class="blueprint pad" style="display:flex;flex-direction:column;gap:10px"><div class="row"><div class="svc-ic" style="--sc:'+B.c+';font-size:24px">'+B.ic+'</div><div style="flex:1;min-width:0"><div class="kick">'+B.en+' · '+B.n+'</div><div style="font-family:var(--font-heading);font-size:19px;font-weight:600;line-height:1.15">'+esc(D.site)+'</div></div>'
   +'<div style="text-align:right"><div class="kick">IFM Index</div><div style="font-family:var(--font-heading);font-size:38px;font-weight:700;line-height:1;color:'+scol(idx)+'">'+idx+'</div></div></div>'
@@ -966,12 +1047,12 @@ function meterList(){const m=[...D.meters].sort((a,b)=>b.month.localeCompare(a.m
 function viewModule(k){const S=SVC[k],M=MOD(k);const sub=M.subs.find(s=>s.k===ST.sub[k])||M.subs[0];
   const filt=sub.f||null;
   return '<div class="stack"><button class="back" onclick="ST.svc=null;render()">'+tx('← บริการทั้งหมด','← All services')+'</button>'
-  +'<div class="mod-head"><div class="svc-ic" style="--sc:'+S.c+';width:48px;height:48px;font-size:24px">'+S.ic+'</div><div style="min-width:0"><div class="pill" style="color:var(--'+(S.type==='Hard'?'hard':'soft')+')">'+S.type+' Service</div><h2 style="font-size:26px">'+S.n+'</h2><div style="font-size:13.5px;color:var(--color-neutral-700)">'+S.th+'</div></div><button class="btn btn-sm m-gear" onclick="msetOpen(\''+k+'\')" aria-label="'+tx('ตั้งค่า Module','Module settings')+'">⚙</button></div>'
+  +'<div class="mod-head"><div class="svc-ic" style="--sc:'+S.c+';width:48px;height:48px;font-size:24px">'+S.ic+'</div><div style="min-width:0"><div class="pill" style="color:var(--'+(S.type==='Hard'?'hard':'soft')+')">'+S.type+' Service</div><h2 style="font-size:26px">'+S.n+'</h2><div style="font-size:13.5px;color:var(--color-neutral-700)">'+S.th+'</div></div>'+(cap('set')?'<button class="btn btn-sm m-gear" onclick="msetOpen(\''+k+'\')" aria-label="'+tx('ตั้งค่า Module','Module settings')+'">⚙</button>':'')+'</div>'
   +(M.note?'<div class="note">'+esc(M.note)+'</div>':'')
   +'<div class="stat-grid">'+M.kpi().map(x=>stat(x[0],x[1],x[2],x[3])).join('')+'</div>'
   +metricStrip(k,'metricGoM')
   +'<div class="chips" role="tablist">'+M.subs.map(s=>'<button class="chip '+(s===sub?'active':'')+'" onclick="ST.sub[\''+k+'\']=\''+s.k+'\';ST.q=\'\';render()">'+s.l+(s.ent==='tickets'?' ('+openWR(k)+')':'')+'</button>').join('')+'</div>'
-  +'<div class="row"><input class="search" id="mq" placeholder="'+tx('ค้นหา','Search')+' '+esc(SCH[sub.ent].label)+'…" value="'+esc(ST.q)+'" oninput="ST.q=this.value;render();refocusM()"><button class="btn btn-primary" onclick="'+(SCH[sub.ent].customNew?SCH[sub.ent].customNew+'()':'openForm2(\''+sub.ent+'\',null,'+esc(JSON.stringify(sub.def||{})).replace(/"/g,'&quot;')+')')+'">+ '+tx('เพิ่ม','Add')+'</button></div>'
+  +'<div class="row"><input class="search" id="mq" placeholder="'+tx('ค้นหา','Search')+' '+esc(SCH[sub.ent].label)+'…" value="'+esc(ST.q)+'" oninput="ST.q=this.value;render();refocusM()">'+(canEdit(sub.ent,null)?'<button class="btn btn-primary" onclick="'+(SCH[sub.ent].customNew?SCH[sub.ent].customNew+'()':'openForm2(\''+sub.ent+'\',null,'+esc(JSON.stringify(sub.def||{})).replace(/"/g,'&quot;')+')')+'">+ '+tx('เพิ่ม','Add')+'</button>':'')+'</div>'
   +(sub.custom?sub.custom():'')
   +(sub.ent==='tickets'?relPanel(k,k==='eng'||k==='fac'?['maint','mttr']:['rel','maint','avail','mtbf','mttr']):sub.k==='pm'?relPanel(k,['rel','mtbf']):sub.k==='equip'?relPanel(k,['avail']):'')
   +'<div class="list">'+(sub.ent==='tickets'?wrList(filt):listOf(sub.ent,filt,sub.limit))+'</div></div>'}
@@ -982,7 +1063,7 @@ function wrCard(t){const S=SVC[t.service]||{};const i=FLOW.indexOf(t.status);con
   return '<div class="blueprint tap rec" style="--bc:'+S.c+'" role="button" tabindex="0" onclick="wrDetail(\''+t.id+'\')"><div class="top"><span class="tag-id">'+t.id+'</span>'+badge(t.priority)+mchip(t.service)+'<span style="margin-left:auto">'+badge(t.status)+'</span></div>'
   +'<div class="t">'+esc(t.desc)+'</div><div class="m">'+esc(t.area)+' · '+esc(t.category)+' · '+fmtDT(t.date)+'</div>'
   +'<div class="top" style="justify-content:space-between">'+slaBadge(t)+'<span class="m">'+(t.assignee?'👤 '+esc(t.assignee):tx('ยังไม่มีผู้รับงาน','Unassigned'))+'</span></div>'
-  +(nx?'<div class="acts"><button class="btn btn-ok btn-sm" onclick="event.stopPropagation();advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept'):nx)+'</button></div>':'')+'</div>'}
+  +(nx&&canEdit('tickets',t)?'<div class="acts"><button class="btn btn-ok btn-sm" onclick="event.stopPropagation();advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept'):nx)+'</button></div>':'')+'</div>'}
 function wrList(filter){let r=D.tickets.filter(filter||(()=>true));if(ST.q){const q=ST.q.toLowerCase();r=r.filter(t=>Object.values(t).join(' ').toLowerCase().includes(q))}
   r.sort((a,b)=>b.date.localeCompare(a.date));return r.length?r.slice(0,60).map(wrCard).join(''):'<div class="blueprint empty">'+tx('ไม่มีงานในรายการนี้','No work requests here')+'</div>'}
 function viewTasks(){const me=ST.user.name;
@@ -1002,29 +1083,31 @@ function wrDetail(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const S=
   openSheet('<div class="sheet-h"><div><div class="top" style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag-id">'+t.id+'</span>'+badge(t.priority)+badge(t.status)+'</div><h3 style="margin-top:6px">'+esc(t.desc)+'</h3></div><button class="btn btn-sm" onclick="closeSheet()" aria-label="close">✕</button></div>'
    +'<div class="stack"><dl class="kv"><dt>Service</dt><dd>'+mchip(t.service)+' '+svcName(t.service)+'</dd><dt>'+tx('พื้นที่','Area')+'</dt><dd>'+esc(t.area)+'</dd><dt>'+tx('หมวด','Category')+'</dt><dd>'+esc(t.category)+'</dd><dt>'+tx('ผู้แจ้ง','Requester')+'</dt><dd>'+esc(t.requester||'—')+'</dd><dt>'+tx('ผู้รับงาน','Assignee')+'</dt><dd>'+esc(t.assignee||'—')+'</dd><dt>SLA</dt><dd>'+slaBadge(t)+' <span style="font-size:12.5px;color:var(--color-neutral-700)">'+tx('ตอบรับ ','Respond ')+fmtDur(sla.r)+' · '+tx('แก้ไข ','Resolve ')+fmtDur(sla.f)+'</span></dd></dl>'
    +'<div class="timeline">'+step(tx('แจ้งงาน','Reported'),t.date,'var(--sky)')+step(tx('รับงาน','Responded'),t.respondedAt,'var(--purple)')+step(tx('แล้วเสร็จ','Completed'),t.completedAt,'var(--green)')+'</div>'
-   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+(nx?'<button class="btn btn-primary" style="flex:1" onclick="advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept job'):nx)+'</button>':'')+(t.status!=='On Hold'&&t.status!=='Closed'&&t.status!=='Completed'?'<button class="btn" onclick="setField(\'tickets\',\''+t.id+'\',\'status\',\'On Hold\')">'+tx('พักงาน','Hold')+'</button>':'')+'<button class="btn" onclick="openForm2(\'tickets\',\''+t.id+'\')">✎ '+tx('แก้ไข','Edit')+'</button></div></div>')}
+   +'<div style="display:flex;gap:8px;flex-wrap:wrap">'+(nx&&canEdit('tickets',t)?'<button class="btn btn-primary" style="flex:1" onclick="advanceM(\''+t.id+'\')">▶ '+(t.status==='New'?tx('รับงาน','Accept job'):nx)+'</button>':'')+(canEdit('tickets',t)&&t.status!=='On Hold'&&t.status!=='Closed'&&t.status!=='Completed'?'<button class="btn" onclick="setField(\'tickets\',\''+t.id+'\',\'status\',\'On Hold\')">'+tx('พักงาน','Hold')+'</button>':'')+'<button class="btn" onclick="openForm2(\'tickets\',\''+t.id+'\')">'+(canEdit('tickets',t)?'✎ '+tx('แก้ไข','Edit'):'👁 '+tx('รายละเอียด','Details'))+'</button></div></div>')}
 
 /* ---------- SETTINGS ---------- */
-function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default');
-  return '<div class="stack"><div class="blueprint pad row"><div class="avatar" style="width:52px;height:52px;font-size:22px">'+esc(u.name.charAt(0).toUpperCase())+'</div><div style="flex:1;min-width:0"><div style="font-family:var(--font-heading);font-size:21px;font-weight:600">'+esc(u.name)+'</div><div style="font-size:14px;color:var(--color-neutral-700)">'+roleName(u.role)+'</div></div><button class="btn btn-sm" onclick="signOut()">'+tx('ออกจากระบบ','Sign out')+'</button></div>'
+function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default'),SET=cap('set'),sites=authOnline()?mySitesFor(BIZK):[];
+  return '<div class="stack"><div class="blueprint pad">'+myAccountHTML()+'<div class="row" style="margin-top:10px"><button class="btn btn-sm" onclick="signOut()">⎋ '+tx('ออกจากระบบ','Sign out')+'</button>'+(cap('usr')?'<button class="btn btn-primary btn-sm" onclick="usrOpenM()">👥 '+tx('ผู้ใช้งาน & สิทธิ์','Users & roles')+'</button>':'')+'</div></div>'
   +'<div class="sec-t"><h2>'+tx('ประเภทธุรกิจ','Business type')+'</h2><small>'+tx('ข้อมูลแยกตามธุรกิจ','Data kept per business')+'</small></div>'
-  +'<div class="list two">'+Object.entries(BIZ).map(([k,b])=>'<button class="blueprint tap biz-opt '+(k===BIZK?'on':'')+'" onclick="switchBiz(\''+k+'\')"><span class="i">'+b.ic+'</span><span style="flex:1;min-width:0"><b style="font-family:var(--font-heading);font-size:17px;display:block">'+tx(b.n,b.en)+'</b><span style="font-size:12.5px;color:var(--color-neutral-700);display:block;line-height:1.3">'+esc(b.desc)+'</span></span>'+(k===BIZK?'<span class="badge b-green">✓</span>':'')+'</button>').join('')+'</div>'
-  +'<div class="field"><label for="site-in">'+tx('ชื่อไซต์ / โครงการ','Site / project name')+'</label><input class="input" id="site-in" value="'+esc(D.site)+'" onchange="D.site=this.value.trim()||P().site;save();toast(\''+tx('บันทึกแล้ว','Saved')+'\')"></div>'
-  +'<div class="sec-t"><h2>'+tx('บริการที่ใช้ในไซต์นี้','Services used at this site')+'</h2></div>'
-  +['Hard','Soft'].map(g=>{const ks=g==='Hard'?['eng','fac']:['hk','sec','pest','gdn','lin'];return '<div class="blueprint pad" style="display:flex;flex-direction:column;gap:8px"><div class="kick" style="color:var(--'+(g==='Hard'?'hard':'soft')+')">'+g+' Service · '+ks.filter(svcOn).length+'/'+ks.length+'</div>'+ks.map(k=>'<label class="row" style="justify-content:space-between;cursor:pointer"><span>'+SVC[k].ic+' <b>'+SVC[k].n+'</b> <span style="font-size:12.5px;color:var(--color-neutral-700)">'+SVC[k].th+'</span></span><input type="checkbox" style="width:20px;height:20px;accent-color:var(--color-accent)" '+(svcOn(k)?'checked':'')+' onchange="toggleSvcM(\''+k+'\',this.checked)"></label>').join('')+'</div>'}).join('')
+  +'<div class="list two">'+Object.entries(BIZ).filter(([k])=>bizAllowed(k)).map(([k,b])=>'<button class="blueprint tap biz-opt '+(k===BIZK?'on':'')+'" onclick="switchBiz(\''+k+'\')"><span class="i">'+b.ic+'</span><span style="flex:1;min-width:0"><b style="font-family:var(--font-heading);font-size:17px;display:block">'+tx(b.n,b.en)+'</b><span style="font-size:12.5px;color:var(--color-neutral-700);display:block;line-height:1.3">'+esc(b.desc)+'</span></span>'+(k===BIZK?'<span class="badge b-green">✓</span>':'')+'</button>').join('')+'</div>'
+  +(sites.length?'<div class="sec-t"><h2>'+tx('อาคาร','Building')+'</h2><small>'+tx('ที่ได้รับสิทธิ์','assigned to you')+'</small></div><div class="chips">'+sites.map(x=>'<button class="chip '+(x.site===gasSite()?'active':'')+'" onclick="setSiteM(\''+esc(x.site)+'\')">🏢 '+esc(x.site)+(x.name?' · '+esc(x.name):'')+'</button>').join('')+'</div>':'')
+  +'<div class="field"><label for="site-in">'+tx('ชื่อไซต์ / โครงการ','Site / project name')+'</label><input class="input" id="site-in" value="'+esc(D.site)+'"'+(SET?'':' disabled')+' onchange="D.site=this.value.trim()||P().site;save();toast(\''+tx('บันทึกแล้ว','Saved')+'\')"></div>'
+  +(SET?'<div class="sec-t"><h2>'+tx('บริการที่ใช้ในไซต์นี้','Services used at this site')+'</h2></div>':'')
+  +(SET?['Hard','Soft']:[]).map(g=>{const ks=g==='Hard'?['eng','fac']:['hk','sec','pest','gdn','lin'];return '<div class="blueprint pad" style="display:flex;flex-direction:column;gap:8px"><div class="kick" style="color:var(--'+(g==='Hard'?'hard':'soft')+')">'+g+' Service · '+ks.filter(svcSite).length+'/'+ks.length+'</div>'+ks.map(k=>'<label class="row" style="justify-content:space-between;cursor:pointer"><span>'+SVC[k].ic+' <b>'+SVC[k].n+'</b> <span style="font-size:12.5px;color:var(--color-neutral-700)">'+SVC[k].th+'</span></span><input type="checkbox" style="width:20px;height:20px;accent-color:var(--color-accent)" '+(svcSite(k)?'checked':'')+' onchange="toggleSvcM(\''+k+'\',this.checked)"></label>').join('')+'</div>'}).join('')
   +'<div class="sec-t"><h2>'+tx('การแสดงผล','Display')+'</h2></div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ภาษา','Language')+'</div>'+segLang()+'</div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ธีม','Theme')+'</div><div style="display:flex;gap:8px">'+[['system',tx('ตามระบบ','System')],['light','Light'],['dark','Dark']].map(o=>'<button class="pref-opt '+(th===o[0]?'active':'')+'" onclick="LS.set(MK.theme,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ฟอนต์','Font')+'</div><div style="display:flex;gap:8px">'+[['default','Barlow'],['sarabun','Sarabun']].map(o=>'<button class="pref-opt '+(ft===o[0]?'active':'')+'" style="font-family:'+(o[0]==='sarabun'?'Sarabun':'Barlow')+'" onclick="LS.set(MK.font,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
-  +'<div class="sec-t"><h2>☁ Google Sheets</h2></div>'+mGasForm()
+  +'<div class="sec-t"><h2>🔑 '+tx('เปลี่ยนรหัสผ่าน','Change password')+'</h2></div><div class="blueprint pad">'+pwFormHTML()+'</div>'
+  +'<div class="sec-t"><h2>☁ Google Sheets</h2></div>'+(cap('gas')?mGasForm():'<div class="blueprint pad"><div id="m-sync" style="font-size:14px">'+mSyncText()+'</div></div>')
   +'<div class="sec-t"><h2>'+tx('ข้อมูล','Data')+'</h2></div>'
   +'<div class="note">'+tx('ข้อมูลเก็บในเครื่องนี้และใช้ร่วมกับ IFM เดสก์ท็อปเมื่อเปิดจากเว็บไซต์เดียวกัน','Data lives on this device and is shared with IFM desktop when opened from the same site')+'</div>'
-  +'<button class="btn" id="reset-btn" onclick="resetM(this)">'+tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data')+'</button>'
+  +(SET?'<button class="btn" id="reset-btn" onclick="resetM(this)">'+tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data')+'</button>':'')
   +'<a class="link" href="'+DESKTOP_URL+'">'+tx('เปิด IFM เวอร์ชันเดสก์ท็อป ›','Open IFM desktop version ›')+'</a>'+footerLegal()+'</div>'}
-function toggleSvcM(k,on){const off={...(D.svcOff||{})};if(on)delete off[k];else off[k]=true;if(Object.keys(SVC).every(x=>off[x])){toast(tx('ต้องเปิดใช้อย่างน้อย 1 บริการ','Keep at least one service on'));render();return}D.svcOff=off;save();render()}
-function switchBiz(k){if(!BIZ[k])return;BIZK=k;LS.set('psd_ifm_biz',k);load();ST.svc=null;ST.q='';render();SYNC.last=null;syncBoot(()=>render());toast(BIZ[k].ic+' '+tx(BIZ[k].n,BIZ[k].en))}
-function signOut(){ST.user=null;try{localStorage.removeItem(MK.user)}catch(e){}render()}
-function resetM(btn){if(!ST.resetArm){ST.resetArm=true;btn.textContent=tx('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm');btn.className='btn btn-danger';setTimeout(()=>{ST.resetArm=false;if(btn.isConnected){btn.textContent=tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data');btn.className='btn'}},4000);return}
+function toggleSvcM(k,on){if(!cap('set')){denied();render();return}const off={...(D.svcOff||{})};if(on)delete off[k];else off[k]=true;if(Object.keys(SVC).every(x=>off[x])){toast(tx('ต้องเปิดใช้อย่างน้อย 1 บริการ','Keep at least one service on'));render();return}D.svcOff=off;save();render()}
+function switchBiz(k){if(!BIZ[k])return;if(!bizAllowed(k)){denied();return}BIZK=k;LS.set('psd_ifm_biz',k);load();ST.svc=null;ST.q='';render();SYNC.last=null;syncBoot(()=>render());toast(BIZ[k].ic+' '+tx(BIZ[k].n,BIZ[k].en))}
+function signOut(){authLogout()}
+function resetM(btn){if(!cap('set')){denied();return}if(!ST.resetArm){ST.resetArm=true;btn.textContent=tx('แตะอีกครั้งเพื่อยืนยัน','Tap again to confirm');btn.className='btn btn-danger';setTimeout(()=>{ST.resetArm=false;if(btn.isConnected){btn.textContent=tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data');btn.className='btn'}},4000);return}
   ST.resetArm=false;D=seed(BIZK);save();render();toast(tx('รีเซ็ตข้อมูลแล้ว','Data reset'))}
 
 /* ---------- actions ---------- */
@@ -1039,7 +1122,7 @@ let FM=null;
 function openSheet(html){document.getElementById('sheet-root').innerHTML='<div class="sheet-ov" onclick="if(event.target===this)closeSheet()"><div class="sheet" role="dialog" aria-modal="true"><div class="grip"></div>'+html+'</div></div>';document.body.style.overflow='hidden'}
 function closeSheet(){document.getElementById('sheet-root').innerHTML='';document.body.style.overflow='';FM=null}
 function openForm2(ent,id,defs){
-  const S=SCH[ent],rec=id?D[ent].find(r=>r.id===id):null;defs=defs||{};FM={ent,id};ST.delArm=null;
+  const S=SCH[ent],rec=id?D[ent].find(r=>r.id===id):null;defs=defs||{};if(!rec&&!canEdit(ent,null)){denied();return}const ro=!canEdit(ent,rec);FM={ent,id,ro};ST.delArm=null;
   const vals={};S.fields.forEach(f=>{vals[f.k]=rec?rec[f.k]:(defs[f.k]!=null?defs[f.k]:(typeof f.def==='function'?f.def():f.def??''))});
   const fields=S.fields.map(f=>{const lab=typeof f.l==='function'?f.l():f.l,v=vals[f.k]??'',fid='m_'+f.k;let inp;
     if(f.t==='select'){let o=typeof f.o==='function'?f.o():f.o;o=o.map(x=>Array.isArray(x)?x:[x,x]);if(v!==''&&!o.some(x=>String(x[0])===String(v)))o.push([v,v]);
@@ -1047,14 +1130,14 @@ function openForm2(ent,id,defs){
     else if(f.t==='textarea')inp='<textarea class="input" id="'+fid+'" rows="3">'+esc(v)+'</textarea>';
     else{const ty=f.t==='datetime'?'datetime-local':f.t==='number'?'number':f.t==='date'?'date':'text';inp='<input class="input" id="'+fid+'" type="'+ty+'" value="'+esc(v)+'"'+(f.t==='number'?' inputmode="decimal" step="any"':'')+(f.list?' list="mdl_'+f.k+'"':'')+'>'+(f.list?'<datalist id="mdl_'+f.k+'"></datalist>':'')}
     return '<div class="field'+(f.full||f.t==='textarea'?' full':'')+'"><label for="'+fid+'">'+esc(lab)+(f.req?' <span class="req">*</span>':'')+'</label>'+inp+'</div>'}).join('');
-  openSheet('<div class="sheet-h"><h3>'+(rec?tx('แก้ไข','Edit')+' · '+esc(rec.id):(ent==='tickets'?tx('แจ้งงานใหม่','New work request'):tx('เพิ่ม','Add ')+esc(S.label)))+'</h3><button class="btn btn-sm" onclick="closeSheet()" aria-label="close">✕</button></div>'
-   +'<form onsubmit="event.preventDefault();submit2()"><div class="form-grid">'+fields+'</div><div class="ferr" id="m-err"></div>'
-   +'<div style="display:flex;gap:8px"><button type="submit" class="btn btn-primary" style="flex:1">'+tx('บันทึก','Save')+'</button>'+(rec?'<button type="button" class="btn btn-danger" onclick="del2(this)">'+tx('ลบ','Delete')+'</button>':'')+'</div></form>');
+  openSheet('<div class="sheet-h"><h3>'+(rec?(ro?'🔒 '+tx('รายละเอียด','Details'):tx('แก้ไข','Edit'))+' · '+esc(rec.id):(ent==='tickets'?tx('แจ้งงานใหม่','New work request'):tx('เพิ่ม','Add ')+esc(S.label)))+'</h3><button class="btn btn-sm" onclick="closeSheet()" aria-label="close">✕</button></div>'
+   +'<form onsubmit="event.preventDefault();submit2()"><fieldset class="au-fs"'+(ro?' disabled':'')+'><div class="form-grid">'+fields+'</div></fieldset><div class="ferr" id="m-err"></div>'
+   +(ro?'<div class="au-ro-note">🔒 '+tx('ดูอย่างเดียว — บทบาทของคุณแก้ไขรายการนี้ไม่ได้','View only — your role cannot edit this')+'</div></form>':'<div style="display:flex;gap:8px"><button type="submit" class="btn btn-primary" style="flex:1">'+tx('บันทึก','Save')+'</button>'+(rec&&canDel(ent,rec)?'<button type="button" class="btn btn-danger" onclick="del2(this)">'+tx('ลบ','Delete')+'</button>':'')+'</div></form>'));
   refreshLists2();
 }
 function refreshLists2(){if(!FM)return;const S=SCH[FM.ent];const cur={};S.fields.forEach(f=>{const e=document.getElementById('m_'+f.k);if(e)cur[f.k]=e.value});
   S.fields.filter(f=>f.list).forEach(f=>{const dl=document.getElementById('mdl_'+f.k);if(dl)dl.innerHTML=(f.list(cur)||[]).map(x=>'<option value="'+esc(x)+'">').join('')})}
-function submit2(){if(!FM)return;const{ent,id}=FM,S=SCH[ent];const r=id?{...D[ent].find(x=>x.id===id)}:{};
+function submit2(){if(!FM)return;if(FM.ro){denied();return}const{ent,id}=FM,S=SCH[ent];const r=id?{...D[ent].find(x=>x.id===id)}:{};
   for(const f of S.fields){const e=document.getElementById('m_'+f.k);let v=e?e.value.trim():'';
     if(f.req&&v===''){document.getElementById('m-err').textContent=tx('กรุณากรอก “','Please fill in “')+(typeof f.l==='function'?f.l():f.l)+'”';e&&e.focus();return}
     if(f.t==='number'&&v!==''){v=+v;if(f.max!=null&&v>f.max)v=f.max;if(f.min!=null&&v<f.min)v=f.min}r[f.k]=v}
@@ -1062,7 +1145,7 @@ function submit2(){if(!FM)return;const{ent,id}=FM,S=SCH[ent];const r=id?{...D[en
   if(id){const i=D[ent].findIndex(x=>x.id===id);D[ent][i]=r;toast(tx('บันทึก ','Saved ')+r.id)}
   else{r.id=nextId(ent);S.onCreate&&S.onCreate(r);D[ent].unshift(r);toast(tx('เพิ่ม ','Added ')+r.id)}
   save();closeSheet();render()}
-function del2(btn){if(!FM)return;if(ST.delArm!==FM.id){ST.delArm=FM.id;btn.textContent=tx('แตะอีกครั้งเพื่อลบ','Tap again to delete');return}
+function del2(btn){if(!FM)return;if(!canDel(FM.ent,D[FM.ent].find(r=>r.id===FM.id))){denied();return}if(ST.delArm!==FM.id){ST.delArm=FM.id;btn.textContent=tx('แตะอีกครั้งเพื่อลบ','Tap again to delete');return}
   const{ent,id}=FM;D[ent]=D[ent].filter(r=>r.id!==id);save();closeSheet();render();toast(tx('ลบ ','Deleted ')+id)}
 
 /*@@BCS-START@@*/
@@ -1693,7 +1776,7 @@ function relPanel(svc,focus){const M=relMetrics(svc),C=M.C,rows=relBySys(svc),f=
 
 /* ---------- module settings modal (calc + database) ---------- */
 const MSET={svc:null,tab:'calc',host:{}};
-function msetOpen(svc,tab){MSET.svc=svc;MSET.tab=tab||MSET.tab||'calc';if(MSET.tab==='tpl'&&svc!=='eng')MSET.tab='calc';msetRender()}
+function msetOpen(svc,tab){if(typeof cap==='function'&&!cap('set')){typeof denied==='function'&&denied();return}MSET.svc=svc;MSET.tab=tab||MSET.tab||'calc';if(MSET.tab==='tpl'&&svc!=='eng')MSET.tab='calc';msetRender()}
 function msetClose(){const m=document.getElementById('mset');if(m){m.hidden=true;m.innerHTML=''}}
 function msetRender(){let m=document.getElementById('mset');if(!m){m=document.createElement('div');m.id='mset';m.className='bcs-modal';m.addEventListener('click',e=>{if(e.target===m)msetClose()});document.body.appendChild(m)}
   const svc=MSET.svc,S=SVC[svc],C=modCalc(svc),tabs=[['calc','📐 การคำนวณ 5 ตัววัด'],['db','🗂 Database / Master list']].concat(svc==='eng'?[['tpl','📝 Log Sheet Template']]:[]);
@@ -1800,27 +1883,27 @@ const SYNC_CFG_KEYS=['_v','site','created','hist','svcOff','targetOv','modCfg','
 const SYNC_ENTS=()=>Object.keys(SCH).filter(k=>Array.isArray(D[k]));
 function gasCfg(){return Object.assign({url:'',key:'',auto:true},LS.get('psd_ifm_gas',{}))}
 function gasSite(){return LS.get('psd_ifm_site_'+BIZK,'')}
-function gasReady(){const c=gasCfg();return!!(c.url&&c.key&&gasSite())}
+function gasReady(){const c=gasCfg();return!!(c.url&&gasSite()&&((typeof sessTok==='function'&&sessTok())||c.key))}
 function syncHashKey(){return'psd_ifm_synch_'+BIZK+'_'+gasSite()}
 function syncBaseKey(){return'psd_ifm_syncrow_'+BIZK+'_'+gasSite()}
 const rowMap=a=>{const m={};(a||[]).forEach(r=>{m[String(r.id)]=hashOf(JSON.stringify(r))});return m};
 function hashOf(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h}
 function setSyncStatus(st,msg){SYNC.status=st;SYNC.msg=msg||'';if(st==='ok')SYNC.last=new Date();SYNC.onStatus&&SYNC.onStatus(st,msg)}
 async function gasCall(action,body){const c=gasCfg();if(!c.url)throw new Error('ยังไม่ได้ใส่ Web App URL');
-  const res=await fetch(c.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,key:c.key,site:gasSite(),business:BIZK,siteName:D&&D.site},body||{}))});
-  let j;try{j=await res.json()}catch(e){throw new Error('Web App ตอบกลับไม่ใช่ JSON — ตรวจ URL และสิทธิ์ Deploy (Anyone)')}if(!j.ok)throw new Error(j.error||'Request failed');return j}
+  const res=await fetch(c.url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,token:(typeof sessTok==='function'&&sessTok())||undefined,key:c.key||undefined,site:gasSite(),business:BIZK,siteName:D&&D.site},body||{}))});
+  let j;try{j=await res.json()}catch(e){throw new Error('Web App ตอบกลับไม่ใช่ JSON — ตรวจ URL และสิทธิ์ Deploy (Anyone)')}if(!j.ok){const er=new Error(j.error||'Request failed');er.auth=!!j.auth;if(j.auth&&action!=='login'&&typeof authExpired==='function')setTimeout(()=>authExpired(j.error),0);throw er}return j}
 function syncNormalize(tables){Object.entries(tables||{}).forEach(([e,rows])=>{const S=SCH[e];if(!S||!Array.isArray(rows))return;const nums=S.fields.filter(f=>f.t==='number').map(f=>f.k);
   rows.forEach(r=>{nums.forEach(k=>{if(r[k]!==''&&r[k]!=null&&!isNaN(+r[k]))r[k]=+r[k]});Object.keys(r).forEach(k=>{if(r[k]==null)r[k]=''})})});return tables}
 async function syncPush(all){if(!gasReady())return;if(SYNC.busy){SYNC.again=true;return}SYNC.busy=true;setSyncStatus('busy');
   try{const H=all?{}:LS.get(syncHashKey(),{}),nh=Object.assign({},H),tables={},base=LS.get(syncBaseKey(),{});
-    SYNC_ENTS().forEach(e=>{const h=hashOf(JSON.stringify(D[e]));if(H[e]===h)return;nh[e]=h;
+    SYNC_ENTS().forEach(e=>{if(typeof canPushEnt==='function'&&!canPushEnt(e))return;const h=hashOf(JSON.stringify(D[e]));if(H[e]===h)return;nh[e]=h;
       if(all||!base[e]){tables[e]={rows:D[e],full:true};return}
       const b=base[e],ids=new Set();const rows=D[e].filter(r=>{const id=String(r.id);ids.add(id);return b[id]!==hashOf(JSON.stringify(r))});
       const deleted=Object.keys(b).filter(id=>!ids.has(id));if(rows.length||deleted.length)tables[e]={rows,deleted,full:false}});
-    const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});const ch=hashOf(JSON.stringify(cfg)),sendCfg=H._cfg!==ch;nh._cfg=ch;
+    const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});const ch=hashOf(JSON.stringify(cfg)),sendCfg=H._cfg!==ch&&(typeof cap!=='function'||cap('set'));nh._cfg=ch;
     if(!Object.keys(tables).length&&!sendCfg){setSyncStatus('ok');return}
     const j=await gasCall('push',{tables,config:sendCfg?cfg:null});
-    let merged=false;if(j.tables&&typeof j.tables==='object'){syncNormalize(j.tables);Object.entries(j.tables).forEach(([e,rows])=>{if(!Array.isArray(rows)||!SCH[e])return;D[e]=rows;nh[e]=hashOf(JSON.stringify(D[e]));merged=true});LS.set('psd_ifm_v1_'+BIZK,D)}
+    let merged=false;if(j.tables&&typeof j.tables==='object'){syncNormalize(j.tables);Object.entries(j.tables).forEach(([e,rows])=>{if(!Array.isArray(rows)||!SCH[e])return;D[e]=rows;nh[e]=hashOf(JSON.stringify(D[e]));merged=true});LS.set(DKEY(),D)}
     Object.keys(tables).forEach(e=>{base[e]=rowMap(D[e])});LS.set(syncBaseKey(),base);if(merged&&j.tables&&Object.keys(j.tables).some(e=>!tables[e]||!tables[e].full))SYNC.onMerge&&SYNC.onMerge();
     if(j.url)LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);
     LS.set(syncHashKey(),nh);setSyncStatus('ok')}
@@ -1828,8 +1911,8 @@ async function syncPush(all){if(!gasReady())return;if(SYNC.busy){SYNC.again=true
 function syncAfterSave(){if(!gasReady()||!gasCfg().auto||SYNC.pulling)return;clearTimeout(SYNC.t);SYNC.t=setTimeout(()=>syncPush(),2500)}
 async function syncPull(){if(!gasReady())return false;SYNC.pulling=true;setSyncStatus('busy');
   try{const j=await gasCall('pull');if(j.url)LS.set('psd_ifm_siteurl_'+BIZK+'_'+gasSite(),j.url);
-    if(j.empty){SYNC.pulling=false;await syncPush(true);return false}
-    const nd=Object.assign({},D,j.config||{},syncNormalize(j.tables||{}));nd._v=1;D=nd;ensureD();LS.set('psd_ifm_v1_'+BIZK,D);
+    if(j.empty){SYNC.pulling=false;if(typeof cap==='function'&&!cap('set')){setSyncStatus('err','Sheet ของอาคารนี้ยังว่าง — รอ Admin / FM ส่งข้อมูลตั้งต้น');return false}await syncPush(true);return false}
+    const nd=Object.assign({},D,j.config||{},syncNormalize(j.tables||{}));nd._v=1;D=nd;ensureD();LS.set(DKEY(),D);
     const nh={},base={};SYNC_ENTS().forEach(e=>{nh[e]=hashOf(JSON.stringify(D[e]));base[e]=rowMap(D[e])});LS.set(syncBaseKey(),base);const cfg={};SYNC_CFG_KEYS.forEach(k=>{if(D[k]!==undefined)cfg[k]=D[k]});nh._cfg=hashOf(JSON.stringify(cfg));LS.set(syncHashKey(),nh);
     setSyncStatus('ok');return true}
   catch(e){setSyncStatus('err',e.message);return false}finally{SYNC.pulling=false}}
@@ -1841,6 +1924,245 @@ async function syncRefresh(){if(!gasReady()||!gasCfg().auto||SYNC.busy||SYNC.pul
 setInterval(syncRefresh,120000);
 window.addEventListener('focus',()=>{if(SYNC.last&&Date.now()-SYNC.last.getTime()>30000)syncRefresh()});
 /*@@IFM2-END@@*/
+/*@@AUTH-START@@*/
+/* ═══════════════════════════════════════════════════════════════════
+   IFM v1.0 · Users, passwords & role-based access (shared desktop + mobile)
+   · Online  (Web App URL set): accounts live in Google Sheets → PSD_IFM_Registry › Users,
+             passwords are salted SHA-256, the server issues a signed 7-day token and
+             checks role / building / module on every pull & push.
+   · Demo    (no URL): accounts live in this browser only (same rules, for trying the app).
+   Roles:  admin · fm · sup · tech · client · requester
+   Access: "*" | "<biz>:*" | "<biz>:<SITE>"      Modules: "*" | "eng,fac,…"
+   ═══════════════════════════════════════════════════════════════════ */
+const AUTH={host:{},busy:false};
+const _t=(th,en)=>AUTH.host.tx?AUTH.host.tx(th,en):th;
+const RL={admin:['ผู้ดูแลระบบ (Admin)','Administrator'],fm:['ผู้จัดการอาคาร (FM)','Facility Manager'],sup:['หัวหน้างาน','Supervisor'],tech:['ช่าง / พนักงานบริการ','Technician / Service staff'],client:['เจ้าของอาคาร / ลูกค้า','Building owner / Client'],requester:['ผู้แจ้งงาน','Requester']};
+const RCOL={admin:'#EF4444',fm:'#F97316',sup:'#A855F7',tech:'#3B82F6',client:'#14B8A6',requester:'#8B949E'};
+const RCAP={admin:{e:1,d:1,set:1,usr:1,gas:1},fm:{e:1,d:1,set:1,usr:1},sup:{e:1,d:1},tech:{e:1},client:{},requester:{}};
+const RDESC={admin:['ทุกธุรกิจ ทุกอาคาร · จัดการผู้ใช้ · สร้างอาคาร · ตั้งค่าทั้งหมด','All businesses & buildings · users · buildings · settings'],
+  fm:['อาคารที่ได้รับสิทธิ์ · เพิ่ม/แก้ไข/ลบ · ตั้งค่า Module/KPI · อนุมัติผู้ใช้ในอาคารของตน','Assigned buildings · full edit · module/KPI settings · approves own staff'],
+  sup:['Module ที่ได้รับสิทธิ์ · เพิ่ม / แก้ไข / ลบ','Assigned modules · add / edit / delete'],
+  tech:['Module ที่ได้รับสิทธิ์ · เพิ่ม / แก้ไข / บันทึกงาน (ลบไม่ได้)','Assigned modules · add / edit / record work (no delete)'],
+  client:['ดูข้อมูลทุกหน้า + แจ้งงาน (แก้ไขไม่ได้)','View everything + raise work requests (read-only)'],
+  requester:['แจ้งงาน + ติดตามสถานะงาน','Raise and follow work requests']};
+const RL_SIGNUP=['requester','tech','sup','client','fm'];
+const ENT_SVC={assets:'eng',omEquip:'eng',omTest:'eng',omLog:'eng',meters:'eng',maContract:'eng',defects:'fac',areas:'fac',hkTasks:'hk',hkInsp:'hk',patrols:'sec',secInc:'sec',visitors:'sec',pestSt:'pest',pestVisit:'pest',gdnZones:'gdn',gdnTasks:'gdn',linenItems:'lin',linenTx:'lin',staff:'_m',vendors:'_m',kpiCustom:'_m'};
+const SKEY='psd_ifm_session',LUKEY='psd_ifm_users';
+const ini=n=>{const s=String(n||'?').trim().replace(/^[เแโใไ]/,'');return(s.charAt(0)||'?').toUpperCase()};
+const roleTx=r=>{const x=RL[r]||RL.requester;return _t(x[0],x[1])};
+const sess=()=>LS.get(SKEY,null);
+const me=()=>{const s=sess();return s&&s.user||null};
+const sessTok=()=>{const s=sess();return s&&s.mode==='online'?s.token:''};
+const authOnline=()=>!!(typeof gasCfg==='function'&&gasCfg().url);
+const myRole=()=>{const u=me();return u?u.role:'requester'};
+const cap=k=>!!(RCAP[myRole()]||{})[k];
+const accOf=u=>String(u&&u.access||'').split(/[,\s]+/).filter(String);
+function hasAcc(u,b,site){if(!u)return false;if(u.role==='admin')return true;const a=accOf(u);return a.includes('*')||a.includes(b+':*')||(!!site&&a.includes(b+':'+site))}
+const bizAllowed=b=>{const u=me();if(!u)return false;if(u.role==='admin')return true;const a=accOf(u);return a.includes('*')||a.some(x=>x.split(':')[0]===b)};
+const BIZ_OK=()=>Object.keys(BIZ).filter(bizAllowed);
+const mySitesFor=b=>((sess()||{}).sites||[]).filter(s=>s.business===b);
+function uSvc(k){const u=me();if(!u)return true;const s=String(u.services||'*').trim();return !s||s==='*'||s.split(/[,\s]+/).includes(k)}
+function entSvc(ent,row){if(row&&row.service)return row.service;return ENT_SVC[ent]||''}
+function canEdit(ent,row){const u=me();if(!u)return false;if(ent==='tickets'&&!row)return true;const c=RCAP[u.role]||{};if(!c.e)return false;const s=entSvc(ent,row);if(s==='_m')return !!c.set;return !s||uSvc(s)}
+function canDel(ent,row){return cap('d')&&canEdit(ent,row)}
+function canPushEnt(e){const r=myRole();if(r==='client'||r==='requester')return e==='tickets';if(ENT_SVC[e]==='_m')return cap('set');return !ENT_SVC[e]||uSvc(ENT_SVC[e])}
+function authNoSite(){return authOnline()&&!!me()&&!gasSite()}
+function denied(){AUTH.host.toast&&AUTH.host.toast(_t('🔒 บทบาท “'+roleTx(myRole())+'” ไม่มีสิทธิ์ทำรายการนี้','🔒 Your role ('+roleTx(myRole())+') cannot do this'))}
+
+/* ── SHA-256 (pure JS; used for demo-mode passwords) ── */
+const SHA_K=(()=>{const k=[];let n=2;const fr=x=>((x-Math.floor(x))*4294967296)|0;while(k.length<64){let p=true;for(let i=2;i*i<=n;i++)if(n%i===0){p=false;break}if(p)k.push(fr(Math.cbrt(n)));n++}return k})();
+const SHA_H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19].map(x=>x|0);
+function sha256hex(str){const m=new TextEncoder().encode(str),l=m.length,P=new Uint8Array(((l+9+63)>>6)<<6);P.set(m);P[l]=0x80;const dv=new DataView(P.buffer);dv.setUint32(P.length-4,(l*8)>>>0);dv.setUint32(P.length-8,Math.floor(l*8/4294967296));
+  const H=SHA_H.slice(),W=new Int32Array(64);const r=(x,n)=>(x>>>n)|(x<<(32-n));
+  for(let o=0;o<P.length;o+=64){for(let i=0;i<16;i++)W[i]=dv.getInt32(o+i*4);
+    for(let i=16;i<64;i++){const a=W[i-15],b=W[i-2];W[i]=(W[i-16]+(r(a,7)^r(a,18)^(a>>>3))+W[i-7]+(r(b,17)^r(b,19)^(b>>>10)))|0}
+    let[a,b,c,d,e,f,g,h]=H;
+    for(let i=0;i<64;i++){const t1=(h+(r(e,6)^r(e,11)^r(e,25))+((e&f)^(~e&g))+SHA_K[i]+W[i])|0,t2=((r(a,2)^r(a,13)^r(a,22))+((a&b)^(a&c)^(b&c)))|0;h=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0}
+    H[0]=(H[0]+a)|0;H[1]=(H[1]+b)|0;H[2]=(H[2]+c)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0}
+  return H.map(x=>(x>>>0).toString(16).padStart(8,'0')).join('')}
+const pwHash=(pw,salt)=>{let h=salt+'|'+pw;for(let i=0;i<60;i++)h=sha256hex(h+'|'+salt);return h};
+const rid=()=>Math.random().toString(36).slice(2)+Date.now().toString(36);
+function randPw(){const a='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';let s='';const v=new Uint32Array(10);try{crypto.getRandomValues(v)}catch(e){v.forEach((x,i)=>v[i]=Math.random()*1e9)}v.forEach(x=>s+=a[x%a.length]);return s}
+
+/* ── shared rules (same as Code.gs) ── */
+const normU=u=>String(u||'').trim().toLowerCase();
+const pubU=u=>({username:u.username,name:u.name,email:u.email||'',phone:u.phone||'',role:u.role,access:u.access||'',services:u.services||'*',status:u.status,created:u.created||'',approvedBy:u.approvedBy||'',lastLogin:u.lastLogin||'',note:u.note||''});
+const siteNorm=s=>String(s||'').trim().toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,40);
+function normAcc(v){const out=[];String(v||'').split(/[,\s]+/).filter(String).forEach(x=>{if(x==='*'){out.push('*');return}const m=x.split(':');if(!BIZ[m[0]])return;const s=!m[1]||m[1]==='*'?'*':siteNorm(m[1]);if(s)out.push(m[0]+':'+s)});return [...new Set(out)].join(',')}
+function normSvcs(v){const s=String(v||'*').trim();if(!s||s==='*')return '*';const a=s.split(/[,\s]+/).filter(x=>SVC[x]);return a.length?a.join(','):'*'}
+function coversAcc(m,access){return accOf({access}).every(x=>{if(x==='*')return m.role==='admin'||accOf(m).includes('*');const p=x.split(':');return p[1]==='*'?(m.role==='admin'||accOf(m).includes('*')||accOf(m).includes(p[0]+':*')):hasAcc(m,p[0],p[1])})}
+function canManageU(m,t){if(!m||!t)return false;if(m.role==='admin')return true;if(m.role!=='fm')return false;if(!['sup','tech','client','requester'].includes(t.role))return false;if(!accOf(t).length||!coversAcc(m,t.access))return false;
+  const ms=String(m.services||'*'),ts=String(t.services||'*');return ms==='*'||!ms||(ts!=='*'&&ts.split(',').every(x=>ms.split(',').includes(x)))}
+
+/* ── demo-mode user store (this browser only) ── */
+function lUsers(){let L=LS.get(LUKEY,null);if(!Array.isArray(L)||!L.length){const mk=(username,name,role,access,services)=>{const salt=rid();return{username,name,email:'',phone:'',role,access,services,status:'active',salt,hash:pwHash('ifm2026',salt),created:new Date().toISOString(),approvedBy:'demo',lastLogin:'',note:'บัญชีสาธิต'}};
+  L=[mk('admin','ผู้ดูแลระบบ','admin','*','*'),mk('fm','คุณวิภา (FM)','fm','*','*'),mk('tech','ช่างสมชาย','tech','*','eng,fac'),mk('owner','เจ้าของอาคาร','client','*','*')];LS.set(LUKEY,L)}return L}
+function lFail(m){throw new Error(m)}
+function localApi(action,q){const L=lUsers(),find=u=>L.find(x=>x.username===normU(u)),put=()=>LS.set(LUKEY,L),now=new Date().toISOString();
+  const cur=()=>{const s=sess();const u=s&&find(s.user.username);if(!u||u.status!=='active'){const e=new Error(_t('กรุณาเข้าสู่ระบบใหม่','Please sign in again'));e.auth=true;throw e}return u};
+  const adm=()=>L.filter(u=>u.role==='admin'&&u.status==='active').length;
+  switch(action){
+  case 'login':{const u=find(q.username);if(!u||pwHash(String(q.password||''),u.salt)!==u.hash)lFail(_t('Username หรือ Password ไม่ถูกต้อง','Wrong username or password'));
+    if(u.status==='pending')lFail(_t('บัญชีของคุณรอ Admin / FM อนุมัติ','Your account is waiting for approval'));if(u.status!=='active')lFail(_t('บัญชีนี้ถูกระงับ — ติดต่อ Admin','This account is disabled'));
+    u.lastLogin=now;put();return{ok:true,token:'',user:pubU(u),sites:[]}}
+  case 'signup':{const d=q.user||{},un=normU(d.username);if(!/^[a-z0-9._-]{3,32}$/.test(un))lFail(_t('Username ใช้ a-z 0-9 . _ - ได้ 3–32 ตัว','Username: 3–32 of a-z 0-9 . _ -'));if(find(un))lFail(_t('Username นี้ถูกใช้แล้ว','Username already taken'));
+    if(String(q.password||'').length<6)lFail(_t('Password ต้องมีอย่างน้อย 6 ตัวอักษร','Password needs 6+ characters'));if(!String(d.name||'').trim())lFail(_t('กรุณาระบุชื่อ-นามสกุล','Enter your name'));
+    const salt=rid(),b=BIZ[d.business]?d.business:'';L.push({username:un,name:String(d.name).trim(),email:d.email||'',phone:d.phone||'',role:RL[d.role]&&d.role!=='admin'?d.role:'requester',access:b?b+':'+(siteNorm(d.site)||'*'):'',services:'*',status:'pending',salt,hash:pwHash(String(q.password),salt),created:now,approvedBy:'',lastLogin:'',note:String(d.note||'')});put();return{ok:true,pending:true}}
+  case 'me':{const u=cur();return{ok:true,user:pubU(u),sites:[]}}
+  case 'passwd':{const u=cur();if(pwHash(String(q.old||''),u.salt)!==u.hash)lFail(_t('รหัสผ่านเดิมไม่ถูกต้อง','Current password is wrong'));if(String(q.password||'').length<6)lFail(_t('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร','New password needs 6+ characters'));
+    u.salt=rid();u.hash=pwHash(String(q.password),u.salt);put();return{ok:true,token:'',user:pubU(u)}}
+  case 'users':{const m=cur();if(!RCAP[m.role].usr)lFail(_t('เฉพาะ Admin / FM','Admin / FM only'));return{ok:true,users:L.filter(u=>u.username===m.username||canManageU(m,u)).map(pubU),sites:[]}}
+  case 'userSave':{const m=cur();if(!RCAP[m.role].usr)lFail(_t('เฉพาะ Admin / FM','Admin / FM only'));const d=q.user||{},un=normU(d.username);let o=find(un);const isNew=!o;
+    if(isNew&&!/^[a-z0-9._-]{3,32}$/.test(un))lFail(_t('Username ใช้ a-z 0-9 . _ - ได้ 3–32 ตัว','Username: 3–32 of a-z 0-9 . _ -'));if(o&&m.role!=='admin'&&!canManageU(m,o))lFail(_t('ไม่มีสิทธิ์จัดการผู้ใช้นี้','Not allowed'));
+    const before=o?{role:o.role,status:o.status}:null;o=o?Object.assign({},o):{username:un,created:now,salt:'',hash:'',lastLogin:'',approvedBy:'',services:'*'};
+    ['name','email','phone','note'].forEach(k=>{if(d[k]!=null)o[k]=String(d[k])});if(d.role!=null)o.role=RL[d.role]?d.role:'requester';if(d.access!=null)o.access=normAcc(d.access);if(d.services!=null)o.services=normSvcs(d.services);
+    if(d.status!=null){if(o.status!=='active'&&d.status==='active')o.approvedBy=m.username+' · '+now.slice(0,10);o.status=d.status}else if(isNew){o.status='active';o.approvedBy=m.username+' · '+now.slice(0,10)}
+    if(!o.role)o.role='requester';if(q.password){if(String(q.password).length<6)lFail(_t('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร','Password needs 6+ characters'));o.salt=rid();o.hash=pwHash(String(q.password),o.salt)}
+    if(isNew&&!o.hash)lFail(_t('กรุณาตั้งรหัสผ่านสำหรับผู้ใช้ใหม่','Set a password for the new user'));if(!o.name)o.name=un;
+    if(before&&o.username===m.username&&(o.role!==before.role||o.status!=='active'))lFail(_t('ไม่สามารถเปลี่ยนบทบาท / ระงับบัญชีของตัวเอง','You cannot change your own role / status'));
+    if(m.role!=='admin'&&!canManageU(m,o))lFail(_t('FM กำหนดได้เฉพาะ หัวหน้างาน / ช่าง / ลูกค้า / ผู้แจ้งงาน ภายในอาคารและ Module ของตนเอง','FM can only manage lower roles within own scope'));
+    if(before&&before.role==='admin'&&before.status==='active'&&(o.role!=='admin'||o.status!=='active')&&adm()<=1)lFail(_t('ต้องมี Admin ที่ใช้งานได้อย่างน้อย 1 คน','Keep at least one active admin'));
+    const i=L.findIndex(x=>x.username===un);if(i>=0)L[i]=o;else L.push(o);put();return{ok:true,user:pubU(o)}}
+  case 'userDelete':{const m=cur(),u=find(q.username);if(!u)lFail('not found');if(!canManageU(m,u))lFail(_t('ไม่มีสิทธิ์ลบผู้ใช้นี้','Not allowed'));if(u.username===m.username)lFail(_t('ไม่สามารถลบบัญชีของตัวเอง','You cannot delete yourself'));
+    if(u.role==='admin'&&u.status==='active'&&adm()<=1)lFail(_t('ต้องมี Admin อย่างน้อย 1 คน','Keep at least one admin'));L.splice(L.indexOf(u),1);put();return{ok:true}}
+  }
+  lFail('Unknown action '+action)}
+async function api(action,body){if(authOnline())return gasCall(action,body||{});return localApi(action,body||{})}
+
+/* ── session ── */
+function authStore(j){const s={mode:authOnline()?'online':'local',token:j.token||'',user:j.user,sites:j.sites||[],at:Date.now()};LS.set(SKEY,s);
+  LS.set('psd_ifm_m_user',{name:j.user.name||j.user.username,role:j.user.role,username:j.user.username});return s}
+function authApply(){const u=me();if(!u)return false;let ch=false;const ok=BIZ_OK();
+  if(ok.length&&!ok.includes(BIZK)){BIZK=ok[0];LS.set('psd_ifm_biz',BIZK);ch=true}
+  if(authOnline()&&u.role!=='admin')ok.forEach(b=>{const cur=LS.get('psd_ifm_site_'+b,''),list=mySitesFor(b);if(!list.some(s=>s.site===cur)&&!(cur&&hasAcc(u,b,cur)&&list.length===0)){const nv=list[0]?list[0].site:'';if(nv!==cur){LS.set('psd_ifm_site_'+b,nv);if(b===BIZK)ch=true}}});
+  return ch}
+async function authLogin(username,password){if(!String(username||'').trim()||!password)throw new Error(_t('กรุณากรอก Username และ Password','Enter username and password'));
+  let j;try{j=await api('login',{username:String(username).trim(),password,client:AUTH.host.client||''})}catch(e){if(/API Key|Unknown action/.test(e.message))throw new Error(_t('Apps Script ยังเป็นเวอร์ชันเก่า — วางโค้ด Code.gs ใหม่ → รัน setup → Deploy เป็น New version','Old Apps Script — paste the new Code.gs, run setup and deploy a new version'));throw e}
+  authStore(j);authApply();return j}
+async function authSignup(d,password){return api('signup',{user:d,password})}
+async function authRefresh(){if(!me())return;try{const j=await api('me');const s=sess();if(!s)return;s.user=j.user;s.sites=j.sites||[];LS.set(SKEY,s);LS.set('psd_ifm_m_user',{name:j.user.name||j.user.username,role:j.user.role,username:j.user.username});if(authApply())AUTH.host.reload&&AUTH.host.reload();else AUTH.host.after&&AUTH.host.after()}catch(e){if(e.auth)authExpired(e.message)}}
+function authLogout(msg){try{localStorage.removeItem(SKEY);localStorage.removeItem('psd_ifm_m_user')}catch(e){}AUTH.host.loggedOut&&AUTH.host.loggedOut(msg||'')}
+function authExpired(msg){if(!sess())return;authLogout(msg||_t('เซสชันหมดอายุ — กรุณาเข้าสู่ระบบใหม่','Session expired — please sign in again'))}
+function authServerSet(url){url=String(url||'').trim();const c=gasCfg();c.url=url;LS.set('psd_ifm_gas',c);try{localStorage.removeItem(SKEY)}catch(e){}}
+async function authServerTest(url){const res=await fetch(url,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'ping'})});const j=await res.json();if(!j.ok)throw new Error(j.error||'ping failed');if(!j.auth)throw new Error(_t('Apps Script เป็นเวอร์ชันเก่า — วางโค้ด Code.gs ใหม่แล้ว Deploy เป็น New version','Old Apps Script — paste the new Code.gs and deploy a new version'));return j}
+function authBoot(){const q=new URLSearchParams(location.search);const srv=q.get('srv')||q.get('server');if(srv&&/^https:\/\//.test(srv)&&srv!==gasCfg().url){authServerSet(srv);try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}}
+  const s=sess();if(s&&((s.mode==='online')!==authOnline()))try{localStorage.removeItem(SKEY)}catch(e){}
+  if(!sess())try{localStorage.removeItem('psd_ifm_m_user')}catch(e){}
+  if(sess()){authApply();setTimeout(authRefresh,400)}}
+function pwStrength(p){p=String(p||'');let s=0;if(p.length>=8)s++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))s++;if(/\d/.test(p))s++;if(/[^A-Za-z0-9]/.test(p))s++;return p.length<6?0:Math.max(1,s)}
+
+/* ── change my password (form shared by both apps) ── */
+function pwFormHTML(){return`<form class="au-pw" onsubmit="event.preventDefault();pwSubmit(this)">
+  <label class="ms-f"><span>${_t('รหัสผ่านเดิม','Current password')}</span><input class="bcs-in au-w" name="old" type="password" autocomplete="current-password" required></label>
+  <label class="ms-f"><span>${_t('รหัสผ่านใหม่ (อย่างน้อย 6 ตัว)','New password (6+ chars)')}</span><input class="bcs-in au-w" name="pw" type="password" autocomplete="new-password" minlength="6" required></label>
+  <label class="ms-f"><span>${_t('ยืนยันรหัสผ่านใหม่','Confirm new password')}</span><input class="bcs-in au-w" name="pw2" type="password" autocomplete="new-password" minlength="6" required></label>
+  <div class="au-row"><button class="bcs-btn bcs-pri" type="submit">${_t('เปลี่ยนรหัสผ่าน','Change password')}</button><span class="au-msg" role="status"></span></div></form>`}
+async function pwSubmit(f){const msg=f.querySelector('.au-msg'),set=(t,ok)=>{msg.textContent=t;msg.style.color=ok?'#22C55E':'#EF4444'};
+  if(f.pw.value!==f.pw2.value){set(_t('รหัสผ่านใหม่ไม่ตรงกัน','Passwords do not match'));return}
+  try{set(_t('กำลังบันทึก…','Saving…'),true);const j=await api('passwd',{old:f.old.value,password:f.pw.value});const s=sess();if(s){if(j.token)s.token=j.token;s.user=j.user;LS.set(SKEY,s)}f.reset();set(_t('✅ เปลี่ยนรหัสผ่านแล้ว','✅ Password changed'),true)}
+  catch(e){set('❌ '+e.message)}}
+
+/* ── account summary (who am I / what can I do) ── */
+function accChips(access){const a=String(access||'').split(/[,\s]+/).filter(String);if(!a.length)return`<span class="au-chip au-warn">${_t('ยังไม่กำหนดอาคาร','No building assigned')}</span>`;
+  return a.map(x=>{if(x==='*')return`<span class="au-chip">🌐 ${_t('ทุกธุรกิจ · ทุกอาคาร','All businesses · all buildings')}</span>`;const p=x.split(':'),b=BIZ[p[0]];return`<span class="au-chip">${b?b.ic+' '+b.en:esc(p[0])}${p[1]==='*'?' · '+_t('ทุกอาคาร','all buildings'):' · <b>'+esc(p[1])+'</b>'}</span>`}).join('')}
+function svcChips(s){s=String(s||'*');if(s==='*'||!s)return`<span class="au-chip">${_t('ทุก Module','All modules')}</span>`;return s.split(',').filter(k=>SVC[k]).map(k=>`<span class="au-chip" style="--cc:${SVC[k].c}">${SVC[k].ic} ${SVC[k].n}</span>`).join('')}
+const roleBadge=r=>`<span class="au-role" style="--rc:${RCOL[r]||'#8B949E'}">${esc(roleTx(r))}</span>`;
+function myAccountHTML(){const u=me();if(!u)return'';const on=authOnline();
+  return`<div class="au-me"><div class="au-av" style="--rc:${RCOL[u.role]}">${esc(ini(u.name||u.username))}</div><div style="min-width:0;flex:1"><div class="au-nm">${esc(u.name||u.username)}</div><div class="bcs-muted">@${esc(u.username)} · ${on?'☁ Google Sheets':_t('โหมดสาธิต (ในเครื่อง)','Demo mode (this device)')}</div></div>${roleBadge(u.role)}</div>
+  <div class="au-kv"><span>${_t('สิทธิ์','Can')}</span><div>${esc(_t(RDESC[u.role][0],RDESC[u.role][1]))}</div><span>${_t('อาคาร','Buildings')}</span><div class="au-chips">${accChips(u.role==='admin'?'*':u.access)}</div><span>Module</span><div class="au-chips">${svcChips(u.services)}</div></div>`}
+
+/* ═════════ user management (Admin / FM) ═════════ */
+const USR={list:null,sites:[],q:'',fr:'',fs:'',err:'',loading:false,rej:null,ed:null};
+function usrMount(){USR.list=null;usrLoad()}
+async function usrLoad(){USR.loading=true;USR.err='';usrRender();try{const j=await api('users');USR.list=j.users||[];USR.sites=j.sites||[]}catch(e){USR.err=e.message;if(e.auth)authExpired(e.message)}USR.loading=false;usrRender()}
+function usrRoot(){return document.getElementById('usr-root')}
+function usrRender(){const el=usrRoot();if(el)el.innerHTML=usrBody()}
+function usrBody(){const m=me();if(!m||!cap('usr'))return`<div class="rm-empty">${_t('เฉพาะ Admin / FM','Admin / FM only')}</div>`;
+  if(USR.err)return`<div class="au-err">❌ ${esc(USR.err)}</div><button class="bcs-btn" onclick="usrLoad()">⟳ ${_t('ลองใหม่','Retry')}</button>`;
+  if(!USR.list)return`<div class="rm-empty">⏳ ${_t('กำลังโหลดรายชื่อผู้ใช้…','Loading users…')}</div>`;
+  const L=USR.list,cnt=s=>L.filter(u=>u.status===s).length,pend=L.filter(u=>u.status==='pending');
+  const q=USR.q.toLowerCase().trim();let rows=L.filter(u=>u.status!=='pending'||USR.fs==='pending');
+  if(USR.fr)rows=rows.filter(u=>u.role===USR.fr);if(USR.fs)rows=rows.filter(u=>u.status===USR.fs);if(q)rows=rows.filter(u=>[u.username,u.name,u.email,u.phone,u.access].join(' ').toLowerCase().includes(q));
+  const order=['admin','fm','sup','tech','client','requester'];rows.sort((a,b)=>order.indexOf(a.role)-order.indexOf(b.role)||String(a.name).localeCompare(String(b.name)));
+  const stat=(l,v,c,f)=>`<button class="au-stat ${USR.fs===f?'on':''}" style="--sc:${c}" onclick="USR.fs=USR.fs==='${f}'?'':'${f}';usrRender()"><b>${v}</b><span>${l}</span></button>`;
+  return`<div class="au-stats">${stat(_t('ใช้งาน','Active'),cnt('active'),'#22C55E','active')}${stat(_t('รออนุมัติ','Pending'),pend.length,'#EAB308','pending')}${stat(_t('ระงับ','Disabled'),cnt('disabled'),'#8B949E','disabled')}${stat(_t('ปฏิเสธ','Rejected'),cnt('rejected'),'#EF4444','rejected')}</div>
+  <div class="au-note">${authOnline()?_t('☁ บัญชีเก็บใน Google Sheets › PSD_IFM_Registry › Users · รหัสผ่านเข้ารหัส SHA-256 + salt · ระบบตรวจสิทธิ์อาคาร / Module ทุกครั้งที่ซิงค์','☁ Accounts are stored in Google Sheets (Registry › Users) · salted SHA-256 passwords · building / module rights are checked on every sync')
+    :_t('🧪 โหมดสาธิต — บัญชีเก็บในเบราว์เซอร์นี้เท่านั้น · เชื่อม Google Sheets เพื่อใช้งานจริงหลายเครื่อง','🧪 Demo mode — accounts live in this browser only · connect Google Sheets for real multi-user use')}${m.role==='fm'?' · '+_t('FM จัดการได้เฉพาะ หัวหน้างาน / ช่าง / ลูกค้า / ผู้แจ้งงาน ในอาคารของตน','FM manages lower roles in own buildings'):''}</div>
+  ${pend.length&&USR.fs!=='pending'?`<div class="au-pend"><div class="au-ph">⏳ ${_t('รออนุมัติ','Waiting for approval')} <span class="au-cnt">${pend.length}</span></div>${pend.map(u=>`<div class="au-prow"><div style="min-width:0;flex:1"><b>${esc(u.name)}</b> <span class="bcs-muted">@${esc(u.username)}${u.email?' · '+esc(u.email):''}${u.phone?' · '+esc(u.phone):''}</span><div class="au-chips" style="margin-top:4px">${roleBadge(u.role)}${accChips(u.access)}</div>${u.note?`<div class="bcs-muted" style="margin-top:3px">“${esc(u.note)}”</div>`:''}<div class="bcs-muted">${_t('สมัครเมื่อ ','Signed up ')}${esc(String(u.created).slice(0,16).replace('T',' '))}</div></div>
+    <div class="au-acts"><button class="bcs-btn bcs-pri" onclick="usrEdit('${esc(u.username)}',true)">✓ ${_t('ตรวจสิทธิ์ + อนุมัติ','Review & approve')}</button><button class="bcs-btn bcs-danger" onclick="usrReject('${esc(u.username)}',this)">✕ ${_t('ปฏิเสธ','Reject')}</button></div></div>`).join('')}</div>`:''}
+  <div class="au-bar"><input class="bcs-in au-w" style="flex:1;min-width:160px" placeholder="${_t('ค้นหาชื่อ / username / อีเมล / อาคาร…','Search name / username / email / building…')}" value="${esc(USR.q)}" oninput="USR.q=this.value;usrRender();const i=usrRoot().querySelector('.au-bar input');i.focus();i.setSelectionRange(i.value.length,i.value.length)">
+    <select class="bcs-in" style="width:auto" onchange="USR.fr=this.value;usrRender()"><option value="">${_t('ทุกบทบาท','All roles')}</option>${order.map(r=>`<option value="${r}" ${USR.fr===r?'selected':''}>${esc(roleTx(r))}</option>`).join('')}</select>
+    <button class="bcs-btn bcs-pri" onclick="usrEdit(null)">＋ ${_t('เพิ่มผู้ใช้','Add user')}</button><button class="bcs-btn" onclick="usrLoad()" title="${_t('โหลดใหม่','Reload')}">⟳</button></div>
+  <div class="au-list">${rows.length?rows.map(u=>{const self=u.username===m.username,mg=!self&&canManageU(m,u)||(self&&m.role==='admin');
+    return`<div class="au-urow ${u.status!=='active'?'off':''}"><div class="au-av sm" style="--rc:${RCOL[u.role]}">${esc(ini(u.name||u.username))}</div>
+      <div class="au-uc"><div><b>${esc(u.name)}</b>${self?` <span class="au-chip">${_t('คุณ','You')}</span>`:''} <span class="bcs-muted">@${esc(u.username)}</span></div><div class="bcs-muted">${[u.email,u.phone].filter(Boolean).map(esc).join(' · ')||'&nbsp;'}</div></div>
+      <div class="au-uc">${roleBadge(u.role)}<div class="bcs-muted" style="margin-top:3px">${u.status==='active'?'● '+_t('ใช้งาน','Active'):u.status==='pending'?'⏳ '+_t('รออนุมัติ','Pending'):u.status==='disabled'?'⏸ '+_t('ระงับ','Disabled'):'✕ '+_t('ปฏิเสธ','Rejected')}</div></div>
+      <div class="au-uc au-chips">${accChips(u.role==='admin'?'*':u.access)}</div>
+      <div class="au-uc au-chips">${svcChips(u.services)}</div>
+      <div class="au-uc bcs-muted">${u.lastLogin?_t('เข้าล่าสุด ','Last login ')+esc(String(u.lastLogin).slice(0,16).replace('T',' ')):_t('ยังไม่เคยเข้า','Never signed in')}</div>
+      <div class="au-acts">${mg?`<button class="bcs-btn" onclick="usrEdit('${esc(u.username)}')">✎ ${_t('แก้ไข','Edit')}</button>`:''}${mg&&!self?`<button class="bcs-btn bcs-danger" title="${_t('ลบ','Delete')}" onclick="usrDel('${esc(u.username)}',this)">🗑</button>`:''}</div></div>`}).join(''):`<div class="rm-empty">${_t('ไม่พบผู้ใช้','No users found')}</div>`}</div>
+  <details class="au-matrix"><summary>${_t('ตารางสิทธิ์ตามบทบาท','Role permissions')}</summary><table class="rm-t"><thead><tr><th>${_t('บทบาท','Role')}</th><th>${_t('ดูข้อมูล','View')}</th><th>${_t('แจ้งงาน','Raise WR')}</th><th>${_t('เพิ่ม / แก้ไข','Add / edit')}</th><th>${_t('ลบ','Delete')}</th><th>${_t('ตั้งค่า Module / KPI','Settings')}</th><th>${_t('จัดการผู้ใช้','Users')}</th><th>${_t('สร้างอาคาร / Sheets','Buildings')}</th></tr></thead>
+    <tbody>${order.map(r=>{const c=RCAP[r],y='✓',n='—',sv=r==='sup'||r==='tech'?' ¹':'';return`<tr><td>${roleBadge(r)}</td><td>${y}</td><td>${y}</td><td>${c.e?y+sv:n}</td><td>${c.d?y+sv:n}</td><td>${c.set?y:n}</td><td>${c.usr?(r==='fm'?y+' ²':y):n}</td><td>${c.gas?y:n}</td></tr>`}).join('')}</tbody></table>
+    <div class="bcs-muted" style="margin-top:6px">¹ ${_t('เฉพาะ Module ที่ได้รับสิทธิ์','only in assigned modules')} · ² ${_t('เฉพาะบทบาทที่ต่ำกว่า ภายในอาคารของตน','lower roles in own buildings only')} · ${_t('ทุกบทบาทเห็นเฉพาะธุรกิจ / อาคารที่ได้รับสิทธิ์','everyone sees only assigned businesses / buildings')}</div></details>`}
+async function usrReject(un,btn){if(USR.rej!==un){USR.rej=un;btn.textContent=_t('กดอีกครั้งเพื่อปฏิเสธ','Tap again to reject');setTimeout(()=>{if(USR.rej===un){USR.rej=null;if(btn.isConnected)btn.textContent='✕ '+_t('ปฏิเสธ','Reject')}},3500);return}
+  USR.rej=null;try{await api('userSave',{user:{username:un,status:'rejected'}});AUTH.host.toast&&AUTH.host.toast(_t('ปฏิเสธ ','Rejected ')+un);usrLoad()}catch(e){AUTH.host.toast&&AUTH.host.toast('❌ '+e.message)}}
+async function usrDel(un,btn){if(USR.rej!=='del:'+un){USR.rej='del:'+un;btn.textContent=_t('ยืนยันลบ','Confirm');setTimeout(()=>{if(USR.rej==='del:'+un){USR.rej=null;if(btn.isConnected)btn.textContent='🗑'}},3500);return}
+  USR.rej=null;try{await api('userDelete',{username:un});AUTH.host.toast&&AUTH.host.toast(_t('ลบผู้ใช้ ','Deleted ')+un);usrLoad()}catch(e){AUTH.host.toast&&AUTH.host.toast('❌ '+e.message)}}
+
+/* editor */
+function usrEdit(un,approve){const m=me(),u=un?(USR.list||[]).find(x=>x.username===un):null;
+  const acc={all:false,biz:{}};Object.keys(BIZ).forEach(b=>acc.biz[b]={on:false,all:true,sites:[]});
+  String(u?u.access:'').split(/[,\s]+/).filter(String).forEach(x=>{if(x==='*'){acc.all=true;return}const p=x.split(':');if(!acc.biz[p[0]])return;const o=acc.biz[p[0]];o.on=true;if(p[1]==='*')o.star=true;else o.sites.push(p[1])});
+  Object.values(acc.biz).forEach(o=>{o.all=!!o.star||!o.sites.length;delete o.star});
+  if(!u&&m.role!=='admin'){const b=BIZK;if(acc.biz[b]&&bizAllowed(b)){acc.biz[b].on=true;const fmAll=accOf(m).includes('*')||accOf(m).includes(b+':*');if(!fmAll){acc.biz[b].all=false;acc.biz[b].sites=accOf(m).filter(x=>x.startsWith(b+':')).map(x=>x.split(':')[1]).slice(0,1)}}}
+  const sv=String(u?u.services||'*':'*');
+  USR.ed={isNew:!u,self:!!u&&u.username===m.username,username:u?u.username:'',name:u?u.name:'',email:u?u.email:'',phone:u?u.phone:'',note:u?u.note:'',role:u?u.role:(m.role==='admin'?'tech':'tech'),
+    status:approve?'active':(u?u.status:'active'),acc,svcAll:sv==='*',svcs:sv==='*'?[]:sv.split(','),pw:'',genPw:'',err:'',approve:!!approve};
+  usrEdRender()}
+function usrEdClose(){const e=document.getElementById('usr-ed');if(e){e.hidden=true;e.innerHTML=''}USR.ed=null}
+function usrEdRender(){const E=USR.ed;if(!E)return;let el=document.getElementById('usr-ed');if(!el){el=document.createElement('div');el.id='usr-ed';el.className='bcs-modal';el.addEventListener('click',ev=>{if(ev.target===el)usrEdClose()});document.body.appendChild(el)}
+  const m=me(),isAdm=m.role==='admin',roles=isAdm?Object.keys(RL):['sup','tech','client','requester'];const rOpts=roles.includes(E.role)?roles:roles.concat([E.role]);
+  const bizList=isAdm?Object.keys(BIZ):BIZ_OK(),coverAll=b=>isAdm||accOf(m).includes('*')||accOf(m).includes(b+':*');
+  const sitesOf=b=>{const s=new Set(USR.sites.filter(x=>x.business===b).map(x=>x.site));E.acc.biz[b].sites.forEach(x=>s.add(x));if(!isAdm&&!coverAll(b))[...s].forEach(x=>{if(!hasAcc(m,b,x))s.delete(x)});return [...s]};
+  const inp=(k,l,ty,ph,dis)=>`<label class="ms-f"><span>${l}</span><input class="bcs-in au-w" ${ty?`type="${ty}"`:''} value="${esc(E[k]||'')}" placeholder="${esc(ph||'')}" ${dis?'disabled':''} oninput="USR.ed.${k}=this.value"></label>`;
+  const adminRole=E.role==='admin';
+  el.innerHTML=`<div class="bcs-mbox" style="width:780px"><div class="bcs-mh"><div><div class="bcs-muted">${E.approve?_t('อนุมัติผู้ลงทะเบียน','Approve sign-up'):E.isNew?_t('ผู้ใช้ใหม่','New user'):_t('แก้ไขผู้ใช้','Edit user')}</div><div class="bcs-st" style="font-size:20px">👤 ${esc(E.isNew?_t('เพิ่มผู้ใช้งาน','Add user'):E.name||E.username)}</div></div><button class="bcs-btn" onclick="usrEdClose()">✕</button></div>
+   <div class="ms-grid">${inp('username','Username *','', 'เช่น somchai.k',!E.isNew)}${inp('name',_t('ชื่อ-นามสกุล *','Full name *'))}${inp('email',_t('อีเมล','Email'),'email')}${inp('phone',_t('โทรศัพท์','Phone'),'tel')}</div>
+   <div class="ms-grid">
+    <label class="ms-f"><span>${_t('บทบาท','Role')}</span><select class="bcs-in au-w" ${E.self?'disabled':''} onchange="USR.ed.role=this.value;usrEdRender()">${rOpts.map(r=>`<option value="${r}" ${E.role===r?'selected':''}>${esc(roleTx(r))}</option>`).join('')}</select><small>${esc(_t(RDESC[E.role][0],RDESC[E.role][1]))}</small></label>
+    <label class="ms-f"><span>${_t('สถานะ','Status')}</span><select class="bcs-in au-w" ${E.self?'disabled':''} onchange="USR.ed.status=this.value">${[['active',_t('ใช้งาน','Active')],['pending',_t('รออนุมัติ','Pending')],['disabled',_t('ระงับชั่วคราว','Disabled')],['rejected',_t('ปฏิเสธ','Rejected')]].map(s=>`<option value="${s[0]}" ${E.status===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select></label>
+    <label class="ms-f"><span>${E.isNew?_t('รหัสผ่าน *','Password *'):_t('ตั้งรหัสผ่านใหม่ (เว้นว่าง = ไม่เปลี่ยน)','New password (blank = keep)')}</span><span class="au-row"><input class="bcs-in au-w" id="usr-pw" type="text" autocomplete="off" value="${esc(E.pw)}" oninput="USR.ed.pw=this.value" style="flex:1"><button type="button" class="bcs-btn" onclick="USR.ed.pw=randPw();usrEdRender()">🎲 ${_t('สุ่ม','Generate')}</button></span><small>${_t('ส่งรหัสให้ผู้ใช้ แล้วให้เปลี่ยนเองที่ ตั้งค่า › บัญชีของฉัน','Send it to the user; they can change it in Settings › My account')}</small></label>
+   </div>
+   <div class="au-sec"><b>🏢 ${_t('สิทธิ์ธุรกิจ / อาคาร','Business / building access')}</b><small>${adminRole?_t('Admin เข้าถึงทุกธุรกิจ ทุกอาคารโดยอัตโนมัติ','Admin always has access to everything'):_t('เลือกธุรกิจ แล้วเลือก “ทุกอาคาร” หรือ “เฉพาะอาคาร”','Pick businesses, then all buildings or specific ones')}</small></div>
+   ${adminRole?'':`${isAdm||accOf(m).includes('*')?`<label class="au-ck"><input type="checkbox" ${E.acc.all?'checked':''} onchange="USR.ed.acc.all=this.checked;usrEdRender()"> 🌐 <b>${_t('ทุกธุรกิจ · ทุกอาคาร','All businesses · all buildings')}</b></label>`:''}
+   ${E.acc.all?'':`<div class="au-accs">${bizList.map(b=>{const B=BIZ[b],o=E.acc.biz[b],ss=sitesOf(b);return`<div class="au-acc ${o.on?'on':''}" style="--bz:${B.c}"><label class="au-ck"><input type="checkbox" ${o.on?'checked':''} onchange="USR.ed.acc.biz['${b}'].on=this.checked;usrEdRender()"> <span>${B.ic}</span> <b>${B.en}</b> <span class="bcs-muted">${B.n}</span></label>
+     ${o.on?`<div class="au-am">${coverAll(b)?`<button type="button" class="bcs-btn ${o.all?'on':''}" onclick="USR.ed.acc.biz['${b}'].all=true;usrEdRender()">${_t('ทุกอาคาร','All buildings')}</button>`:''}<button type="button" class="bcs-btn ${!o.all||!coverAll(b)?'on':''}" onclick="USR.ed.acc.biz['${b}'].all=false;usrEdRender()">${_t('เฉพาะอาคาร','Specific')}</button></div>
+     ${!o.all||!coverAll(b)?`<div class="au-sites">${ss.map(x=>`<label class="au-ck sm"><input type="checkbox" ${o.sites.includes(x)?'checked':''} onchange="usrSite('${b}','${esc(x)}',this.checked)"> ${esc(x)}${(USR.sites.find(s=>s.business===b&&s.site===x)||{}).name?` <span class="bcs-muted">${esc(USR.sites.find(s=>s.business===b&&s.site===x).name)}</span>`:''}</label>`).join('')||`<span class="bcs-muted">${_t('ยังไม่มีอาคารที่ลงทะเบียน','No registered buildings yet')}</span>`}
+       ${coverAll(b)?`<form class="au-row" onsubmit="event.preventDefault();usrSite('${b}',this.c.value,true)"><input class="bcs-in" name="c" placeholder="${_t('+ รหัสอาคาร','+ site code')}" style="width:130px;text-transform:uppercase"><button class="bcs-btn">${_t('เพิ่ม','Add')}</button></form>`:''}</div>`:''}`:''}</div>`}).join('')}</div>`}`}
+   <div class="au-sec"><b>🧩 Module</b><small>${_t('Module ที่ผู้ใช้เห็นและทำงานได้ (Admin / FM / ลูกค้า ปกติให้ทุก Module)','Modules this user works in')}</small></div>
+   <label class="au-ck"><input type="checkbox" ${E.svcAll?'checked':''} onchange="USR.ed.svcAll=this.checked;usrEdRender()"> <b>${_t('ทุก Module','All modules')}</b></label>
+   ${E.svcAll?'':`<div class="au-svcs">${['Hard','Soft'].map(g=>`<div><div class="bcs-muted" style="font-weight:700;margin-bottom:4px">${g} Service</div>${Object.keys(SVC).filter(k=>SVC[k].type===g).map(k=>`<label class="au-ck sm"><input type="checkbox" ${E.svcs.includes(k)?'checked':''} onchange="usrSvc('${k}',this.checked)"> ${SVC[k].ic} ${SVC[k].n}</label>`).join('')}</div>`).join('')}</div>`}
+   <label class="ms-f"><span>${_t('หมายเหตุ','Note')}</span><input class="bcs-in au-w" value="${esc(E.note||'')}" oninput="USR.ed.note=this.value"></label>
+   ${E.err?`<div class="au-err">❌ ${esc(E.err)}</div>`:''}
+   <div class="ms-foot"><button class="bcs-btn" onclick="usrEdClose()">${_t('ยกเลิก','Cancel')}</button><button class="bcs-btn bcs-pri" id="usr-save" onclick="usrSave()">${E.approve?'✓ '+_t('อนุมัติ + บันทึก','Approve & save'):_t('บันทึก','Save')}</button></div></div>`;
+  el.hidden=false}
+function usrSite(b,code,on){const o=USR.ed.acc.biz[b];code=siteNorm(code);if(!code)return;o.on=true;o.all=false;o.sites=o.sites.filter(x=>x!==code);if(on)o.sites.push(code);usrEdRender()}
+function usrSvc(k,on){const E=USR.ed;E.svcs=E.svcs.filter(x=>x!==k);if(on)E.svcs.push(k);usrEdRender()}
+async function usrSave(){const E=USR.ed;if(!E)return;E.err='';const m=me();
+  const access=E.role==='admin'?'*':E.acc.all?'*':Object.entries(E.acc.biz).filter(([b,o])=>o.on).flatMap(([b,o])=>{const full=m.role==='admin'||accOf(m).includes('*')||accOf(m).includes(b+':*');return o.all&&full?[b+':*']:o.sites.map(s=>b+':'+s)}).join(',');
+  if(!String(E.username).trim())E.err=_t('กรุณาระบุ Username','Enter a username');else if(!String(E.name).trim())E.err=_t('กรุณาระบุชื่อ','Enter a name');
+  else if(E.isNew&&String(E.pw).length<6)E.err=_t('ตั้งรหัสผ่านอย่างน้อย 6 ตัว (กด 🎲 สุ่มได้)','Set a 6+ character password (🎲 to generate)');
+  else if(E.role!=='admin'&&!access)E.err=_t('เลือกอาคารอย่างน้อย 1 แห่ง','Pick at least one building');
+  else if(!E.svcAll&&!E.svcs.length)E.err=_t('เลือก Module อย่างน้อย 1 รายการ','Pick at least one module');
+  if(E.err){usrEdRender();return}
+  const b=document.getElementById('usr-save');if(b){b.disabled=true;b.textContent=_t('กำลังบันทึก…','Saving…')}
+  try{const user={username:E.username,name:E.name,email:E.email,phone:E.phone,note:E.note,access,services:E.svcAll?'*':E.svcs.join(',')};if(!E.self){user.role=E.role;user.status=E.status}
+    await api('userSave',{user,password:E.pw||undefined});const pw=E.pw,un=E.username;usrEdClose();AUTH.host.toast&&AUTH.host.toast('✅ '+_t('บันทึกผู้ใช้ ','Saved ')+un+(pw?' · '+_t('รหัสผ่าน: ','password: ')+pw:''));if(E.self)authRefresh();usrLoad()}
+  catch(e){E.err=e.message;usrEdRender();if(e.auth)authExpired(e.message)}}
+
+/* guard helpers for host apps */
+function authGuard(fn,chk){return function(...a){if(!chk(...a)){denied();return}return fn.apply(this,a)}}
+/*@@AUTH-END@@*/
 
 /* ---------- mobile host for Part 2 ---------- */
 MSET.host={toast:m=>toast(m),after:()=>render(),user:()=>ST.user?ST.user.name:''};
@@ -1861,13 +2183,14 @@ Object.assign(CARD,{
 function mGasForm(){const c=gasCfg();return '<div class="blueprint pad" style="display:flex;flex-direction:column;gap:10px">'
   +'<div id="m-sync" style="font-size:14px">'+mSyncText()+'</div>'
   +'<div class="field"><label for="mg-url">Web App URL</label><input class="input" id="mg-url" value="'+esc(c.url)+'" placeholder="https://script.google.com/macros/s/…/exec"></div>'
-  +'<div class="field"><label for="mg-key">API Key</label><input class="input" id="mg-key" type="password" value="'+esc(c.key)+'"></div>'
+  +'<div class="field"><label for="mg-key">API Key '+tx('(กุญแจหลัก · ไม่บังคับ)','(master key · optional)')+'</label><input class="input" id="mg-key" type="password" value="'+esc(c.key)+'"></div>'
   +'<div class="field"><label for="mg-site">'+tx('รหัสอาคาร (Site Code) — ','Site code — ')+esc(tx(P().n,P().en))+'</label><input class="input" id="mg-site" value="'+esc(gasSite())+'" style="text-transform:uppercase"></div>'
   +'<label class="row" style="font-size:14px"><input type="checkbox" id="mg-auto" '+(c.auto?'checked':'')+' style="width:20px;height:20px;accent-color:var(--color-accent)">'+tx('ซิงค์อัตโนมัติ','Auto sync')+'</label>'
   +'<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-primary btn-sm" onclick="mGasSave()">'+tx('บันทึก + ซิงค์','Save + sync')+'</button><button class="btn btn-sm" onclick="mGasSyncNow()">'+tx('ซิงค์ตอนนี้','Sync now')+'</button></div>'
   +'<div style="font-size:12.5px;color:var(--color-neutral-700)">'+tx('ตั้งค่าครั้งเดียวในเดสก์ท็อปก็ได้ (เว็บไซต์เดียวกันใช้ค่าร่วมกัน) · 1 อาคาร 1 ธุรกิจ = 1 Spreadsheet','Can be set once on desktop (same site shares settings) · 1 building × 1 business = 1 spreadsheet')+'</div></div>'}
-async function mGasSave(){const g=id=>document.getElementById(id);LS.set('psd_ifm_gas',{url:g('mg-url').value.trim(),key:g('mg-key').value.trim(),auto:g('mg-auto').checked});LS.set('psd_ifm_site_'+BIZK,g('mg-site').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,''));
-  if(!gasReady()){toast(tx('ใส่ URL, API Key และรหัสอาคารให้ครบ','Fill in URL, API key and site code'));return}try{await gasCall('register');}catch(e){toast('❌ '+e.message);return}await syncBoot(()=>render());if(SYNC.status==='ok')toast(tx('เชื่อมต่อ Google Sheets แล้ว','Connected to Google Sheets'));render()}
+async function mGasSave(){const g=id=>document.getElementById(id);LS.set('psd_ifm_gas',{url:g('mg-url').value.trim(),key:g('mg-key').value.trim(),auto:g('mg-auto').checked});const os=gasSite();LS.set('psd_ifm_site_'+BIZK,g('mg-site').value.trim().toUpperCase().replace(/[^A-Z0-9_-]/g,''));if(gasSite()!==os)load();
+  if((sess()||{}).mode!==(authOnline()?'online':'local')){authLogout(tx('เปลี่ยนการเชื่อมต่อแล้ว — กรุณาเข้าสู่ระบบด้วยบัญชีบน Google Sheets','Connection changed — please sign in again'));return}
+  if(!gasReady()){toast(tx('ใส่ URL, API Key และรหัสอาคารให้ครบ','Fill in URL, API key and site code'));return}try{await gasCall('register');await authRefresh()}catch(e){toast('❌ '+e.message);return}await syncBoot(()=>render());if(SYNC.status==='ok')toast(tx('เชื่อมต่อ Google Sheets แล้ว','Connected to Google Sheets'));render()}
 async function mGasSyncNow(){if(!gasReady()){toast(tx('ยังไม่ได้ตั้งค่า','Not configured'));return}await syncPush();const got=await syncPull();toast(SYNC.status==='ok'?tx('ซิงค์แล้ว','Synced'):'❌ '+SYNC.msg);if(got)render()}
 
 /* ---------- render / boot ---------- */
@@ -1875,8 +2198,24 @@ function render(){const root=document.getElementById('app-root');
   if(!ST.lang)root.innerHTML=screenSplash();else if(!ST.user)root.innerHTML=screenLogin();else{root.innerHTML=screenMain();if(ST.tab==='bldg')BCS.mount()}
   document.documentElement.lang=ST.lang==='en'?'en':'th'}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
-window.addEventListener('storage',e=>{if(e.key==='psd_ifm_v1_'+BIZK){load();if(!FM)render()}});
-applyPrefs();load();render();setTimeout(()=>syncBoot(()=>{if(!FM)render()}),50);
+window.addEventListener('storage',e=>{if(e.key===DKEY()){load();if(!FM)render()}if(e.key===SKEY){ST.user=stUser();if(ST.user){authApply();load()}render()}});AUTH.host={toast:m=>toast(m),tx:(a,b)=>tx(a,b),client:'mobile',after:()=>{ST.user=stUser();if(!FM)render()},reload:()=>{ST.user=stUser();load();render();SYNC.last=null;syncBoot(()=>{if(!FM)render()})},
+  loggedOut:m=>{ST.user=null;LGM.msg=m||'';LGM.tab='login';USR.list=null;closeSheet();usrCloseM();typeof usrEdClose==='function'&&usrEdClose();typeof msetClose==='function'&&msetClose();typeof omLogClose==='function'&&omLogClose();render()}};
+
+/* ── permission guards (role / building / module) ── */
+const GUARD=(n,chk)=>{if(typeof window[n]==='function')window[n]=authGuard(window[n],chk)};
+const rowOf=(ent,id)=>(D[ent]||[]).find(r=>r.id===id);
+GUARD('delRow',(ent,id)=>canDel(ent,rowOf(ent,id)));
+GUARD('markDone',(ent,id)=>canEdit(ent,rowOf(ent,id)));
+GUARD('setField',(ent,id)=>canEdit(ent,rowOf(ent,id)));
+GUARD('checkout',id=>canEdit('visitors',rowOf('visitors',id)));
+GUARD('pestCheck',id=>canEdit('pestSt',rowOf('pestSt',id)));
+GUARD('omLogOpen',id=>canEdit('omLog',id?rowOf('omLog',id):null));
+['advance','advanceM','bcsAdvance'].forEach(n=>GUARD(n,id=>canEdit('tickets',rowOf('tickets',id))));
+['omTestDone','omTestDoneM'].forEach(n=>GUARD(n,id=>canEdit('omTest',rowOf('omTest',id))));
+['maVisit','maVisitM'].forEach(n=>GUARD(n,id=>canEdit('maContract',rowOf('maContract',id))));
+['bcsSetupOpen','bcsToggleEdit','bcsPlanUpload','bcsPlanClear','bcsResetRooms'].forEach(n=>GUARD(n,()=>cap('set')));
+
+applyPrefs();authBoot();ST.user=stUser();load();render();if(ST.user)setTimeout(()=>syncBoot(()=>{if(!FM)render()}),50);
 </script>
 </body>
 </html>
