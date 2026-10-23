@@ -330,6 +330,12 @@ select.fc option{background:var(--bg3);color:var(--text)}
 .ma-prog{min-width:110px}
 @media(max-width:900px){.rm-strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:560px){.rm-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.oml-r{grid-template-columns:minmax(0,1fr) auto;}.oml-r .oml-st{grid-column:1/-1;text-align:left}}
+.oml-lk{border:1px solid var(--bcs-line);background:var(--bcs-card2);color:var(--bcs-acc);border-radius:6px;padding:2px 7px;font:inherit;font-size:11.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.oml-lk:hover{border-color:var(--bcs-acc)}
+.oml-res{display:flex;flex-direction:column;gap:2px;border-radius:10px;padding:10px 14px;margin-bottom:6px}.oml-res b{font-size:18px}.oml-res span{font-size:12.5px;color:var(--bcs-muted)}
+.oml-res.ok{background:color-mix(in srgb,#22C55E 12%,transparent);border:1px solid color-mix(in srgb,#22C55E 45%,transparent)}.oml-res.ok b{color:#16A34A}
+.oml-res.ng{background:color-mix(in srgb,#EF4444 12%,transparent);border:1px solid color-mix(in srgb,#EF4444 45%,transparent)}.oml-res.ng b{color:#EF4444}
+@media print{body>*:not(#omlog){display:none!important}#omlog{position:static!important;background:none!important;padding:0!important}#omlog .bcs-mbox{max-height:none!important;border:0!important;box-shadow:none!important;width:100%!important}#omlog .ms-foot,#omlog .bcs-mh .bcs-btn{display:none!important}}
 /*@@IFM2CSS-END@@*/
 /*@@AUTHCSS-START@@*/
 /* ── users & permissions ── */
@@ -1048,7 +1054,7 @@ function tbl(ent,opt={}){const cid='t_'+ent+'_'+(opt.key||CUR);TB[cid]={ent,opt}
 function colLabel(ent,c){const S=SCH[ent];if(S.colL&&S.colL[c])return S.colL[c];if(c==='id')return 'ID';if(c==='_sla')return 'SLA';if(c==='_pct')return '%';const f=S.fields.find(x=>x.k===c);return f?(typeof f.l==='function'?f.l():f.l):c}
 function cell(ent,c,r){
   const S=SCH[ent],v=r[c];
-  if(ent==='omLog'&&c==='_read')return omLogReadCell(r);if(ent==='omLog'&&c==='_media')return omLogMediaCell(r);
+  if(ent==='omTest'&&c==='_log')return omTestLogCell(r);if(ent==='omLog'&&c==='_read')return omLogReadCell(r);if(ent==='omLog'&&c==='_media')return omLogMediaCell(r);
   if(ent==='maContract'&&c==='_prog'){const p=r.visitsYear?Math.min(100,Math.round(r.visitsDone/r.visitsYear*100)):0;return`<div class="ma-prog"><b>${esc(r._prog)}</b> ครั้ง ${r._behind?'<span class="badge b-orange">ช้ากว่าแผน</span>':''}<div class="bar"><i style="width:${p}%;background:${r._behind?'var(--orange)':'var(--green)'}"></i></div></div>`}
   if(c==='result')return badge(v);
   if(c==='asset'||c==='test'||(ent==='maContract'&&c==='service'))return`<span style="color:var(--text);font-weight:600">${esc(v)}</span>`;
@@ -1076,10 +1082,11 @@ function rowActs(ent,r){let h='';const ed=canEdit(ent,r),dl=canDel(ent,r);
   if(ent==='hkTasks'&&r.status!=='Done')h+=`<button class="btn btn-ok btn-ic" onclick="markDone('hkTasks','${r.id}')">✓ Done</button> `;
   if(ent==='compliance')h+=`<button class="btn btn-ok btn-ic" title="บันทึกว่าดำเนินการวันนี้" onclick="markDone('compliance','${r.id}')">✓ ทำแล้ว</button> `;
   if(ent==='visitors'&&!r.timeOut)h+=`<button class="btn btn-ok btn-ic" onclick="checkout('${r.id}')">ออก</button> `;
-  if(ent==='omTest')h+=`<button class="btn btn-ok btn-ic" onclick="omTestDone('${r.id}')">✓ ทดสอบวันนี้</button> `;
+  if(ent==='omTest')h+=`<button class="btn btn-ok btn-ic" title="บันทึก Log ผลการทดสอบ (ค่าที่วัด รูป ลายเซ็น)" onclick="omTestDone('${r.id}')">🧪 บันทึกผลทดสอบ</button> `;
   if(ent==='maContract'&&(+r.visitsDone||0)<(+r.visitsYear||0))h+=`<button class="btn btn-ok btn-ic" onclick="maVisit('${r.id}')">+1 เข้า PM</button> `;
   }
   if(ent==='omLog')h+=`<button class="btn btn-ghost btn-ic" title="ดู Log Sheet" onclick="omLogView('${r.id}')">👁</button> `;
+  if(ent==='omTest')h+=`<button class="btn btn-ghost btn-ic" title="ประวัติผลการทดสอบ" onclick="omTestHist('${r.id}')">📚</button> `;
   if(ed)h+=`<button class="btn btn-ghost btn-ic" title="แก้ไข" onclick="${SCH[ent].customEdit?SCH[ent].customEdit+`('${r.id}')`:`openForm('${ent}','${r.id}')`}">✎</button> `;
   else if(ent!=='omLog')h+=`<button class="btn btn-ghost btn-ic" title="ดูรายละเอียด (ดูอย่างเดียว)" onclick="openForm('${ent}','${r.id}')">👁</button> `;
   if(dl)h+=`<button class="btn btn-ghost btn-ic" title="ลบ" onclick="delRow('${ent}','${r.id}',this)">🗑</button>`;
@@ -1233,7 +1240,7 @@ function engOpTab(){const eq=D.omEquip,ts=D.omTest.map(SCH.omTest.derive),lg=D.o
   return relPanel('eng',['avail'])+`<div class="kpi-grid">${kpi('อุปกรณ์หลัก',eq.length,`Running ${eq.filter(e=>e.status==='Running').length} · Standby ${eq.filter(e=>e.status==='Standby').length}`,'var(--orange)')}${kpi('Fault / Stop',eq.filter(e=>e.status==='Fault'||e.status==='Stop').length,'ต้องตรวจสอบ','var(--red)')}${kpi('OM Test เลยกำหนด',ts.filter(t=>t.status==='Overdue').length,`ใกล้ครบ ${ts.filter(t=>t.status==='Due Soon').length} · Fail ${ts.filter(t=>t.result==='Fail').length}`,'var(--yellow)')}${kpi('Log Sheet วันนี้',lg.filter(l=>String(l.dt).slice(0,10)===todayS).length,`7 วัน ${lg.filter(l=>String(l.dt).slice(0,10)>=d7).length} ใบ`,'var(--blue)')}${kpi('Log ผิดปกติ (7 วัน)',lg.filter(l=>l.status==='Abnormal'&&String(l.dt).slice(0,10)>=d7).length,'สร้าง WR อัตโนมัติได้','var(--red)')}</div>`
   +tabs('eng-om',[{k:'equip',l:'⚙ OM Main Equipment',h:()=>tbl('omEquip')},{k:'test',l:'🧪 OM Test (Weekly / Monthly / Annually)',h:()=>tbl('omTest',{bar:sel,filter:r=>!f||r.freq===f})},{k:'log',l:'📝 OM Log Sheet',h:()=>`<div class="alert a-info">Log Sheet: ค่าที่วัดได้มีช่วงมาตรฐาน min–max · ค่าที่วัดไม่ได้บันทึกเป็น ปกติ / ผิดปกติ · แนบรูปได้ 2 รูป และลงลายเซ็นผู้บันทึก · ปรับแม่แบบได้ที่ ⚙ ตั้งค่า Module → Log Sheet Template</div>`+tbl('omLog')}])}
 function maTab(){const m=D.maContract.map(SCH.maContract.derive);return`<div class="kpi-grid">${kpi('สัญญา MA',m.length,m.map(x=>x.service).slice(0,3).join(' · '),'var(--orange)')}${kpi('มูลค่ารวม / ปี','฿'+fmtN(sum(m,x=>x.value)),'ทุกสัญญา','var(--blue)')}${kpi('ใกล้หมดอายุ',m.filter(x=>x.status!=='Active').length,'ภายใน 60 วัน / หมดแล้ว','var(--yellow)')}${kpi('PM ผู้รับจ้างล่าช้า',m.filter(x=>x._behind).length,'เข้าน้อยกว่าแผนตามสัดส่วนเวลา','var(--red)')}</div>`+tbl('maContract')}
-function omTestDone(id){const r=D.omTest.find(x=>x.id===id);if(!r)return;r.lastDone=todayS;r.result='Pass';save();render();toast(r.test+' → ทดสอบวันนี้ (Pass)')}
+function omTestDone(id){omLogOpen(null,id)}
 function maVisit(id){const r=D.maContract.find(x=>x.id===id);if(!r)return;r.visitsDone=(+r.visitsDone||0)+1;save();render();toast(r.service+' · เข้า PM ครั้งที่ '+r.visitsDone)}
 
 VIEWS.fac=()=>{const d=D.defects,open=d.filter(x=>x.status!=='Closed');const cr=compRows('fac');
@@ -1371,7 +1378,7 @@ SCH.omTest={label:'รายการทดสอบ (OM Test)',pfx:'OT',fields:
   {k:'freq',l:'ความถี่',t:'select',o:[['Weekly','Weekly — รายสัปดาห์'],['Monthly','Monthly — รายเดือน'],['Annually','Annually — รายปี']],def:'Monthly'},
   {k:'lastDone',l:'ทดสอบล่าสุด',t:'date',def:()=>todayS},{k:'result',l:'ผลการทดสอบ',t:'select',o:['Pass','Fail','Pending'],def:'Pass',b:1},
   {k:'by',l:'ผู้ทดสอบ',t:'text'},{k:'note',l:'หมายเหตุ / ค่าที่วัดได้',t:'textarea',full:1}],
-  cols:['id','test','equipment','freq','lastDone','_nextDue','by','result','status'],colL:{_nextDue:'ครบกำหนด',status:'สถานะ'},
+  cols:['id','test','equipment','freq','lastDone','_nextDue','by','result','status','_log'],colL:{_nextDue:'ครบกำหนด',status:'สถานะ',_log:'Log ผลทดสอบ'},
   derive:r=>{const nx=addD(r.lastDone||todayS,OM_FREQ[r.freq]||30),dl=dBetween(todayS,nx);return{...r,_nextDue:nx,_dl:dl,status:dl<0?'Overdue':dl<=Math.max(1,Math.round((OM_FREQ[r.freq]||30)*0.2))?'Due Soon':'On Schedule'}},
   sort:(a,b)=>a._dl-b._dl};
 SCH.omLog={label:'Log Sheet',pfx:'LG',l4:1,customNew:'omLogOpen',customEdit:'omLogOpen',fields:[
@@ -1403,6 +1410,28 @@ const LOGTPL0=[
  {k:'Boiler / Steam / Compressed air',m:'boiler|steam|compressor|air dryer|lpg|crane|hoist',p:[['Operating Pressure','bar','m',5,10],['Temperature','°C','m',20,180],['Safety Valve / Interlock','','c'],['Water / Oil Level','','c']]},
  {k:'Kitchen equipment',m:'oven|wok|dishwasher|hood|kitchen|exhaust',p:[['Operating Temperature','°C','m',60,300],['Gas / Burner Flame','','c'],['Filter / Hood ความสะอาด','','c'],['ระบบตัดไฟ / Safety','','c']]},
  {k:'General (ทั่วไป)',m:'',p:[['อุณหภูมิ','°C','m',0,60],['สภาพทั่วไป','','c'],['เสียง / กลิ่นผิดปกติ','','c']]}];
+const TESTTPL0=[
+ {k:'Generator No-load Run',m:'no-load|run test',p:[['Start-up time','sec','m',0,10],['Output Voltage L-L','V','m',380,420],['Frequency','Hz','m',49.5,50.5],['Oil Pressure','bar','m',2,6],['Coolant Temp','°C','m',60,95],['Run Duration','min','m',15,60],['Battery Voltage','V','m',24,28.5],['การรั่ว / การสั่น / ควันไอเสีย','','c']]},
+ {k:'Generator Load / Load bank',m:'load test|load bank|annual service',p:[['Test Load','%','m',30,100],['Output Power','kW','m',1,5000],['Output Voltage L-L','V','m',380,420],['Frequency','Hz','m',49.5,50.5],['Oil Pressure','bar','m',2,6],['Coolant Temp','°C','m',60,95],['Test Duration','min','m',30,240],['ATS Transfer Time','sec','m',0,10],['ควันไอเสีย / การสั่น','','c']]},
+ {k:'Fire Pump',m:'fire pump|jockey',p:[['Auto Start Pressure','bar','m',5,8],['Churn Pressure','bar','m',8,12],['Flow (Flow test)','GPM','m',0,3000],['Run Time','min','m',10,30],['Diesel Engine / Motor','','c'],['Packing Gland Drip','','c'],['Controller / Alarm Signal','','c']]},
+ {k:'Chiller Efficiency',m:'chiller',p:[['Efficiency','kW/TR','m',0.45,0.75],['Chiller Load','%','m',50,100],['CHW Supply Temp','°C','m',5.5,8],['CHW Return Temp','°C','m',10,14],['CDW Supply Temp','°C','m',28,32],['CDW Return Temp','°C','m',32,37],['Approach Temp','°C','m',0.5,3],['Refrigerant / Oil Level','','c']]},
+ {k:'UPS Battery Discharge',m:'ups|battery',p:[['Load during test','%','m',20,100],['Discharge Time','min','m',10,60],['End Voltage per Cell','V','m',1.75,2.3],['Battery Temp','°C','m',18,30],['Alarm / Transfer','','c']]},
+ {k:'Lift / Escalator Safety',m:'lift|escalator|elevator|brake',p:[['Governor Trip Speed','m/s','m',0,3],['Brake Stopping Distance','mm','m',0,600],['Leveling Accuracy','mm','m',0,10],['Safety Gear Engagement','','c'],['Door Interlock','','c'],['Overload Device','','c'],['Emergency Alarm / Intercom','','c']]},
+ {k:'Fire Alarm System',m:'fire alarm|detector',p:[['Detectors Tested','pcs','m',1,99999],['Detectors Failed','pcs','m',0,0],['Panel Battery Voltage','V','m',24,28.5],['Manual Call Points','','c'],['Bells / Sounders / Strobe','','c'],['Interface (AHU trip / Lift recall)','','c']]},
+ {k:'Emergency Lighting',m:'emergency light',p:[['Units Tested','pcs','m',1,99999],['Units Failed','pcs','m',0,0],['Discharge Duration','min','m',90,240],['Exit Signs','','c']]},
+ {k:'Cold Room Alarm',m:'cold room|freezer|walk-in',p:[['Probe Reading vs Reference','°C','m',-1,1],['High-temp Alarm Trigger','°C','m',-18,8],['Alarm / Notification','','c'],['Door Alarm','','c']]},
+ {k:'Safety Valve / Leak Test',m:'safety valve|leak detector|lpg|boiler|receiver',p:[['Set Pressure / Alarm Level','bar','m',0,15],['Lift / Trigger Value','bar','m',0,15],['Reseat / Reset','','c'],['Tag / Seal','','c']]},
+ {k:'General Test',m:'',p:[['Visual Inspection','','c'],['Function Test','','c'],['Safety Devices','','c'],['Measured Value','','m',0,100]]}];
+function testTplFor(t){const s=(String(t&&t.test||'')+' '+String(t&&t.equipment||'')).toLowerCase(),T=(D.modCfg&&D.modCfg.eng&&Array.isArray(D.modCfg.eng.testTpl)&&D.modCfg.eng.testTpl.length)?D.modCfg.eng.testTpl:TESTTPL0;
+  return T.find(x=>x.m&&String(x.m).split('|').some(w=>w.trim()&&s.includes(w.trim().toLowerCase())))||T.find(x=>!x.m)||T[T.length-1]}
+const tplReadings=tp=>tp.p.map(q=>q[2]==='m'?{n:q[0],u:q[1],t:'m',min:+q[3],max:+q[4],v:'',ok:null}:{n:q[0],u:'',t:'c',v:'',ok:null});
+const omTestLogs=id=>(D.omLog||[]).filter(l=>l.testId===id).sort((a,b)=>String(b.dt).localeCompare(String(a.dt)));
+function omTestLogCell(r){const L=omTestLogs(r.id);if(!L.length)return'<span class="bcs-muted">ยังไม่มี</span>';const l=L[0];return`<button class="oml-lk" onclick="omLogView('${l.id}')">📄 ${esc(l.id)}</button>${L.length>1?` <button class="oml-lk" onclick="omTestHist('${r.id}')">+${L.length-1}</button>`:''}`}
+function omTestHist(id){const T=D.omTest.find(x=>x.id===id);if(!T)return;const L=omTestLogs(id);let m=document.getElementById('omlog');if(!m){m=document.createElement('div');m.id='omlog';m.className='bcs-modal';document.body.appendChild(m)}
+  m.innerHTML=`<div class="bcs-mbox" style="width:760px"><div class="bcs-mh"><div><div class="bcs-muted">${esc(T.id)} · ${esc(T.equipment||'')} · ${esc(T.freq)}</div><div class="bcs-st" style="font-size:20px">🧪 ${esc(T.test)}</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  <div class="bcs-cap">ประวัติผลการทดสอบ · ${L.length} ครั้ง</div>
+  <div class="oml-rows">${L.map(l=>`<div class="oml-r" style="cursor:pointer" onclick="omLogView('${l.id}')"><span class="nm">${esc(l.id)} · ${fmtDT(l.dt)}<small>${esc(l.recorder||'')}${l.witness?' · พยาน '+esc(l.witness):''}</small></span><span>${omLogReadCell(l)}</span><span class="oml-st ${l.status==='Abnormal'?'ng':'ok'}">${l.status==='Abnormal'?'✗ FAIL':'✓ PASS'}</span></div>`).join('')||'<div class="rm-empty">ยังไม่มี Log ผลการทดสอบ</div>'}</div>
+  <div class="ms-foot"><button class="bcs-btn" onclick="omLogClose()">ปิด</button><button class="bcs-btn bcs-pri" onclick="omLogOpen(null,'${T.id}')">🧪 บันทึกผลทดสอบใหม่</button></div></div>`;m.hidden=false}
 function logTpls(){const c=D.modCfg&&D.modCfg.eng&&D.modCfg.eng.logTpl;return Array.isArray(c)&&c.length?c:LOGTPL0}
 function logTplFor(name,system){const s=(String(name||'')+' '+String(system||'')).toLowerCase(),T=logTpls();
   return T.find(t=>t.m&&String(t.m).split('|').some(w=>w.trim()&&s.includes(w.trim().toLowerCase())))||T.find(t=>!t.m)||T[T.length-1]}
@@ -1435,8 +1464,11 @@ function modList(svc,key){const c=D.modCfg&&D.modCfg[svc]&&D.modCfg[svc].lists&&
   const lt=f('linenTx','type');if(lt)lt.o=()=>modList('lin','txTypes');})();
 
 /* ---------- seed new tables for existing datasets ---------- */
+function seedTestLogs(){if(!D.omTest||!D.omLog||D._tlog||(typeof gasSite==='function'&&gasSite()))return;D._tlog=1;if(D.omLog.some(l=>l.kind==='test'))return;let n=D.omLog.reduce((m,l)=>Math.max(m,parseInt(String(l.id).split('-').pop(),10)||0),0);
+  D.omTest.forEach((T,i)=>{const fail=T.result==='Fail';const rd=tplReadings(testTplFor(T)).map((q,k)=>{if(q.t==='m'){const bad=fail&&k===0;const span=q.max-q.min;q.v=bad?+(q.max+Math.max(1,span*.1)).toFixed(2):+(q.min+span*(.3+((i*7+k*3)%5)/12)).toFixed(q.max>100?0:2);q.ok=q.v>=q.min&&q.v<=q.max}else{q.v='ok';q.ok=true}return q});
+    const id='LG-'+pad(++n,4);D.omLog.push({id,kind:'test',testId:T.id,test:T.test,freq:T.freq,dt:T.lastDone+'T'+pad(9+i%6,2)+':00',equipment:T.equipment,system:'',shift:'Morning',recorder:T.by||'',witness:i%3===0?'ตัวแทนลูกค้า':'',readings:rd,photos:[],sig:'',remark:'',status:rd.some(q=>q.ok===false)?'Abnormal':'Normal'});T.lastLog=id})}
 function ensureExtra(){if(!D)return;['omEquip','omTest','omLog','maContract'].forEach(k=>{if(!Array.isArray(D[k]))D[k]=null});
-  if(D.omEquip&&D.omTest&&D.omLog&&D.maContract)return;
+  if(D.omEquip&&D.omTest&&D.omLog&&D.maContract){seedTestLogs();return}
   const r=rng(BIZK+'-om-v1'),ri=(a,b)=>a+Math.floor(r()*(b-a+1)),pick=a=>a[Math.floor(r()*a.length)],person=()=>pick(FN)+' '+pick(LN);
   if(!D.omEquip){const A=D.assets.filter(a=>a.crit==='A').slice(0,8);D.omEquip=A.map((a,i)=>({id:'OE-'+pad(i+1,3),asset:a.name,system:a.system,area:a.area,rated:(a.name.match(/[\d,.]+\s?(TR|kVA|kW|GPM|t\/h|t|L)\b/i)||[''])[0],hrsDay:/generator|ups|fire pump|standby/i.test(a.name)?0:/lift|escalator/i.test(a.name)?18:24,runHours:ri(4000,42000),status:a.status==='Down'?'Fault':a.status==='Standby'?'Standby':'Running',operator:person(),lastCheck:addD(todayS,-ri(0,2))}))}
   if(!D.omTest){const T=[];const add=(t,eq,f)=>T.push({id:'OT-'+pad(T.length+1,3),test:t,equipment:eq,freq:f,lastDone:addD(todayS,-ri(0,Math.round(OM_FREQ[f]*1.15))),result:r()<.9?'Pass':'Fail',by:person(),note:''});
@@ -1538,31 +1570,33 @@ function msetTplReset(){delete modCfg('eng').logTpl;msetSaved('คืนค่�
 
 /* ---------- OM Log Sheet form (readings · 2 photos · signature) ---------- */
 const OML={rec:null,sigDirty:false};
-function omLogOpen(id){const rec=id&&typeof id==='string'?D.omLog.find(x=>x.id===id):null;const u=(MSET.host.user&&MSET.host.user())||'';
+function omLogOpen(id,testId){const rec=id&&typeof id==='string'?D.omLog.find(x=>x.id===id):null;const u=(MSET.host.user&&MSET.host.user())||'';
+  if(!rec&&testId){const T=D.omTest.find(x=>x.id===testId);if(!T)return;const eq=D.omEquip.find(e=>e.asset===T.equipment)||D.assets.find(a=>a.name===T.equipment)||{};
+    OML.rec={id:'',kind:'test',testId:T.id,test:T.test,freq:T.freq,dt:isoDT(new Date()),equipment:T.equipment||'',system:eq.system||'',shift:'Morning',recorder:u,witness:'',readings:tplReadings(testTplFor(T)),photos:[],sig:'',remark:'',status:'Normal',autoWR:true};OML.sigDirty=false;omLogRender();return}
   OML.rec=rec?JSON.parse(JSON.stringify(rec)):{id:'',dt:isoDT(new Date()),equipment:(D.omEquip[0]||{}).asset||'',system:(D.omEquip[0]||{}).system||'',shift:'Morning',recorder:u,readings:null,photos:[],sig:'',remark:'',status:'Normal',autoWR:true};
   if(!OML.rec.readings)OML.rec.readings=omLogTplReadings(OML.rec.equipment,OML.rec.system);OML.sigDirty=false;omLogRender()}
 function omLogTplReadings(eq,sys){return logTplFor(eq,sys).p.map(q=>q[2]==='m'?{n:q[0],u:q[1],t:'m',min:+q[3],max:+q[4],v:'',ok:null}:{n:q[0],u:'',t:'c',v:'',ok:null})}
 function omLogEquip(v){const e=D.omEquip.find(x=>x.asset===v)||D.assets.find(x=>x.name===v);OML.rec.equipment=v;OML.rec.system=e?e.system:'';OML.rec.readings=omLogTplReadings(v,OML.rec.system);omLogRender()}
 function omLogVal(i,v){const q=OML.rec.readings[i];if(q.t==='m'){q.v=v===''?'':+v;q.ok=v===''?null:(+v>=q.min&&+v<=q.max)}else{q.v=v;q.ok=v==='ok'?true:v==='ng'?false:null}
   if(q.t==='c'){omLogRender();return}const el=document.getElementById('oml-st-'+i);if(el){el.textContent=q.ok==null?'—':q.ok?'✓ ปกติ':'✗ นอกเกณฑ์';el.className='oml-st '+(q.ok==null?'':q.ok?'ok':'ng')}omLogSum()}
-function omLogSum(){const ng=OML.rec.readings.filter(q=>q.ok===false).length,el=document.getElementById('oml-sum');if(el)el.innerHTML=ng?`<b style="color:#EF4444">ผิดปกติ ${ng} รายการ</b>`:'<b style="color:#22C55E">ปกติทุกรายการ</b>'}
+function omLogSum(){const ng=OML.rec.readings.filter(q=>q.ok===false).length,el=document.getElementById('oml-sum');if(el&&OML.rec.kind==='test'){el.innerHTML=!OML.rec.readings.some(q=>q.v!==''&&q.v!=null)?'<span class="bcs-muted">— รอกรอกผล</span>':ng?`<b style="color:#EF4444">✗ FAIL — ไม่ผ่าน ${ng} รายการ</b>`:'<b style="color:#22C55E">✓ PASS</b>';return}if(el)el.innerHTML=ng?`<b style="color:#EF4444">ผิดปกติ ${ng} รายการ</b>`:'<b style="color:#22C55E">ปกติทุกรายการ</b>'}
 function omLogRender(){const cv0=document.getElementById('oml-sig');if(cv0&&OML.sigDirty&&OML.rec){try{OML.rec.sig=cv0.toDataURL('image/png')}catch(e){}}let m=document.getElementById('omlog');if(!m){m=document.createElement('div');m.id='omlog';m.className='bcs-modal';document.body.appendChild(m)}
   const R=OML.rec,eqs=[...new Set(D.omEquip.map(e=>e.asset).concat(D.assets.map(a=>a.name)))];
-  m.innerHTML=`<div class="bcs-mbox" style="width:820px"><div class="bcs-mh"><div><div class="bcs-muted">Engineering · Operation · OM Log Sheet ${R.id?'· '+esc(R.id):''}</div><div class="bcs-st" style="font-size:20px">📝 ${R.id?'แก้ไข':'บันทึก'} Log Sheet</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  m.innerHTML=`<div class="bcs-mbox" style="width:820px"><div class="bcs-mh"><div><div class="bcs-muted">Engineering · Operation · ${R.kind==='test'?'OM Test · '+esc(R.testId)+' · '+esc(R.freq||''):'OM Log Sheet'} ${R.id?'· '+esc(R.id):''}</div><div class="bcs-st" style="font-size:20px">${R.kind==='test'?'🧪 '+esc(R.test):'📝 '+(R.id?'แก้ไข':'บันทึก')+' Log Sheet'}</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
   <div class="ms-grid">
-    <label class="ms-f"><span>อุปกรณ์ *</span><select class="bcs-in" style="width:100%" onchange="omLogEquip(this.value)">${eqs.map(x=>`<option ${x===R.equipment?'selected':''}>${esc(x)}</option>`).join('')}</select><small>แม่แบบ: ${esc(logTplFor(R.equipment,R.system).k)}</small></label>
+    ${R.kind==='test'?`<div class="ms-f"><span>อุปกรณ์</span><b style="padding:6px 0">${esc(R.equipment||'—')}</b><small>แม่แบบผลทดสอบ: ${esc(testTplFor({test:R.test,equipment:R.equipment}).k)}</small></div>`:`<label class="ms-f"><span>อุปกรณ์ *</span><select class="bcs-in" style="width:100%" onchange="omLogEquip(this.value)">${eqs.map(x=>`<option ${x===R.equipment?'selected':''}>${esc(x)}</option>`).join('')}</select><small>แม่แบบ: ${esc(logTplFor(R.equipment,R.system).k)}</small></label>`}
     <label class="ms-f"><span>วันเวลา *</span><input class="bcs-in" style="width:100%" type="datetime-local" value="${esc(R.dt)}" onchange="OML.rec.dt=this.value"></label>
     <label class="ms-f"><span>กะ</span><select class="bcs-in" style="width:100%" onchange="OML.rec.shift=this.value">${['Morning','Afternoon','Night'].map(x=>`<option ${x===R.shift?'selected':''}>${x}</option>`).join('')}</select></label>
-    <label class="ms-f"><span>ผู้บันทึก *</span><input class="bcs-in" style="width:100%" value="${esc(R.recorder)}" oninput="OML.rec.recorder=this.value"></label></div>
-  <div class="bcs-cap" style="margin-top:12px">ค่าที่ต้องบันทึก <span id="oml-sum"></span></div>
+    <label class="ms-f"><span>${R.kind==='test'?'ผู้ทดสอบ *':'ผู้บันทึก *'}</span><input class="bcs-in" style="width:100%" value="${esc(R.recorder)}" oninput="OML.rec.recorder=this.value"></label>${R.kind==='test'?`<label class="ms-f"><span>ผู้ร่วมทดสอบ / พยาน (ลูกค้า · ผู้รับเหมา)</span><input class="bcs-in" style="width:100%" value="${esc(R.witness||'')}" oninput="OML.rec.witness=this.value"></label>`:''}</div>
+  <div class="bcs-cap" style="margin-top:12px">${R.kind==='test'?'ผลการทดสอบ':'ค่าที่ต้องบันทึก'} <span id="oml-sum"></span></div>
   <div class="oml-rows">${R.readings.map((q,i)=>q.t==='m'?`<div class="oml-r"><span class="nm">${esc(q.n)}<small>มาตรฐาน ${q.min} – ${q.max} ${esc(q.u)}</small></span><span class="ms-i"><input class="bcs-in" type="number" step="any" inputmode="decimal" value="${q.v}" oninput="omLogVal(${i},this.value)">${esc(q.u)}</span><span class="oml-st ${q.ok==null?'':q.ok?'ok':'ng'}" id="oml-st-${i}">${q.ok==null?'—':q.ok?'✓ ปกติ':'✗ นอกเกณฑ์'}</span></div>`
     :`<div class="oml-r"><span class="nm">${esc(q.n)}<small>ตรวจสภาพ (วัดค่าไม่ได้)</small></span><span class="oml-seg">${[['ok','✓ ปกติ'],['ng','✗ ผิดปกติ'],['na','N/A']].map(([v,l])=>`<button type="button" class="${q.v===v?'on '+v:''}" onclick="omLogVal(${i},'${v}')">${l}</button>`).join('')}</span><span></span></div>`).join('')}</div>
   <div class="ms-grid" style="margin-top:12px">
     <div class="ms-f"><span>รูปถ่าย (สูงสุด 2 รูป)</span><div class="oml-ph">${[0,1].map(i=>R.photos[i]?`<div class="oml-img"><img src="${esc(R.photos[i])}" alt="photo ${i+1}"><button type="button" onclick="OML.rec.photos.splice(${i},1);omLogRender()">✕</button></div>`:`<label class="oml-add">📷 เพิ่มรูป ${i+1}<input type="file" accept="image/*" capture="environment" hidden onchange="omLogPhoto(this)"></label>`).join('')}</div></div>
     <div class="ms-f"><span>ลายเซ็นผู้บันทึก</span>${R.sig&&!String(R.sig).startsWith('data:')?`<img class="oml-sigimg" src="${esc(R.sig)}" alt="signature"><small class="bcs-muted">ลายเซ็นเดิม — เซ็นใหม่ด้านล่างหากต้องการเปลี่ยน</small>`:''}<canvas id="oml-sig" class="oml-sig" width="560" height="170"></canvas><span style="display:flex;gap:6px;margin-top:4px"><button type="button" class="bcs-btn" onclick="omLogSigClear()">ล้างลายเซ็น</button><small class="bcs-muted" style="align-self:center">เซ็นด้วยนิ้วหรือเมาส์</small></span></div></div>
   <label class="ms-f" style="margin-top:10px"><span>หมายเหตุ</span><textarea class="bcs-in" style="width:100%;min-height:60px" oninput="OML.rec.remark=this.value">${esc(R.remark||'')}</textarea></label>
-  ${R.id?'':`<label class="oml-ck"><input type="checkbox" ${R.autoWR?'checked':''} onchange="OML.rec.autoWR=this.checked"> สร้าง Work Request อัตโนมัติเมื่อพบค่าผิดปกติ</label>`}
-  <div class="ms-foot"><span class="ferr" id="oml-err" style="margin-right:auto;color:#EF4444"></span><button class="bcs-btn" onclick="omLogClose()">ยกเลิก</button><button class="bcs-btn bcs-pri" onclick="omLogSave()">💾 บันทึก Log Sheet</button></div></div>`;
+  ${R.id?'':`<label class="oml-ck"><input type="checkbox" ${R.autoWR?'checked':''} onchange="OML.rec.autoWR=this.checked"> สร้าง Work Request อัตโนมัติเมื่อ${R.kind==='test'?'ผลทดสอบไม่ผ่าน':'พบค่าผิดปกติ'}</label>`}
+  <div class="ms-foot"><span class="ferr" id="oml-err" style="margin-right:auto;color:#EF4444"></span><button class="bcs-btn" onclick="omLogClose()">ยกเลิก</button><button class="bcs-btn bcs-pri" onclick="omLogSave()">💾 ${R.kind==='test'?'บันทึกผลทดสอบ':'บันทึก Log Sheet'}</button></div></div>`;
   m.hidden=false;omLogSum();omLogSigInit()}
 function omLogClose(){const m=document.getElementById('omlog');if(m){m.hidden=true;m.innerHTML=''}OML.rec=null}
 function omLogSigInit(){const cv=document.getElementById('oml-sig');if(!cv)return;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,cv.width,cv.height);
@@ -1585,18 +1619,20 @@ function omLogSave(){const R=OML.rec,err=m=>{const e=document.getElementById('om
   let wr=null;
   if(!R.id){R.id=nextId('omLog');D.omLog.unshift(R);
     if(auto&&R.status==='Abnormal'){const bad=R.readings.filter(q=>q.ok===false).map(q=>q.n+(q.t==='m'?' = '+q.v+' '+q.u:'')).join(', ');const eq=D.omEquip.find(x=>x.asset===R.equipment)||D.assets.find(x=>x.name===R.equipment)||{};
-      wr={id:nextId('tickets'),date:isoDT(new Date()),service:'eng',area:eq.area||(D.areas[0]||{}).name||'',category:R.system||'Operation',desc:'Log Sheet '+R.id+' ผิดปกติ: '+R.equipment+' — '+bad,priority:'P2',requester:R.recorder,assignee:'',status:'New',respondedAt:'',completedAt:''};D.tickets.unshift(wr)}}
+      wr={id:nextId('tickets'),date:isoDT(new Date()),service:'eng',area:eq.area||(D.areas[0]||{}).name||'',category:R.system||'Operation',desc:(R.kind==='test'?'ผลทดสอบ '+R.test+' ('+R.id+') ไม่ผ่าน: ':'Log Sheet '+R.id+' ผิดปกติ: ')+R.equipment+' — '+bad,priority:'P2',requester:R.recorder,assignee:'',status:'New',respondedAt:'',completedAt:''};D.tickets.unshift(wr)}}
   else{const i=D.omLog.findIndex(x=>x.id===R.id);if(i>=0)D.omLog[i]=R}
   const e=D.omEquip.find(x=>x.asset===R.equipment);if(e)e.lastCheck=String(R.dt).slice(0,10);
+  if(R.kind==='test'){const T=D.omTest.find(x=>x.id===R.testId),last=omTestLogs(R.testId)[0];if(T&&last&&last.id===R.id){T.lastDone=String(R.dt).slice(0,10);T.result=R.status==='Abnormal'?'Fail':'Pass';T.by=R.recorder;T.lastLog=R.id}}
   save();omLogClose();MSET.host.toast&&MSET.host.toast('บันทึก '+R.id+(wr?' · สร้าง '+wr.id+' แล้ว':''));MSET.host.after&&MSET.host.after()}
 function omLogView(id){const R=D.omLog.find(x=>x.id===id);if(!R)return;let m=document.getElementById('omlog');if(!m){m=document.createElement('div');m.id='omlog';m.className='bcs-modal';document.body.appendChild(m)}
-  m.innerHTML=`<div class="bcs-mbox" style="width:760px"><div class="bcs-mh"><div><div class="bcs-muted">${esc(R.id)} · ${fmtDT(R.dt)} · ${esc(R.shift||'')}</div><div class="bcs-st" style="font-size:20px">📝 ${esc(R.equipment)}</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  m.innerHTML=`<div class="bcs-mbox" style="width:760px"><div class="bcs-mh"><div><div class="bcs-muted">${esc(R.id)} · ${fmtDT(R.dt)} · ${esc(R.shift||'')}</div><div class="bcs-st" style="font-size:20px">${R.kind==='test'?'🧪 '+esc(R.test):'📝 '+esc(R.equipment)}</div></div><button class="bcs-btn" onclick="omLogClose()">✕</button></div>
+  ${R.kind==='test'?`<div class="oml-res ${R.status==='Abnormal'?'ng':'ok'}"><b>${R.status==='Abnormal'?'✗ FAIL — ไม่ผ่าน':'✓ PASS — ผ่าน'}</b><span>${esc(R.equipment)} · ${esc(R.testId)} · ${esc(R.freq||'')} · ผู้ทดสอบ ${esc(R.recorder||'—')}${R.witness?' · พยาน '+esc(R.witness):''}</span></div>`:''}
   <div class="oml-rows">${(R.readings||[]).map(q=>`<div class="oml-r"><span class="nm">${esc(q.n)}${q.t==='m'?`<small>มาตรฐาน ${q.min} – ${q.max} ${esc(q.u)}</small>`:''}</span><b>${q.t==='m'?(q.v===''?'—':esc(q.v)+' '+esc(q.u)):({ok:'ปกติ',ng:'ผิดปกติ',na:'N/A'}[q.v]||'—')}</b><span class="oml-st ${q.ok==null?'':q.ok?'ok':'ng'}">${q.ok==null?'—':q.ok?'✓':'✗'}</span></div>`).join('')}</div>
   ${(R.photos||[]).length?`<div class="oml-ph" style="margin-top:10px">${R.photos.map(p=>`<div class="oml-img"><img src="${esc(p)}" alt="photo"></div>`).join('')}</div>`:''}
   ${R.sig?`<div class="bcs-cap" style="margin-top:10px">ลายเซ็น · ${esc(R.recorder||'')}</div><img class="oml-sigimg" src="${esc(R.sig)}" alt="signature">`:''}
   ${R.remark?`<div class="bcs-muted" style="margin-top:8px">หมายเหตุ: ${esc(R.remark)}</div>`:''}
-  <div class="ms-foot"><button class="bcs-btn" onclick="omLogOpen('${R.id}')">✎ แก้ไข</button><button class="bcs-btn bcs-pri" onclick="omLogClose()">ปิด</button></div></div>`;m.hidden=false}
-function omLogReadCell(r){const rd=r.readings||[],ng=rd.filter(q=>q.ok===false).length;return`${rd.length} ค่า${ng?` · <b style="color:#EF4444">ผิดปกติ ${ng}</b>`:''}`}
+  <div class="ms-foot">${R.kind==='test'?`<button class="bcs-btn" style="margin-right:auto" onclick="omTestHist('${R.testId}')">📚 ประวัติการทดสอบ</button>`:''}<button class="bcs-btn" onclick="window.print()">🖨 พิมพ์</button><button class="bcs-btn" onclick="omLogOpen('${R.id}')">✎ แก้ไข</button><button class="bcs-btn bcs-pri" onclick="omLogClose()">ปิด</button></div></div>`;m.hidden=false}
+function omLogReadCell(r){const rd=r.readings||[],ng=rd.filter(q=>q.ok===false).length;return`${r.kind==='test'?'<span class="badge b-purple">🧪 Test</span> ':''}${rd.length} ค่า${ng?` · <b style="color:#EF4444">ผิดปกติ ${ng}</b>`:''}`}
 function omLogMediaCell(r){return`<span class="oml-mini">${(r.photos||[]).map(p=>`<img src="${esc(p)}" alt="">`).join('')}${r.sig?`<img class="sg" src="${esc(r.sig)}" alt="sig">`:''}${!(r.photos||[]).length&&!r.sig?'—':''}</span>`}
 
 /* ---------- Google Apps Script / Sheets sync ---------- */
