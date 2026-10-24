@@ -473,6 +473,16 @@ fieldset.au-fs{border:0;padding:0;margin:0;min-width:0}
 .si-docs{display:flex;flex-wrap:wrap;gap:6px}
 @media(max-width:900px){.si-grid{grid-template-columns:1fr 1fr}.si-grid>*{grid-column:auto!important}.si-grid>.si-fe:has(textarea),.si-grid>[style*="span 3"]{grid-column:1/-1!important}.si-scope{grid-template-columns:1fr}.si-prow{grid-template-columns:1fr 1fr}.si-prow select{grid-column:1/-1}}
 @media(max-width:520px){.si-grid{grid-template-columns:1fr}}
+.md-opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.md-opt{position:relative;display:flex;flex-direction:column;gap:4px;text-align:left;border:1.5px solid var(--bcs-line);border-radius:12px;padding:12px 14px;background:var(--bcs-card2);color:var(--bcs-text);font:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
+.md-opt:hover{transform:translateY(-2px);box-shadow:0 10px 18px -12px rgba(0,0,0,.4);border-color:var(--mc)}
+.md-opt.on{border-color:var(--mc);background:color-mix(in srgb,var(--mc) 10%,var(--bcs-card))}
+.md-opt b{font-size:15px}.md-opt small{font-size:12px;color:var(--bcs-muted);line-height:1.45}.md-opt small b{font-size:12px;color:var(--bcs-text)}
+.md-opt i{position:absolute;top:10px;right:12px;font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--mc);border-radius:999px;padding:1px 8px}
+.md-live{display:flex;flex-direction:column;gap:8px;margin-top:12px;border:1px dashed var(--bcs-line);border-radius:10px;padding:10px 12px}
+.mode-pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;border:1px solid}
+.mode-pill.s{color:#C2410C;background:#FFEDD5;border-color:#FDBA74}.mode-pill.l{color:#15803D;background:#DCFCE7;border-color:#86EFAC}
+@media(max-width:700px){.md-opts{grid-template-columns:1fr}}
 /*@@SITECSS-END@@*/
 
 .m-gear{margin-left:auto;align-self:flex-start}
@@ -646,8 +656,8 @@ let D=null;const P=()=>BIZ[BIZK];
 const UI={tab:{},q:{},hd:{svc:'',st:'',pri:''},del:null};
 let CUR='dashboard';let Q=[];const TB={};let charts={};
 function save(){ensureD();LS.set(DKEY(),D);typeof syncAfterSave==='function'&&syncAfterSave()}
-function DKEY(){const s=LS.get('psd_ifm_site_'+BIZK,'');return'psd_ifm_v1_'+BIZK+(s?'@'+s:'')}
-function load(){D=LS.get(DKEY(),null);if(!D&&DKEY()!=='psd_ifm_v1_'+BIZK&&!LS.get('psd_ifm_mig_'+BIZK,false)){D=LS.get('psd_ifm_v1_'+BIZK,null);LS.set('psd_ifm_mig_'+BIZK,true)}if(!D||D._v!==1){D=seed(BIZK);save()}ensureD()}
+function DKEY(){if(typeof DMODE==='function'&&DMODE()==='sample')return'psd_ifm_v1_'+BIZK+'@SAMPLE';const s=LS.get('psd_ifm_site_'+BIZK,'');return'psd_ifm_v1_'+BIZK+(s?'@'+s:'@LIVE')}
+function load(){D=LS.get(DKEY(),null);if(!D&&!/@(SAMPLE|LIVE)$/.test(DKEY())&&!LS.get('psd_ifm_mig_'+BIZK,false)){D=LS.get('psd_ifm_v1_'+BIZK,null);LS.set('psd_ifm_mig_'+BIZK,true)}if(!D||D._v!==1){D=typeof DMODE==='function'&&DMODE()!=='sample'?liveStrip(seed(BIZK),true):seed(BIZK);save()}ensureD()}
 /* enabled services + KPI targets (per business, kept inside D) */
 function ensureD(){if(!D)return;if(!D.svcOff)D.svcOff={};if(!D.kpiCustom)D.kpiCustom=[];if(!D.targetOv)D.targetOv={};applyTargets();typeof ensureExtra==='function'&&ensureExtra()}
 const svcSite=k=>!(D&&D.svcOff&&D.svcOff[k]);
@@ -1017,7 +1027,7 @@ function viewHome(){
   const hK=['eng','fac'].filter(svcOn),sK=['hk','sec','pest','gdn','lin'].filter(svcOn),hard=avg(hK.map(k=>sc[k])),soft=avg(sK.map(k=>sc[k])),idx=hK.length&&sK.length?Math.round((hard+soft)/2):hK.length?hard:soft;
   const AL=alerts().slice(0,5),pmA=avg([pmPct('eng'),pmPct('fac')]);
   const mine=D.tickets.filter(t=>t.assignee===ST.user.name&&t.status!=='Closed'&&t.status!=='Completed');
-  return '<div class="stack">'+(authNoSite()?'<div class="au-banner">⚠ '+tx('ยังไม่ได้เลือกอาคาร — ข้อมูลที่เห็นเป็นข้อมูลตัวอย่างในเครื่องนี้','No building selected — you are seeing sample data on this device')+(cap('gas')?'':' · '+tx('ติดต่อ Admin / FM','contact your Admin / FM'))+'</div>':'')
+  return '<div class="stack">'+(DMODE()==='sample'&&me()?'<button class="au-banner" style="width:100%;text-align:left;font:inherit;cursor:pointer;border-color:#FDBA74" onclick="goTab(\'set\')">🧪 '+tx('กำลังใช้ข้อมูลตัวอย่าง — ไม่ซิงค์ Google Sheets','Using sample data — not synced')+(cap('set')?' · '+tx('เปลี่ยนที่ ตั้งค่า ›','change in Settings ›'):'')+'</button>':'')+(authNoSite()&&DMODE()!=='sample'?'<div class="au-banner">⚠ '+tx('ยังไม่ได้เลือกอาคาร — ข้อมูลที่เห็นเป็นข้อมูลตัวอย่างในเครื่องนี้','No building selected — you are seeing sample data on this device')+(cap('gas')?'':' · '+tx('ติดต่อ Admin / FM','contact your Admin / FM'))+'</div>':'')
   +'<div><h2 style="font-size:24px">'+tx('สวัสดี, ','Hello, ')+esc(ST.user.name)+'</h2><div style="font-size:14px;color:var(--color-neutral-700)">'+roleName(ST.user.role)+' · '+esc(D.site)+'</div></div>'
   +'<div class="blueprint pad" style="display:flex;flex-direction:column;gap:10px"><div class="row"><div class="svc-ic" style="--sc:'+B.c+';font-size:24px">'+B.ic+'</div><div style="flex:1;min-width:0"><div class="kick">'+B.en+' · '+B.n+'</div><div style="font-family:var(--font-heading);font-size:19px;font-weight:600;line-height:1.15">'+esc(D.site)+'</div></div>'
   +'<div style="text-align:right"><div class="kick">IFM Index</div><div style="font-family:var(--font-heading);font-size:38px;font-weight:700;line-height:1;color:'+scol(idx)+'">'+idx+'</div></div></div>'
@@ -1136,6 +1146,7 @@ function wrDetail(id){const t=D.tickets.find(x=>x.id===id);if(!t)return;const S=
 /* ---------- SETTINGS ---------- */
 function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default'),SET=cap('set'),sites=authOnline()?mySitesFor(BIZK):[];
   return '<div class="stack"><div class="blueprint pad">'+myAccountHTML()+'<div class="row" style="margin-top:10px"><button class="btn btn-sm" onclick="signOut()">⎋ '+tx('ออกจากระบบ','Sign out')+'</button>'+(cap('usr')?'<button class="btn btn-primary btn-sm" onclick="usrOpenM()">👥 '+tx('ผู้ใช้งาน & สิทธิ์','Users & roles')+'</button>':'')+'</div></div>'
+  +(SET?'<div class="sec-t"><h2>🗂 '+tx('ชุดข้อมูล','Data set')+'</h2><small>'+tx('ตัวอย่าง / ข้อมูลจริง','Sample / live')+'</small></div><div class="blueprint pad">'+modeCardHTML()+'</div>':'')
   +'<div class="sec-t"><h2>'+tx('ประเภทธุรกิจ','Business type')+'</h2><small>'+tx('ข้อมูลแยกตามธุรกิจ','Data kept per business')+'</small></div>'
   +'<div class="list two">'+Object.entries(BIZ).filter(([k])=>bizAllowed(k)).map(([k,b])=>'<button class="blueprint tap biz-opt '+(k===BIZK?'on':'')+'" onclick="switchBiz(\''+k+'\')"><span class="i">'+b.ic+'</span><span style="flex:1;min-width:0"><b style="font-family:var(--font-heading);font-size:17px;display:block">'+tx(b.n,b.en)+'</b><span style="font-size:12.5px;color:var(--color-neutral-700);display:block;line-height:1.3">'+esc(b.desc)+'</span></span>'+(k===BIZK?'<span class="badge b-green">✓</span>':'')+'</button>').join('')+'</div>'
   +(sites.length?'<div class="sec-t"><h2>'+tx('อาคาร','Building')+'</h2><small>'+tx('ที่ได้รับสิทธิ์','assigned to you')+'</small></div><div class="chips">'+sites.map(x=>'<button class="chip '+(x.site===gasSite()?'active':'')+'" onclick="setSiteM(\''+esc(x.site)+'\')">🏢 '+esc(x.site)+(x.name?' · '+esc(x.name):'')+'</button>').join('')+'</div>':'')
@@ -1150,7 +1161,7 @@ function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(M
   +'<div class="sec-t"><h2>☁ Google Sheets</h2></div>'+(cap('gas')?mGasForm():'<div class="blueprint pad"><div id="m-sync" style="font-size:14px">'+mSyncText()+'</div></div>')
   +'<div class="sec-t"><h2>'+tx('ข้อมูล','Data')+'</h2></div>'
   +'<div class="note">'+tx('ข้อมูลเก็บในเครื่องนี้และใช้ร่วมกับ IFM เดสก์ท็อปเมื่อเปิดจากเว็บไซต์เดียวกัน','Data lives on this device and is shared with IFM desktop when opened from the same site')+'</div>'
-  +(SET?'<button class="btn" id="reset-btn" onclick="resetM(this)">'+tx('รีเซ็ตเป็นข้อมูลตัวอย่าง','Reset to sample data')+'</button>':'')
+  
   +'<a class="link" href="'+DESKTOP_URL+'">'+tx('เปิด IFM เวอร์ชันเดสก์ท็อป ›','Open IFM desktop version ›')+'</a>'+footerLegal()+'</div>'}
 function toggleSvcM(k,on){if(!cap('set')){denied();render();return}const off={...(D.svcOff||{})};if(on)delete off[k];else off[k]=true;if(Object.keys(SVC).every(x=>off[x])){toast(tx('ต้องเปิดใช้อย่างน้อย 1 บริการ','Keep at least one service on'));render();return}D.svcOff=off;save();render()}
 function switchBiz(k){if(!BIZ[k])return;if(!bizAllowed(k)){denied();return}BIZK=k;LS.set('psd_ifm_biz',k);load();ST.svc=null;ST.q='';render();SYNC.last=null;syncBoot(()=>render());toast(BIZ[k].ic+' '+tx(BIZ[k].n,BIZ[k].en))}
@@ -1783,7 +1794,7 @@ function modList(svc,key){const c=D.modCfg&&D.modCfg[svc]&&D.modCfg[svc].lists&&
   const lt=f('linenTx','type');if(lt)lt.o=()=>modList('lin','txTypes');})();
 
 /* ---------- seed new tables for existing datasets ---------- */
-function seedTestLogs(){if(!D.omTest||!D.omLog||D._tlog||(typeof gasSite==='function'&&gasSite()))return;D._tlog=1;if(D.omLog.some(l=>l.kind==='test'))return;let n=D.omLog.reduce((m,l)=>Math.max(m,parseInt(String(l.id).split('-').pop(),10)||0),0);
+function seedTestLogs(){if(!D.omTest||!D.omLog||D._tlog||(typeof DMODE==='function'&&DMODE()!=='sample'))return;D._tlog=1;if(D.omLog.some(l=>l.kind==='test'))return;let n=D.omLog.reduce((m,l)=>Math.max(m,parseInt(String(l.id).split('-').pop(),10)||0),0);
   D.omTest.forEach((T,i)=>{const fail=T.result==='Fail';const rd=tplReadings(testTplFor(T)).map((q,k)=>{if(q.t==='m'){const bad=fail&&k===0;const span=q.max-q.min;q.v=bad?+(q.max+Math.max(1,span*.1)).toFixed(2):+(q.min+span*(.3+((i*7+k*3)%5)/12)).toFixed(q.max>100?0:2);q.ok=q.v>=q.min&&q.v<=q.max}else{q.v='ok';q.ok=true}return q});
     const id='LG-'+pad(++n,4);D.omLog.push({id,kind:'test',testId:T.id,test:T.test,freq:T.freq,dt:T.lastDone+'T'+pad(9+i%6,2)+':00',equipment:T.equipment,system:'',shift:'Morning',recorder:T.by||'',witness:i%3===0?'ตัวแทนลูกค้า':'',readings:rd,photos:[],sig:'',remark:'',status:rd.some(q=>q.ok===false)?'Abnormal':'Normal'});T.lastLog=id})}
 function ensureExtra(){if(!D)return;['omEquip','omTest','omLog','maContract'].forEach(k=>{if(!Array.isArray(D[k]))D[k]=null});
@@ -1960,7 +1971,7 @@ const SYNC_CFG_KEYS=['_v','site','created','hist','svcOff','targetOv','modCfg','
 const SYNC_ENTS=()=>Object.keys(SCH).filter(k=>Array.isArray(D[k]));
 function gasCfg(){return Object.assign({url:'',key:'',auto:true},LS.get('psd_ifm_gas',{}))}
 function gasSite(){return LS.get('psd_ifm_site_'+BIZK,'')}
-function gasReady(){const c=gasCfg();return!!(c.url&&gasSite()&&((typeof sessTok==='function'&&sessTok())||c.key))}
+function gasReady(){const c=gasCfg();return!!(c.url&&gasSite()&&(typeof DMODE!=='function'||DMODE()!=='sample')&&((typeof sessTok==='function'&&sessTok())||c.key))}
 function syncHashKey(){return'psd_ifm_synch_'+BIZK+'_'+gasSite()}
 function syncBaseKey(){return'psd_ifm_syncrow_'+BIZK+'_'+gasSite()}
 const rowMap=a=>{const m={};(a||[]).forEach(r=>{m[String(r.id)]=hashOf(JSON.stringify(r))});return m};
@@ -2043,7 +2054,7 @@ function entSvc(ent,row){if(row&&row.service)return row.service;return ENT_SVC[e
 function canEdit(ent,row){const u=me();if(!u)return false;if(ent==='tickets'&&!row)return true;const c=RCAP[u.role]||{};if(!c.e)return false;const s=entSvc(ent,row);if(s==='_m')return !!c.set;return !s||uSvc(s)}
 function canDel(ent,row){return cap('d')&&canEdit(ent,row)}
 function canPushEnt(e){const r=myRole();if(r==='client'||r==='requester')return e==='tickets';if(ENT_SVC[e]==='_m')return cap('set');return !ENT_SVC[e]||uSvc(ENT_SVC[e])}
-function authNoSite(){return authOnline()&&!!me()&&!gasSite()}
+function authNoSite(){return authOnline()&&!!me()&&!gasSite()&&(typeof DMODE!=='function'||DMODE()!=='sample')}
 function denied(){AUTH.host.toast&&AUTH.host.toast(_t('🔒 บทบาท “'+roleTx(myRole())+'” ไม่มีสิทธิ์ทำรายการนี้','🔒 Your role ('+roleTx(myRole())+') cannot do this'))}
 
 /* ── SHA-256 (pure JS; used for demo-mode passwords) ── */
@@ -2276,7 +2287,7 @@ function siSeed(){const B=P(),y=new Date().getFullYear(),k=BIZK;
       quiet:k==='hospital'?'งานเสียงดังห้ามในหอผู้ป่วย 21:00–06:00':k==='hotel'?'งานในห้องพัก 10:00–17:00 เท่านั้น':k==='office'?'งานเสียงดัง / เจาะ หลัง 18:00':'',safety:'ขอ Work permit ก่อนงานร้อน / งานที่สูง / ที่อับอากาศ · สวม PPE ตลอด · ลงชื่อเข้า–ออก',
       reports:'Daily report (Line) · Weekly WR summary · Monthly KPI report + ประชุมทบทวน',meeting:'Monthly review ทุกสัปดาห์ที่ 1 ของเดือน',channel:'IFM Mobile / Helpdesk / Line Official',risks:'',notes:''},
     docs:{asbuilt:true,om:true,assetlist:true,warranty:false,permits:true,keys:true,contacts:true,baseline:false,sla:true,induction:true}}}
-function ensureSite(){if(!D)return null;if(!D.siteInfo||typeof D.siteInfo!=='object')D.siteInfo=siSeed();const s=D.siteInfo;['b','c','scope','staff','pri','docs'].forEach(k=>{if(!s[k]||typeof s[k]!=='object')s[k]={}});if(!Array.isArray(s.contacts))s.contacts=[];return s}
+function ensureSite(){if(!D)return null;if(!D.siteInfo||typeof D.siteInfo!=='object')D.siteInfo=DMODE()==='sample'?siSeed():blankSite();const s=D.siteInfo;['b','c','scope','staff','pri','docs'].forEach(k=>{if(!s[k]||typeof s[k]!=='object')s[k]={}});if(!Array.isArray(s.contacts))s.contacts=[];return s}
 const siGet=p=>p.split('.').reduce((o,k)=>o==null?undefined:o[k],ensureSite());
 function siSet(p,v,keep){if(!cap('set')){denied();return}const ks=p.split('.'),last=ks.pop();const o=ks.reduce((o,k)=>{if(o[k]==null||typeof o[k]!=='object')o[k]={};return o[k]},ensureSite());o[last]=v;delete D.siteInfo._sample;save();if(!keep)siRender();SITE.host.saved&&SITE.host.saved()}
 const daysTo=d=>d?Math.round((new Date(d+'T00:00:00')-new Date(todayS+'T00:00:00'))/864e5):null;
@@ -2369,6 +2380,36 @@ function siCtDel(i){const s=ensureSite();s.contacts.splice(i,1);siSet('contacts'
 /* summary for the Registry (Sites sheet) */
 function siSummary(){const s=ensureSite(),k=siContract();return{client:s.b.client||'',address:[s.b.address,s.b.province,s.b.postcode].filter(Boolean).join(' '),floors:(s.b.floorsAbove||'')+(s.b.floorsBelow?'+B'+s.b.floorsBelow:''),gfa:s.b.gfa||'',
   contractNo:s.c.no||'',contractStart:s.c.start||'',contractEnd:s.c.end||'',contractValue:s.c.value||'',status:k.st,services:Object.keys(SVC).filter(svcSite).map(x=>SVC[x].n+(s.staff[x]?' ('+s.staff[x]+')':'')).join(', ')}}
+
+/* ═════ data sets: 🧪 sample (demo / training, never synced) vs ✅ live (real building, synced) ═════ */
+function DMODE(){const m=LS.get('psd_ifm_mode',null),on=typeof gasCfg==='function'&&!!gasCfg().url;
+  if(m==='sample'&&on&&typeof me==='function'&&me()&&typeof cap==='function'&&!cap('set'))return'live';
+  if(m==='sample'||m==='live')return m;return on?'live':'sample'}
+const blankSite=()=>({b:{},c:{renewNotice:90},scope:{},staff:{},contacts:[],pri:{},docs:{}});
+const TX_ENTS=['tickets','omLog','hkInsp','patrols','secInc','visitors','pestVisit','gdnTasks','linenTx','defects','meters','staff','vendors','maContract'];
+const ST_ENTS=['assets','omEquip','omTest','compliance','pm','hkTasks','pestSt','gdnZones','linenItems'];
+function liveStrip(d,keep){TX_ENTS.forEach(k=>{if(Array.isArray(d[k]))d[k]=[]});
+  if(keep){(d.omTest||[]).forEach(t=>{delete t.lastLog;t.result='Pending';t.by='';t.lastDone=todayS});(d.omEquip||[]).forEach(e=>{e.runHours=0;e.operator=''})}
+  else ST_ENTS.forEach(k=>{if(Array.isArray(d[k]))d[k]=[]});
+  d.siteInfo=blankSite();d._tlog=1;d._live=keep?'structure':'empty';return d}
+function setDataMode(m){if(!cap('set')){denied();return}if(m===DMODE())return;LS.set('psd_ifm_mode',m);load();SYNC.last=null;clearTimeout(SYNC.t);
+  setSyncStatus(gasReady()?'manual':'off');SITE.host.reload&&SITE.host.reload();
+  SITE.host.toast&&SITE.host.toast(m==='sample'?'🧪 ใช้ข้อมูลตัวอย่าง — ไม่ซิงค์ Google Sheets':'✅ ใช้ข้อมูลจริง'+(gasSite()?' · อาคาร '+gasSite():''))}
+let MDARM='';
+async function liveStart(btn,keep){if(!cap('set')||DMODE()!=='live'){denied();return}const k=(keep?'k':'e')+gasSite();
+  if(MDARM!==k){MDARM=k;btn.dataset.t=btn.textContent;btn.textContent='⚠ กดอีกครั้งเพื่อยืนยัน — ล้างงานทั้งหมดของ '+(gasSite()||'อาคารนี้');btn.classList.add('bcs-danger');setTimeout(()=>{if(MDARM===k){MDARM='';if(btn.isConnected){btn.textContent=btn.dataset.t;btn.classList.remove('bcs-danger')}}},4500);return}
+  MDARM='';btn.disabled=true;D=liveStrip(D,keep);save();if(gasReady()){await syncPush(true)}
+  SITE.host.reload&&SITE.host.reload();SITE.host.toast&&SITE.host.toast('🧹 เริ่มอาคารจริงแล้ว'+(gasReady()?(SYNC.status==='ok'?' · อัปเดต Google Sheets แล้ว':' · ❌ '+SYNC.msg):''))}
+let MDARM2='';
+function sampleReset(btn){if(DMODE()!=='sample'){return}if(MDARM2!=='r'){MDARM2='r';btn.dataset.t=btn.textContent;btn.textContent='กดอีกครั้งเพื่อยืนยัน';setTimeout(()=>{if(MDARM2==='r'){MDARM2='';if(btn.isConnected)btn.textContent=btn.dataset.t}},4000);return}
+  MDARM2='';D=seed(BIZK);save();SITE.host.reload&&SITE.host.reload();SITE.host.toast&&SITE.host.toast('🔄 รีเซ็ตข้อมูลตัวอย่างแล้ว')}
+function modeCardHTML(){const m=DMODE(),site=typeof gasSite==='function'?gasSite():'',on=typeof gasCfg==='function'&&!!gasCfg().url,st=D&&D._live;
+  return`<div class="md-opts"><button class="md-opt ${m==='sample'?'on':''}" style="--mc:#F97316" onclick="setDataMode('sample')"><b>🧪 ข้อมูลตัวอย่าง</b><small>ชุดสาธิตครบทุก Module ของ ${P().en} · ใช้นำเสนอลูกค้า / อบรมพนักงาน · เก็บในเครื่องนี้ <u>ไม่ซิงค์</u> Google Sheets</small>${m==='sample'?'<i>กำลังใช้</i>':''}</button>
+   <button class="md-opt ${m==='live'?'on':''}" style="--mc:#22C55E" onclick="setDataMode('live')"><b>✅ ข้อมูลจริง</b><small>${site?'อาคาร <b>'+esc(site)+'</b> · ':''}${on?'ซิงค์ Google Sheets ทุกเครื่อง':'ยังไม่เชื่อม Google Sheets — เก็บในเครื่องนี้'} · ใช้งานจริงกับลูกค้า</small>${m==='live'?'<i>กำลังใช้</i>':''}</button></div>
+  ${m==='sample'?`<div class="au-row" style="margin-top:10px"><button class="bcs-btn" onclick="sampleReset(this)">🔄 รีเซ็ตข้อมูลตัวอย่าง</button><span class="bcs-muted">สร้างชุดตัวอย่างของ ${P().en} ใหม่ทั้งหมด (ไม่กระทบข้อมูลจริง)</span></div>`
+  :`<div class="md-live"><b>🧹 เริ่มอาคารจริง</b><span class="bcs-muted">ล้างงานตัวอย่าง / งานทดลองของ${site?' '+esc(site):'อาคารนี้'} — Work Request, Log Sheet, ผลทดสอบ, ตรวจ, Patrol, เหตุการณ์, ผู้มาติดต่อ, เบิกผ้า, มิเตอร์, พนักงาน, ผู้รับเหมา, สัญญา MA และข้อมูลอาคาร & สัญญา ${on&&site?'แล้วเขียนทับ Google Sheet ของอาคารนี้':''}</span>${st?`<span class="au-chip" style="--cc:#22C55E">✓ เริ่มอาคารจริงแล้ว (${st==='structure'?'เก็บโครงสร้าง':'ว่างทั้งหมด'})</span>`:''}
+    <div class="au-row"><button class="bcs-btn bcs-pri" onclick="liveStart(this,true)">เริ่มแบบเก็บโครงสร้าง</button><span class="bcs-muted">เก็บพื้นที่ · ทรัพย์สิน · อุปกรณ์หลัก · รายการทดสอบ · Compliance · แผน PM · งาน HK · จุด Pest · โซนสวน · รายการผ้า ไว้แก้ต่อ</span></div>
+    <div class="au-row"><button class="bcs-btn" onclick="liveStart(this,false)">เริ่มแบบว่างทั้งหมด</button><span class="bcs-muted">เหลือเฉพาะพื้นที่ (Area) และการตั้งค่า — กรอกทะเบียนทั้งหมดเอง</span></div></div>`}`}
 /*@@SITE-END@@*/
 
 /* ---------- mobile host for Part 2 ---------- */
@@ -2376,7 +2417,7 @@ MSET.host={toast:m=>toast(m),after:()=>render(),user:()=>ST.user?ST.user.name:''
 SYNC.onMerge=()=>{if(!FM)render()};
 SYNC.blockRefresh=()=>!!FM||!!(document.getElementById('si-m')&&!document.getElementById('si-m').hidden)||!!(document.getElementById('omlog')&&!document.getElementById('omlog').hidden)||!!(document.getElementById('mset')&&!document.getElementById('mset').hidden);
 SYNC.onStatus=()=>{const e=document.getElementById('m-sync');if(e)e.innerHTML=mSyncText()};
-function mSyncText(){const st=SYNC.status,c={ok:'var(--green)',err:'var(--red)',busy:'var(--yellow)'}[st]||'var(--color-neutral-500)';
+function mSyncText(){if(DMODE()==='sample')return'🧪 '+tx('ข้อมูลตัวอย่าง — ไม่ซิงค์','Sample data — not synced');const st=SYNC.status,c={ok:'var(--green)',err:'var(--red)',busy:'var(--yellow)'}[st]||'var(--color-neutral-500)';
   const t=!gasReady()?tx('ยังไม่ได้เชื่อม Google Sheets — ข้อมูลอยู่ในเครื่องนี้','Not connected to Google Sheets — data stays on this device'):st==='busy'?tx('กำลังซิงค์…','Syncing…'):st==='err'?SYNC.msg:SYNC.last?tx('ซิงค์ล่าสุด ','Last sync ')+SYNC.last.toLocaleTimeString('th-TH'):tx('เชื่อมต่อแล้ว','Connected');
   return '<span class="sync-dot" style="background:'+c+'"></span>'+esc(t)}
 function metricGoM(svc,tab){const M=MOD(svc),want={eng:{pm:'pm',wr:'wr',om:'equip'},fac:{pm:'pm',wr:'wr',om:'wr'}}[svc]||{};const k=want[tab]||'wr';if(M.subs.some(s=>s.k===k))ST.sub[svc]=k;ST.q='';render();setTimeout(()=>{const c=document.querySelector('.chips .chip.active');c&&c.scrollIntoView({behavior:'smooth',block:'center',inline:'center'})},60)}
@@ -2405,7 +2446,7 @@ function render(){const root=document.getElementById('app-root');
   if(!ST.lang)root.innerHTML=screenSplash();else if(!ST.user)root.innerHTML=screenLogin();else{root.innerHTML=screenMain();if(ST.tab==='bldg')BCS.mount()}
   document.documentElement.lang=ST.lang==='en'?'en':'th'}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet()});
-SITE.host={toast:m=>toast(m),saved:()=>{},svc:()=>{},renamed:()=>{}};
+SITE.host={toast:m=>toast(m),saved:()=>{},svc:()=>{},renamed:()=>{},reload:()=>{render();if(gasReady())syncBoot(()=>{if(!FM)render()})}};
 window.addEventListener('storage',e=>{if(e.key===DKEY()){load();if(!FM)render()}if(e.key===SKEY){ST.user=stUser();if(ST.user){authApply();load()}render()}});AUTH.host={toast:m=>toast(m),tx:(a,b)=>tx(a,b),client:'mobile',after:()=>{ST.user=stUser();if(!FM)render()},reload:()=>{ST.user=stUser();load();render();SYNC.last=null;syncBoot(()=>{if(!FM)render()})},
   loggedOut:m=>{typeof siteCloseM==='function'&&(document.getElementById('si-m')||{}).hidden===false&&siteCloseM();ST.user=null;LGM.msg=m||'';LGM.tab='login';USR.list=null;closeSheet();usrCloseM();typeof usrEdClose==='function'&&usrEdClose();typeof msetClose==='function'&&msetClose();typeof omLogClose==='function'&&omLogClose();render()}};
 
