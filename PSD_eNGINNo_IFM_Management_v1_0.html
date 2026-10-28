@@ -98,6 +98,7 @@ button{font-family:inherit}
 .lg-srvbox{display:flex;flex-direction:column;gap:8px;background:var(--bg3);border-radius:10px;padding:10px}
 .lg-hint{font-size:12px;color:var(--text3);text-align:center;line-height:1.6}.lg-hint code{font-family:var(--font-mono);color:var(--accent);background:var(--bg3);padding:1px 5px;border-radius:4px}
 .sb-user .u{cursor:pointer}
+.lg-link{border:0;background:none;color:var(--accent);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;padding:2px 0;align-self:flex-end}.lg-link:hover{text-decoration:underline}
 
 #sb-overlay{display:none;position:fixed;inset:0;background:var(--overlay);z-index:90}
 
@@ -1770,9 +1771,11 @@ function canManageU(m,t){if(!m||!t)return false;if(m.role==='admin')return true;
   const ms=String(m.services||'*'),ts=String(t.services||'*');return ms==='*'||!ms||(ts!=='*'&&ts.split(',').every(x=>ms.split(',').includes(x)))}
 
 /* ── demo-mode user store (this browser only) ── */
-function lUsers(){let L=LS.get(LUKEY,null);if(!Array.isArray(L)||!L.length){const mk=(username,name,role,access,services)=>{const salt=rid();return{username,name,email:'',phone:'',role,access,services,status:'active',salt,hash:pwHash('ifm2026',salt),created:new Date().toISOString(),approvedBy:'demo',lastLogin:'',note:'บัญชีสาธิต'}};
+function lUsers(){let L=LS.get(LUKEY,null);if(!Array.isArray(L)||!L.length){const mk=(username,name,role,access,services)=>{const salt=rid();return{username,name,email:username+'@demo.ifm',phone:'',role,access,services,status:'active',salt,hash:pwHash('ifm2026',salt),created:new Date().toISOString(),approvedBy:'demo',lastLogin:'',note:'บัญชีสาธิต'}};
   L=[mk('admin','ผู้ดูแลระบบ','admin','*','*'),mk('fm','คุณวิภา (FM)','fm','*','*'),mk('tech','ช่างสมชาย','tech','*','eng,fac'),mk('owner','เจ้าของอาคาร','client','*','*')];LS.set(LUKEY,L)}return L}
 function lFail(m){throw new Error(m)}
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function lEmail(L,e,self){e=normU(e);if(!EMAIL_RE.test(e))lFail(_t('กรุณาระบุอีเมลที่ถูกต้อง (ใช้รับรหัสเมื่อลืมรหัสผ่าน)','Enter a valid email (used for password reset)'));if(L.some(u=>u.username!==self&&normU(u.email)===e))lFail(_t('อีเมลนี้ถูกใช้กับบัญชีอื่นแล้ว','Email already used by another account'));return e}
 function localApi(action,q){const L=lUsers(),find=u=>L.find(x=>x.username===normU(u)),put=()=>LS.set(LUKEY,L),now=new Date().toISOString();
   const cur=()=>{const s=sess();const u=s&&find(s.user.username);if(!u||u.status!=='active'){const e=new Error(_t('กรุณาเข้าสู่ระบบใหม่','Please sign in again'));e.auth=true;throw e}return u};
   const adm=()=>L.filter(u=>u.role==='admin'&&u.status==='active').length;
@@ -1781,8 +1784,15 @@ function localApi(action,q){const L=lUsers(),find=u=>L.find(x=>x.username===norm
     if(u.status==='pending')lFail(_t('บัญชีของคุณรอ Admin / FM อนุมัติ','Your account is waiting for approval'));if(u.status!=='active')lFail(_t('บัญชีนี้ถูกระงับ — ติดต่อ Admin','This account is disabled'));
     u.lastLogin=now;put();return{ok:true,token:'',user:pubU(u),sites:[]}}
   case 'signup':{const d=q.user||{},un=normU(d.username);if(!/^[a-z0-9._-]{3,32}$/.test(un))lFail(_t('Username ใช้ a-z 0-9 . _ - ได้ 3–32 ตัว','Username: 3–32 of a-z 0-9 . _ -'));if(find(un))lFail(_t('Username นี้ถูกใช้แล้ว','Username already taken'));
-    if(String(q.password||'').length<6)lFail(_t('Password ต้องมีอย่างน้อย 6 ตัวอักษร','Password needs 6+ characters'));if(!String(d.name||'').trim())lFail(_t('กรุณาระบุชื่อ-นามสกุล','Enter your name'));
-    const salt=rid(),b=BIZ[d.business]?d.business:'';L.push({username:un,name:String(d.name).trim(),email:d.email||'',phone:d.phone||'',role:RL[d.role]&&d.role!=='admin'?d.role:'requester',access:b?b+':'+(siteNorm(d.site)||'*'):'',services:'*',status:'pending',salt,hash:pwHash(String(q.password),salt),created:now,approvedBy:'',lastLogin:'',note:String(d.note||'')});put();return{ok:true,pending:true}}
+    if(String(q.password||'').length<6)lFail(_t('Password ต้องมีอย่างน้อย 6 ตัวอักษร','Password needs 6+ characters'));if(!String(d.name||'').trim())lFail(_t('กรุณาระบุชื่อ-นามสกุล','Enter your name'));lEmail(L,d.email,un);
+    const salt=rid(),b=BIZ[d.business]?d.business:'';L.push({username:un,name:String(d.name).trim(),email:normU(d.email),phone:d.phone||'',role:RL[d.role]&&d.role!=='admin'?d.role:'requester',access:b?b+':'+(siteNorm(d.site)||'*'):'',services:'*',status:'pending',salt,hash:pwHash(String(q.password),salt),created:now,approvedBy:'',lastLogin:'',note:String(d.note||'')});put();return{ok:true,pending:true}}
+  case 'forgot':{const who=normU(q.who);if(!who)lFail(_t('กรุณาระบุ Username หรืออีเมล','Enter your username or email'));const u=L.find(x=>x.username===who||normU(x.email)===who);
+    const msg=_t('ถ้ามีบัญชีที่ตรงกันและมีอีเมลในระบบ เราได้ส่งรหัสยืนยัน 6 หลักไปที่อีเมลนั้นแล้ว (ใช้ได้ 15 นาที)','If an account matches, a 6-digit code was sent to its email (valid 15 min)');
+    if(!u||u.status!=='active')return{ok:true,message:msg};const code=String(100000+Math.floor(Math.random()*900000));AUTH.rc=AUTH.rc||{};AUTH.rc[u.username]={code,n:0,exp:Date.now()+9e5};return{ok:true,message:msg,demoCode:code}}
+  case 'reset':{const who=normU(q.who),u=L.find(x=>x.username===who||normU(x.email)===who),r=u&&AUTH.rc&&AUTH.rc[u.username];
+    if(!r||r.exp<Date.now())lFail(_t('รหัสยืนยันไม่ถูกต้องหรือหมดอายุ — ขอรหัสใหม่ได้','Code invalid or expired'));if(r.n>=5){delete AUTH.rc[u.username];lFail(_t('กรอกรหัสผิดเกิน 5 ครั้ง — กรุณาขอรหัสใหม่','Too many attempts — request a new code'))}
+    if(String(q.code||'').trim()!==r.code){r.n++;lFail(_t('รหัสยืนยันไม่ถูกต้อง (เหลือ ','Wrong code (')+(5-r.n)+_t(' ครั้ง)',' left)'))}
+    if(String(q.password||'').length<6)lFail(_t('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร','New password needs 6+ characters'));u.salt=rid();u.hash=pwHash(String(q.password),u.salt);put();delete AUTH.rc[u.username];return{ok:true,username:u.username}}
   case 'me':{const u=cur();return{ok:true,user:pubU(u),sites:[]}}
   case 'passwd':{const u=cur();if(pwHash(String(q.old||''),u.salt)!==u.hash)lFail(_t('รหัสผ่านเดิมไม่ถูกต้อง','Current password is wrong'));if(String(q.password||'').length<6)lFail(_t('รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร','New password needs 6+ characters'));
     u.salt=rid();u.hash=pwHash(String(q.password),u.salt);put();return{ok:true,token:'',user:pubU(u)}}
@@ -1790,7 +1800,7 @@ function localApi(action,q){const L=lUsers(),find=u=>L.find(x=>x.username===norm
   case 'userSave':{const m=cur();if(!RCAP[m.role].usr)lFail(_t('เฉพาะ Admin / FM','Admin / FM only'));const d=q.user||{},un=normU(d.username);let o=find(un);const isNew=!o;
     if(isNew&&!/^[a-z0-9._-]{3,32}$/.test(un))lFail(_t('Username ใช้ a-z 0-9 . _ - ได้ 3–32 ตัว','Username: 3–32 of a-z 0-9 . _ -'));if(o&&m.role!=='admin'&&!canManageU(m,o))lFail(_t('ไม่มีสิทธิ์จัดการผู้ใช้นี้','Not allowed'));
     const before=o?{role:o.role,status:o.status}:null;o=o?Object.assign({},o):{username:un,created:now,salt:'',hash:'',lastLogin:'',approvedBy:'',services:'*'};
-    ['name','email','phone','note'].forEach(k=>{if(d[k]!=null)o[k]=String(d[k])});if(d.role!=null)o.role=RL[d.role]?d.role:'requester';if(d.access!=null)o.access=normAcc(d.access);if(d.services!=null)o.services=normSvcs(d.services);
+    ['name','phone','note'].forEach(k=>{if(d[k]!=null)o[k]=String(d[k])});if(d.email!=null&&(String(d.email).trim()||isNew))o.email=lEmail(L,d.email,un);else if(d.email!=null)o.email='';if(isNew&&!o.email)lFail(_t('กรุณาระบุอีเมล (ใช้รับรหัสเมื่อลืมรหัสผ่าน)','Email is required'));if(d.role!=null)o.role=RL[d.role]?d.role:'requester';if(d.access!=null)o.access=normAcc(d.access);if(d.services!=null)o.services=normSvcs(d.services);
     if(d.status!=null){if(o.status!=='active'&&d.status==='active')o.approvedBy=m.username+' · '+now.slice(0,10);o.status=d.status}else if(isNew){o.status='active';o.approvedBy=m.username+' · '+now.slice(0,10)}
     if(!o.role)o.role='requester';if(q.password){if(String(q.password).length<6)lFail(_t('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร','Password needs 6+ characters'));o.salt=rid();o.hash=pwHash(String(q.password),o.salt)}
     if(isNew&&!o.hash)lFail(_t('กรุณาตั้งรหัสผ่านสำหรับผู้ใช้ใหม่','Set a password for the new user'));if(!o.name)o.name=un;
@@ -1815,6 +1825,8 @@ async function authLogin(username,password){if(!String(username||'').trim()||!pa
   let j;try{j=await api('login',{username:String(username).trim(),password,client:AUTH.host.client||''})}catch(e){if(/API Key|Unknown action/.test(e.message))throw new Error(_t('Apps Script ยังเป็นเวอร์ชันเก่า — วางโค้ด Code.gs ใหม่ → รัน setup → Deploy เป็น New version','Old Apps Script — paste the new Code.gs, run setup and deploy a new version'));throw e}
   authStore(j);authApply();return j}
 async function authSignup(d,password){return api('signup',{user:d,password})}
+async function authForgot(who){return api('forgot',{who:String(who||'').trim()})}
+async function authReset(who,code,password){return api('reset',{who:String(who||'').trim(),code:String(code||'').trim(),password})}
 async function authRefresh(){if(!me())return;try{const j=await api('me');const s=sess();if(!s)return;s.user=j.user;s.sites=j.sites||[];LS.set(SKEY,s);LS.set('psd_ifm_m_user',{name:j.user.name||j.user.username,role:j.user.role,username:j.user.username});if(authApply())AUTH.host.reload&&AUTH.host.reload();else AUTH.host.after&&AUTH.host.after()}catch(e){if(e.auth)authExpired(e.message)}}
 function authLogout(msg){try{localStorage.removeItem(SKEY);localStorage.removeItem('psd_ifm_m_user')}catch(e){}AUTH.host.loggedOut&&AUTH.host.loggedOut(msg||'')}
 function authExpired(msg){if(!sess())return;authLogout(msg||_t('เซสชันหมดอายุ — กรุณาเข้าสู่ระบบใหม่','Session expired — please sign in again'))}
@@ -1870,7 +1882,7 @@ function usrBody(){const m=me();if(!m||!cap('usr'))return`<div class="rm-empty">
     <button class="bcs-btn bcs-pri" onclick="usrEdit(null)">＋ ${_t('เพิ่มผู้ใช้','Add user')}</button><button class="bcs-btn" onclick="usrLoad()" title="${_t('โหลดใหม่','Reload')}">⟳</button></div>
   <div class="au-list">${rows.length?rows.map(u=>{const self=u.username===m.username,mg=!self&&canManageU(m,u)||(self&&m.role==='admin');
     return`<div class="au-urow ${u.status!=='active'?'off':''}"><div class="au-av sm" style="--rc:${RCOL[u.role]}">${esc(ini(u.name||u.username))}</div>
-      <div class="au-uc"><div><b>${esc(u.name)}</b>${self?` <span class="au-chip">${_t('คุณ','You')}</span>`:''} <span class="bcs-muted">@${esc(u.username)}</span></div><div class="bcs-muted">${[u.email,u.phone].filter(Boolean).map(esc).join(' · ')||'&nbsp;'}</div></div>
+      <div class="au-uc"><div><b>${esc(u.name)}</b>${self?` <span class="au-chip">${_t('คุณ','You')}</span>`:''} <span class="bcs-muted">@${esc(u.username)}</span></div><div class="bcs-muted">${u.email?'':`<span class="au-chip au-warn" title="${_t('ตั้งรหัสผ่านใหม่ทางอีเมลไม่ได้ — กด แก้ไข เพื่อเพิ่มอีเมล','Cannot reset password by email')}">⚠ ${_t('ไม่มีอีเมล','No email')}</span> `}${[u.email,u.phone].filter(Boolean).map(esc).join(' · ')}</div></div>
       <div class="au-uc">${roleBadge(u.role)}<div class="bcs-muted" style="margin-top:3px">${u.status==='active'?'● '+_t('ใช้งาน','Active'):u.status==='pending'?'⏳ '+_t('รออนุมัติ','Pending'):u.status==='disabled'?'⏸ '+_t('ระงับ','Disabled'):'✕ '+_t('ปฏิเสธ','Rejected')}</div></div>
       <div class="au-uc au-chips">${accChips(u.role==='admin'?'*':u.access)}</div>
       <div class="au-uc au-chips">${svcChips(u.services)}</div>
@@ -1902,7 +1914,7 @@ function usrEdRender(){const E=USR.ed;if(!E)return;let el=document.getElementByI
   const inp=(k,l,ty,ph,dis)=>`<label class="ms-f"><span>${l}</span><input class="bcs-in au-w" ${ty?`type="${ty}"`:''} value="${esc(E[k]||'')}" placeholder="${esc(ph||'')}" ${dis?'disabled':''} oninput="USR.ed.${k}=this.value"></label>`;
   const adminRole=E.role==='admin';
   el.innerHTML=`<div class="bcs-mbox" style="width:780px"><div class="bcs-mh"><div><div class="bcs-muted">${E.approve?_t('อนุมัติผู้ลงทะเบียน','Approve sign-up'):E.isNew?_t('ผู้ใช้ใหม่','New user'):_t('แก้ไขผู้ใช้','Edit user')}</div><div class="bcs-st" style="font-size:20px">👤 ${esc(E.isNew?_t('เพิ่มผู้ใช้งาน','Add user'):E.name||E.username)}</div></div><button class="bcs-btn" onclick="usrEdClose()">✕</button></div>
-   <div class="ms-grid">${inp('username','Username *','', 'เช่น somchai.k',!E.isNew)}${inp('name',_t('ชื่อ-นามสกุล *','Full name *'))}${inp('email',_t('อีเมล','Email'),'email')}${inp('phone',_t('โทรศัพท์','Phone'),'tel')}</div>
+   <div class="ms-grid">${inp('username','Username *','', 'เช่น somchai.k',!E.isNew)}${inp('name',_t('ชื่อ-นามสกุล *','Full name *'))}${inp('email',_t('อีเมล * (รับรหัสเมื่อลืมรหัสผ่าน)','Email * (password reset)'),'email')}${inp('phone',_t('โทรศัพท์','Phone'),'tel')}</div>
    <div class="ms-grid">
     <label class="ms-f"><span>${_t('บทบาท','Role')}</span><select class="bcs-in au-w" ${E.self?'disabled':''} onchange="USR.ed.role=this.value;usrEdRender()">${rOpts.map(r=>`<option value="${r}" ${E.role===r?'selected':''}>${esc(roleTx(r))}</option>`).join('')}</select><small>${esc(_t(RDESC[E.role][0],RDESC[E.role][1]))}</small></label>
     <label class="ms-f"><span>${_t('สถานะ','Status')}</span><select class="bcs-in au-w" ${E.self?'disabled':''} onchange="USR.ed.status=this.value">${[['active',_t('ใช้งาน','Active')],['pending',_t('รออนุมัติ','Pending')],['disabled',_t('ระงับชั่วคราว','Disabled')],['rejected',_t('ปฏิเสธ','Rejected')]].map(s=>`<option value="${s[0]}" ${E.status===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select></label>
@@ -1926,6 +1938,7 @@ function usrSvc(k,on){const E=USR.ed;E.svcs=E.svcs.filter(x=>x!==k);if(on)E.svcs
 async function usrSave(){const E=USR.ed;if(!E)return;E.err='';const m=me();
   const access=E.role==='admin'?'*':E.acc.all?'*':Object.entries(E.acc.biz).filter(([b,o])=>o.on).flatMap(([b,o])=>{const full=m.role==='admin'||accOf(m).includes('*')||accOf(m).includes(b+':*');return o.all&&full?[b+':*']:o.sites.map(s=>b+':'+s)}).join(',');
   if(!String(E.username).trim())E.err=_t('กรุณาระบุ Username','Enter a username');else if(!String(E.name).trim())E.err=_t('กรุณาระบุชื่อ','Enter a name');
+  else if(E.isNew&&!EMAIL_RE.test(String(E.email||'').trim()))E.err=_t('กรุณาระบุอีเมลที่ถูกต้อง — ใช้รับรหัสเมื่อลืมรหัสผ่าน','Enter a valid email');
   else if(E.isNew&&String(E.pw).length<6)E.err=_t('ตั้งรหัสผ่านอย่างน้อย 6 ตัว (กด 🎲 สุ่มได้)','Set a 6+ character password (🎲 to generate)');
   else if(E.role!=='admin'&&!access)E.err=_t('เลือกอาคารอย่างน้อย 1 แห่ง','Pick at least one building');
   else if(!E.svcAll&&!E.svcs.length)E.err=_t('เลือก Module อย่างน้อย 1 รายการ','Pick at least one module');
@@ -2704,13 +2717,13 @@ function lgEye(id,b){const i=document.getElementById(id);if(!i)return;const sh=i
 function lgRender(){const on=authOnline(),c=gasCfg(),el=document.getElementById('lg-body');if(!el)return;
   el.innerHTML=`<div class="lg-tabs" role="tablist"><button type="button" class="${LG.tab==='login'?'on':''}" onclick="LG.tab='login';LG.msg='';LG.ok='';lgRender()">🔐 เข้าสู่ระบบ</button><button type="button" class="${LG.tab==='reg'?'on':''}" onclick="LG.tab='reg';LG.msg='';LG.ok='';lgRender()">📝 ลงทะเบียน</button></div>
   ${LG.msg?`<div class="ferr lg-msg">${esc(LG.msg)}</div>`:''}${LG.ok?`<div class="lg-ok">${esc(LG.ok)}</div>`:''}
-  ${LG.tab==='login'?`<form class="lg-form" onsubmit="event.preventDefault();doLogin()">
+  ${LG.tab==='forgot'?lgForgotHTML():LG.tab==='login'?`<form class="lg-form" onsubmit="event.preventDefault();doLogin()">
     <div class="fg"><label class="fl" for="lg-user">Username</label><input class="fc" id="lg-user" autocomplete="username" autocapitalize="none" spellcheck="false"></div>
     <div class="fg"><label class="fl" for="lg-pass">Password</label><div class="lg-pw"><input class="fc" id="lg-pass" type="password" autocomplete="current-password"><button type="button" onclick="lgEye('lg-pass',this)" aria-label="แสดงรหัสผ่าน">👁</button></div></div>
-    <button type="submit" class="btn btn-primary" id="lg-go" style="justify-content:center;padding:10px">เข้าสู่ระบบ</button></form>`
+    <button type="submit" class="btn btn-primary" id="lg-go" style="justify-content:center;padding:10px">เข้าสู่ระบบ</button><button type="button" class="lg-link" onclick="FG.step=1;FG.who=lgv('lg-user');LG.tab='forgot';LG.msg='';LG.ok='';lgRender()">ลืมรหัสผ่าน?</button></form>`
   :`<form class="lg-form" onsubmit="event.preventDefault();doSignup()">
     <div class="lg-2"><div class="fg"><label class="fl" for="rg-name">ชื่อ-นามสกุล *</label><input class="fc" id="rg-name" autocomplete="name"></div><div class="fg"><label class="fl" for="rg-phone">โทรศัพท์</label><input class="fc" id="rg-phone" type="tel" autocomplete="tel"></div></div>
-    <div class="fg"><label class="fl" for="rg-email">อีเมล</label><input class="fc" id="rg-email" type="email" autocomplete="email"></div>
+    <div class="fg"><label class="fl" for="rg-email">อีเมล * <span style="font-weight:400;text-transform:none;letter-spacing:0">(ใช้รับรหัสเมื่อลืมรหัสผ่าน)</span></label><input class="fc" id="rg-email" type="email" autocomplete="email"></div>
     <div class="lg-2"><div class="fg"><label class="fl" for="rg-user">Username *</label><input class="fc" id="rg-user" autocomplete="username" autocapitalize="none" placeholder="a-z 0-9 . _ -"></div><div class="fg"><label class="fl" for="rg-pass">Password * (6+)</label><div class="lg-pw"><input class="fc" id="rg-pass" type="password" autocomplete="new-password"><button type="button" onclick="lgEye('rg-pass',this)" aria-label="แสดงรหัสผ่าน">👁</button></div></div></div>
     <div class="lg-2"><div class="fg"><label class="fl" for="rg-biz">ธุรกิจ</label><select class="fc" id="rg-biz">${Object.entries(BIZ).map(([k,b])=>`<option value="${k}" ${k===BIZK?'selected':''}>${b.ic} ${b.n}</option>`).join('')}</select></div><div class="fg"><label class="fl" for="rg-site">รหัสอาคาร</label><input class="fc" id="rg-site" placeholder="เช่น HOSP-01" style="text-transform:uppercase"></div></div>
     <div class="fg"><label class="fl" for="rg-role">บทบาทที่ขอ</label><select class="fc" id="rg-role">${RL_SIGNUP.map(r=>`<option value="${r}" ${r==='tech'?'selected':''}>${esc(roleTx(r))} — ${esc(RDESC[r][0])}</option>`).join('')}</select></div>
@@ -2721,6 +2734,29 @@ function lgRender(){const on=authOnline(),c=gasCfg(),el=document.getElementById(
   ${on?'':`<div class="lg-hint">ทดลองใช้: <code>admin</code> / <code>ifm2026</code><br>บทบาทอื่น: <code>fm</code> · <code>tech</code> · <code>owner</code> (รหัสเดียวกัน)</div>`}
   <div style="font-size:11px;color:var(--text3);text-align:center">ใช้บัญชีเดียวกับ IFM Mobile · <a href="PSD_eNGINNo_IFM_Mobile_v1_0.html" style="color:var(--accent)">📱 เปิด Mobile App</a></div>`}
 const lgv=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+const FG={step:1,who:'',demo:''};
+function lgForgotHTML(){return FG.step===1?`<form class="lg-form" onsubmit="event.preventDefault();doForgot()">
+    <div><div style="font-weight:700;font-size:15px">🔑 ลืมรหัสผ่าน</div><div class="sec-sub" style="margin:2px 0 0">กรอก Username หรืออีเมลที่ลงทะเบียนไว้ ระบบจะส่ง<b>รหัสยืนยัน 6 หลัก</b>ไปที่อีเมลของคุณ</div></div>
+    <div class="fg"><label class="fl" for="fg-who">Username หรืออีเมล</label><input class="fc" id="fg-who" autocomplete="username" autocapitalize="none" value="${esc(FG.who)}"></div>
+    <button type="submit" class="btn btn-primary" id="fg-go" style="justify-content:center;padding:10px">📧 ส่งรหัสยืนยันทางอีเมล</button>
+    <div style="display:flex;justify-content:space-between"><button type="button" class="lg-link" onclick="LG.tab='login';LG.msg='';LG.ok='';lgRender()">← กลับไปเข้าสู่ระบบ</button><button type="button" class="lg-link" onclick="FG.step=2;FG.who=lgv('fg-who');LG.msg='';LG.ok='';lgRender()">มีรหัสแล้ว ›</button></div></form>`
+  :`<form class="lg-form" onsubmit="event.preventDefault();doReset()">
+    <div><div style="font-weight:700;font-size:15px">🔑 ตั้งรหัสผ่านใหม่</div><div class="sec-sub" style="margin:2px 0 0">บัญชี <b>${esc(FG.who)}</b> · เปิดอีเมลแล้วกรอกรหัส 6 หลัก (ใช้ได้ 15 นาที)</div></div>
+    ${FG.demo?`<div class="lg-ok">🧪 โหมดสาธิต (ไม่ส่งอีเมลจริง): รหัสยืนยันคือ <b style="letter-spacing:3px">${esc(FG.demo)}</b></div>`:''}
+    <div class="fg"><label class="fl" for="fg-code">รหัสยืนยัน 6 หลัก</label><input class="fc" id="fg-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" style="font-size:22px;letter-spacing:8px;text-align:center;font-family:var(--font-mono)"></div>
+    <div class="fg"><label class="fl" for="fg-pw">รหัสผ่านใหม่ (6 ตัวขึ้นไป)</label><div class="lg-pw"><input class="fc" id="fg-pw" type="password" autocomplete="new-password"><button type="button" onclick="lgEye('fg-pw',this)" aria-label="แสดงรหัสผ่าน">👁</button></div></div>
+    <div class="fg"><label class="fl" for="fg-pw2">ยืนยันรหัสผ่านใหม่</label><input class="fc" id="fg-pw2" type="password" autocomplete="new-password"></div>
+    <button type="submit" class="btn btn-primary" id="fg-go" style="justify-content:center;padding:10px">✅ ตั้งรหัสผ่านใหม่</button>
+    <div style="display:flex;justify-content:space-between"><button type="button" class="lg-link" onclick="FG.step=1;LG.msg='';LG.ok='';lgRender()">← ขอรหัสใหม่</button><button type="button" class="lg-link" onclick="LG.tab='login';LG.msg='';LG.ok='';lgRender()">กลับไปเข้าสู่ระบบ</button></div></form>`}
+async function doForgot(){FG.who=lgv('fg-who');const b=document.getElementById('fg-go');if(b){b.disabled=true;b.textContent='กำลังส่ง…'}
+  try{const j=await authForgot(FG.who);FG.demo=j.demoCode||'';FG.step=2;LG.msg='';LG.ok=j.message||'ส่งรหัสยืนยันแล้ว';lgRender();const i=document.getElementById('fg-code');i&&i.focus()}
+  catch(e){LG.msg=e.message;LG.ok='';lgRender()}}
+async function doReset(){const code=lgv('fg-code'),pw=document.getElementById('fg-pw').value,pw2=document.getElementById('fg-pw2').value;
+  if(!/^\d{6}$/.test(code)){LG.msg='กรอกรหัสยืนยัน 6 หลัก';LG.ok='';lgRender();return}if(pw.length<6){LG.msg='รหัสผ่านใหม่ต้องมีอย่างน้อย 6 ตัวอักษร';LG.ok='';lgRender();document.getElementById('fg-code').value=code;return}
+  if(pw!==pw2){LG.msg='รหัสผ่านใหม่ไม่ตรงกัน';LG.ok='';lgRender();document.getElementById('fg-code').value=code;return}
+  const b=document.getElementById('fg-go');if(b){b.disabled=true;b.textContent='กำลังบันทึก…'}
+  try{const j=await authReset(FG.who,code,pw);FG.demo='';LG.tab='login';LG.msg='';LG.ok='✅ ตั้งรหัสผ่านใหม่แล้ว — เข้าสู่ระบบด้วยรหัสใหม่ได้เลย';lgRender();const u=document.getElementById('lg-user');if(u)u.value=j.username||FG.who;const p2=document.getElementById('lg-pass');p2&&p2.focus()}
+  catch(e){LG.msg=e.message;LG.ok='';lgRender();const c=document.getElementById('fg-code');if(c)c.value=code}}
 async function doLogin(){const b=document.getElementById('lg-go');if(b){b.disabled=true;b.textContent='กำลังตรวจสอบ…'}
   try{await authLogin(lgv('lg-user'),document.getElementById('lg-pass').value);LG.msg='';LG.ok='';document.getElementById('login').hidden=true;afterAuth();toast('ยินดีต้อนรับ '+(me().name||me().username)+' · '+roleTx(me().role))}
   catch(e){LG.msg=e.message;const u=lgv('lg-user');lgRender();const i=document.getElementById('lg-user');if(i){i.value=u;document.getElementById('lg-pass').focus()}}}
