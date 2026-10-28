@@ -29,6 +29,11 @@
   --bg:#E9ECF0;--bg2:#FFFFFF;--bg3:#F1F3F6;--bg4:#E1E5EB;--border:#D3D9E1;--border2:#BCC5D1;--side:#F3F4F7;
   --text:#0F172A;--text2:#475569;--text3:#64748B;--grid:rgba(15,23,42,.07);--topbar:rgba(233,236,240,.94);--overlay:rgba(15,23,42,.45);
   --accent:#EA580C;color-scheme:light}
+/* ตามระบบ (system) on a light OS → dark-grey "dim" palette, so it is clearly different from Light */
+@media (prefers-color-scheme: light){:root[data-theme="system"]{
+  --bg:#2D333B;--bg2:#373E47;--bg3:#424A54;--bg4:#4B5460;--border:#545D68;--border2:#636E7B;
+  --text:#E3E9EF;--text2:#B4BFCB;--text3:#94A1AF;--grid:rgba(255,255,255,.07);--topbar:rgba(45,51,59,.94);--overlay:rgba(0,0,0,.6);--side:#24292F;
+  --accent:#F97316;color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0D1117;--bg2:#161B22;--bg3:#1C2333;--bg4:#21262D;--border:#30363D;--border2:#3D444D;
   --text:#E6EDF3;--text2:#8B949E;--text3:#6E7681;--grid:rgba(255,255,255,.05);--topbar:rgba(13,17,23,.92);--overlay:rgba(0,0,0,.72);--side:#161B22;
@@ -1343,7 +1348,7 @@ VIEWS.settings=()=>{const S=cap('set'),u=me()||{};const sites=authOnline()?siteO
     <div class="card no-lift"><div class="card-t">ข้อมูลไซต์ — ${P().ic} ${P().en}</div>
       ${sites.length?`<div class="fg" style="margin-bottom:12px"><span class="fl">อาคาร (Site Code)</span><div style="display:flex;gap:6px;flex-wrap:wrap">${sites.map(x=>`<button class="btn ${x.site===gasSite()?'btn-primary':'btn-ghost'} btn-sm" onclick="setSite('${esc(x.site)}')">🏢 ${esc(x.site)}${x.name?' · '+esc(x.name):''}</button>`).join('')}</div>${cap('gas')&&gasSite()?`<div style="margin-top:8px"><button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="siteDel(this)">🗑 ลบอาคาร ${esc(gasSite())} ออกจากระบบ</button><div class="sec-sub" style="margin:4px 0 0">ย้ายโฟลเดอร์อาคาร (Spreadsheet + รูป) ไปถังขยะ Google Drive กู้คืนได้ 30 วัน · ถอดสิทธิ์อาคารนี้จากผู้ใช้</div></div>`:''}</div>`:''}
       <div class="fg" style="margin-bottom:12px"><label class="fl" for="site-name">ชื่อโครงการ / ไซต์</label><input class="fc" id="site-name" value="${esc(D.site)}" ${S?'':'disabled'} onchange="D.site=this.value.trim()||P().site;save();buildChrome();toast('บันทึกชื่อไซต์แล้ว')"></div>
-      <div class="fg" style="margin-bottom:12px"><span class="fl">ธีมการแสดงผล</span><div style="display:flex;gap:8px;flex-wrap:wrap">${[['system','ตามระบบ'],['dark','Dark'],['light','Light']].map(t=>`<button class="btn ${themeMode()===t[0]?'btn-primary':'btn-ghost'} btn-sm" onclick="setTheme('${t[0]}')">${t[1]}</button>`).join('')}</div></div>
+      <div class="fg" style="margin-bottom:12px"><span class="fl">ธีมการแสดงผล</span><div style="display:flex;gap:8px;flex-wrap:wrap">${[['system','ตามระบบ · เทาเข้ม'],['dark','Dark'],['light','Light']].map(t=>`<button class="btn ${themeMode()===t[0]?'btn-primary':'btn-ghost'} btn-sm" onclick="setTheme('${t[0]}')">${t[1]}</button>`).join('')}</div><div class="sec-sub">ตามระบบ: เครื่องที่ตั้งโหมดสว่าง = พื้นเทาเข้ม · เครื่องที่ตั้งโหมดมืด = Dark</div></div>
       ${S?'':`<div class="sec-sub">ตั้งค่า Module / KPI / Google Sheets ทำโดย Admin หรือ FM</div>`}
     </div>
   </div>
@@ -2678,9 +2683,9 @@ function setBiz(k){if(!BIZ[k])return;if(me()&&!bizAllowed(k)){denied();buildChro
 
 // theme
 function themeMode(){return LS.get('psd_ifm_theme','system')}
-function applyTheme(){const m=themeMode();if(m==='system')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',m)}
+function applyTheme(){document.documentElement.setAttribute('data-theme',themeMode())}
 function setTheme(m){LS.set('psd_ifm_theme',m);applyTheme();render()}
-function cycleTheme(){const o=['system','dark','light'];setTheme(o[(o.indexOf(themeMode())+1)%3]);toast('ธีม: '+{system:'ตามระบบ',dark:'Dark',light:'Light'}[themeMode()])}
+function cycleTheme(){const o=['system','dark','light'];setTheme(o[(o.indexOf(themeMode())+1)%3]);toast('ธีม: '+{system:'ตามระบบ (เทาเข้ม)',dark:'Dark',light:'Light'}[themeMode()])}
 try{matchMedia('(prefers-color-scheme: light)').addEventListener('change',()=>{if(themeMode()==='system')render()})}catch(e){}
 
 function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.opacity='1';t.style.transform='translateY(0)';clearTimeout(t._t);t._t=setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(10px)'},2800)}
