@@ -39,6 +39,14 @@ body.theme-dark{
   --danger:#ff6b5b; --green:#4fd17a; --yellow:#eab308; --red:#ff6b5b; --purple:#b48cf0; --teal:#2fc4b2; --hard:#f08a3e; --soft:#2fc4b2;
   --sheet-bg:#161b22; --overlay:rgba(0,0,0,.65); --desk:#05080c; color-scheme:dark;
 }
+/* ตามระบบ on a light device → dark grey (dim), clearly different from Light */
+body.theme-dark.theme-dim{
+  --color-bg:#2d333b; --color-surface:#373e47; --color-card:#353c45; --color-text:#e3e9ef;
+  --color-divider:rgba(227,233,239,.2);
+  --color-neutral-100:#373e47; --color-neutral-200:#424a54; --color-neutral-300:#545d68;
+  --color-neutral-500:#8d99a6; --color-neutral-600:#a3aebb; --color-neutral-700:#b4bfcb; --color-neutral-800:#d3dae2;
+  --color-accent-100:#2c3e52; --sheet-bg:#373e47; --desk:#22272e;
+}
 *,*::before,*::after{box-sizing:border-box}
 html{background:var(--color-bg)}
 body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
@@ -479,6 +487,8 @@ fieldset.au-fs{border:0;padding:0;margin:0;min-width:0}
 .md-opt.on{border-color:var(--mc);background:color-mix(in srgb,var(--mc) 10%,var(--bcs-card))}
 .md-opt b{font-size:15px}.md-opt small{font-size:12px;color:var(--bcs-muted);line-height:1.45}.md-opt small b{font-size:12px;color:var(--bcs-text)}
 .md-opt i{position:absolute;top:10px;right:12px;font-style:normal;font-size:11px;font-weight:700;color:#fff;background:var(--mc);border-radius:999px;padding:1px 8px}
+.md-live>.au-chip{align-self:flex-start}
+.md-warn{color:#EA580C;font-weight:700}
 .md-live{display:flex;flex-direction:column;gap:8px;margin-top:12px;border:1px dashed var(--bcs-line);border-radius:10px;padding:10px 12px}
 .mode-pill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;cursor:pointer;white-space:nowrap;border:1px solid}
 .mode-pill.s{color:#C2410C;background:#FFEDD5;border-color:#FDBA74}.mode-pill.l{color:#15803D;background:#DCFCE7;border-color:#86EFAC}
@@ -912,10 +922,10 @@ function toast(m){const t=document.getElementById('toast');t.textContent=m;t.cla
 function applyPrefs(){
   const th=LS.get(MK.theme,'system'),ft=LS.get(MK.font,'default');
   let dark=th==='dark';
-  if(th==='system'){const dt=document.documentElement.getAttribute('data-theme');dark=dt?dt==='dark':(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)}
-  document.body.classList.toggle('theme-dark',dark);
+  let dim=false;if(th==='system'){const dt=document.documentElement.getAttribute('data-theme');const osDark=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches;dark=dt?dt==='dark':true;dim=!dt&&!osDark}
+  document.body.classList.toggle('theme-dark',dark);document.body.classList.toggle('theme-dim',dim);
   document.body.classList.toggle('font-sarabun',ft==='sarabun');
-  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',dark?'#0d1117':'#f2f2f3');
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',dim?'#2d333b':dark?'#0d1117':'#f2f2f3');
 }
 try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{applyPrefs()})}catch(e){}
 
@@ -1176,7 +1186,7 @@ function viewSettings(){const u=ST.user,th=LS.get(MK.theme,'system'),ft=LS.get(M
   +(SET?['Hard','Soft']:[]).map(g=>{const ks=g==='Hard'?['eng','fac']:['hk','sec','pest','gdn','lin'];return '<div class="blueprint pad" style="display:flex;flex-direction:column;gap:8px"><div class="kick" style="color:var(--'+(g==='Hard'?'hard':'soft')+')">'+g+' Service · '+ks.filter(svcSite).length+'/'+ks.length+'</div>'+ks.map(k=>'<label class="row" style="justify-content:space-between;cursor:pointer"><span>'+SVC[k].ic+' <b>'+SVC[k].n+'</b> <span style="font-size:12.5px;color:var(--color-neutral-700)">'+SVC[k].th+'</span></span><input type="checkbox" style="width:20px;height:20px;accent-color:var(--color-accent)" '+(svcSite(k)?'checked':'')+' onchange="toggleSvcM(\''+k+'\',this.checked)"></label>').join('')+'</div>'}).join('')
   +'<div class="sec-t"><h2>'+tx('การแสดงผล','Display')+'</h2></div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ภาษา','Language')+'</div>'+segLang()+'</div>'
-  +'<div><div class="kick" style="margin-bottom:6px">'+tx('ธีม','Theme')+'</div><div style="display:flex;gap:8px">'+[['system',tx('ตามระบบ','System')],['light','Light'],['dark','Dark']].map(o=>'<button class="pref-opt '+(th===o[0]?'active':'')+'" onclick="LS.set(MK.theme,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
+  +'<div><div class="kick" style="margin-bottom:6px">'+tx('ธีม','Theme')+'</div><div style="display:flex;gap:8px">'+[['system',tx('ตามระบบ · เทาเข้ม','System · dim')],['light','Light'],['dark','Dark']].map(o=>'<button class="pref-opt '+(th===o[0]?'active':'')+'" onclick="LS.set(MK.theme,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
   +'<div><div class="kick" style="margin-bottom:6px">'+tx('ฟอนต์','Font')+'</div><div style="display:flex;gap:8px">'+[['default','Barlow'],['sarabun','Sarabun']].map(o=>'<button class="pref-opt '+(ft===o[0]?'active':'')+'" style="font-family:'+(o[0]==='sarabun'?'Sarabun':'Barlow')+'" onclick="LS.set(MK.font,\''+o[0]+'\');applyPrefs();render()">'+o[1]+'</button>').join('')+'</div></div>'
   +'<div class="sec-t"><h2>🔑 '+tx('เปลี่ยนรหัสผ่าน','Change password')+'</h2></div><div class="blueprint pad">'+pwFormHTML()+'</div>'
   +'<div class="sec-t"><h2>☁ Google Sheets</h2></div>'+(cap('gas')?mGasForm():'<div class="blueprint pad"><div id="m-sync" style="font-size:14px">'+mSyncText()+'</div></div>')
@@ -2451,7 +2461,7 @@ function sampleReset(btn){if(DMODE()!=='sample'){return}if(MDARM2!=='r'){MDARM2=
   MDARM2='';D=seed(BIZK);save();SITE.host.reload&&SITE.host.reload();SITE.host.toast&&SITE.host.toast('🔄 รีเซ็ตข้อมูลตัวอย่างแล้ว')}
 function modeCardHTML(){const m=DMODE(),site=typeof gasSite==='function'?gasSite():'',on=typeof gasCfg==='function'&&!!gasCfg().url,st=D&&D._live;
   return`<div class="md-opts"><button class="md-opt ${m==='sample'?'on':''}" style="--mc:#F97316" onclick="setDataMode('sample')"><b>🧪 ข้อมูลตัวอย่าง</b><small>ชุดสาธิตครบทุก Module ของ ${P().en} · ใช้นำเสนอลูกค้า / อบรมพนักงาน · เก็บในเครื่องนี้ <u>ไม่ซิงค์</u> Google Sheets</small>${m==='sample'?'<i>กำลังใช้</i>':''}</button>
-   <button class="md-opt ${m==='live'?'on':''}" style="--mc:#22C55E" onclick="setDataMode('live')"><b>✅ ข้อมูลจริง</b><small>${site?'อาคาร <b>'+esc(site)+'</b> · ':''}${on?'ซิงค์ Google Sheets ทุกเครื่อง':'ยังไม่เชื่อม Google Sheets — เก็บในเครื่องนี้'} · ใช้งานจริงกับลูกค้า</small>${m==='live'?'<i>กำลังใช้</i>':''}</button></div>
+   <button class="md-opt ${m==='live'?'on':''}" style="--mc:#22C55E" onclick="setDataMode('live')"><b>✅ ข้อมูลจริง</b><small>${site?'อาคาร <b>'+esc(site)+'</b> · ซิงค์ Google Sheets ทุกเครื่อง':on?'<span class="md-warn">⚠ ยังไม่ได้เลือกอาคาร</span> — ตั้งรหัสอาคารใน ☁ Google Sheets ก่อน ข้อมูลยังอยู่ในเครื่องนี้':'ยังไม่เชื่อม Google Sheets — เก็บในเครื่องนี้'} · ใช้งานจริงกับลูกค้า</small>${m==='live'?'<i>กำลังใช้</i>':''}</button></div>
   ${m==='sample'?`<div class="au-row" style="margin-top:10px"><button class="bcs-btn" onclick="sampleReset(this)">🔄 รีเซ็ตข้อมูลตัวอย่าง</button><span class="bcs-muted">สร้างชุดตัวอย่างของ ${P().en} ใหม่ทั้งหมด (ไม่กระทบข้อมูลจริง)</span></div>`
   :`<div class="md-live"><b>🧹 เริ่มอาคารจริง</b><span class="bcs-muted">ล้างงานตัวอย่าง / งานทดลองของ${site?' '+esc(site):'อาคารนี้'} — Work Request, Log Sheet, ผลทดสอบ, ตรวจ, Patrol, เหตุการณ์, ผู้มาติดต่อ, เบิกผ้า, มิเตอร์, พนักงาน, ผู้รับเหมา, สัญญา MA และข้อมูลอาคาร & สัญญา ${on&&site?'แล้วเขียนทับ Google Sheet ของอาคารนี้':''}</span>${st?`<span class="au-chip" style="--cc:#22C55E">✓ เริ่มอาคารจริงแล้ว (${st==='structure'?'เก็บโครงสร้าง':'ว่างทั้งหมด'})</span>`:''}
     <div class="au-row"><button class="bcs-btn bcs-pri" onclick="liveStart(this,true)">เริ่มแบบเก็บโครงสร้าง</button><span class="bcs-muted">เก็บพื้นที่ · ทรัพย์สิน · อุปกรณ์หลัก · รายการทดสอบ · Compliance · แผน PM · งาน HK · จุด Pest · โซนสวน · รายการผ้า ไว้แก้ต่อ</span></div>
