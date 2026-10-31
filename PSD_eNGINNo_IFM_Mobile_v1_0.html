@@ -1246,7 +1246,7 @@ const BR_KEY=['r1','r2','r3','r4'];
 const BR_NAME=['WR','HARD','PPM','SOFT'];
 const BR_DESC=[['งานแจ้งซ่อม / แจ้งบริการค้าง','Open work requests'],['อุปกรณ์ Down/Warning · Defect ระดับ Medium+','Assets down / warning · defects Medium+'],['PM เกิน/ครบใน 7 วัน · งานแม่บ้าน Missed','PM overdue / due 7 days · missed HK'],['ความสะอาดตรวจล่าสุด < 85% · Pest ระดับ High · เหตุ รปภ. Medium+','Cleanliness < 85% · pest High · incidents Medium+']];
 const BR_GO=['helpdesk','eng','eng','hk'];
-const BCS={sel:null,ring:'r1',edit:false,kind:'desk',host:{},st:null,rd:null,rows:[]};
+const BCS={sel:null,ring:'r1',mod:'',edit:false,kind:'desk',host:{},st:null,rd:null,rows:[]};
 const bT=(th,en)=>(BCS.host.lang&&BCS.host.lang()==='en')?en:th;
 function bLS(k,d){try{const v=localStorage.getItem('psd_ifm_'+k);return v==null?d:v}catch(e){return d}}
 function bLSset(k,v){try{localStorage.setItem('psd_ifm_'+k,v)}catch(e){}}
@@ -1296,9 +1296,19 @@ function bcsAreaRS(a){
   const k4=(hkLow?1:0)+pst.length+inc.length;
   const r4=k4?{bad:1,c:BR_COL[3],k:k4,n:j([hkLow&&bT('ความสะอาด ','Clean ')+hkA+'%',pst.length&&'Pest '+pst.length+bT(' จุด',' pts'),inc.length&&bT('เหตุ รปภ. ','Incident ')+inc.length])}:bOK(bT('ปกติ','Normal'));
   const crit=crW.length>0||down.length>0||df.some(d=>d.severity==='Critical')||pst.some(s=>s.activity==='High');
-  return{r1,r2,r3,r4,crit,bad:!!(r1.bad||r2.bad||r3.bad||r4.bad),ow,as,down,warn,df,pmO,pm7,hkM,hkA,pst,inc}}
-function bcsFloorStatus(){const out={};bcsFloors().forEach(f=>out[f.id]={n:0,r1:0,r2:0,r3:0,r4:0,crit:0,bad:false,items:[]});
-  D.areas.forEach(a=>{const o=out[bcsAreaFloor(a)];if(!o)return;const rs=bcsAreaRS(a);o.n++;BR_KEY.forEach(k=>{if(rs[k].bad)o[k]++});if(rs.crit)o.crit++;o.items.push({a,rs})});
+  const mods={},add=(k,parts,crit,list)=>{if(!svcOn(k))return;const ws=ow.filter(t=>t.service===k),cw=ws.filter(t=>t.priority==='P1'||slaOf(t).s==='breach').length;
+    const ps=parts.filter(x=>x&&x[1]);const n=ws.length+ps.reduce((s,x)=>s+x[1],0);if(!n)return;
+    mods[k]={k:n,crit:!!(crit||cw),ow:ws,n:j([ws.length&&('WR '+ws.length+(cw?' ('+bT('เกิน SLA/P1 ','over SLA/P1 ')+cw+')':''))].concat(ps.map(x=>x[0]+' '+x[1])))}};
+  const pmS=s=>pmO.filter(p=>p.service===s).length+pm7.filter(p=>p.service===s).length;
+  add('eng',[['Down',down.length],['Warning',warn.length],[bT('PM ค้าง/ใน 7 วัน','PM due'),pmS('eng')]],down.length>0);
+  add('fac',[['Defect',df.length],[bT('PM ค้าง/ใน 7 วัน','PM due'),pmS('fac')]],df.some(d=>d.severity==='Critical'));
+  add('hk',[[bT('งาน Missed','Missed'),hkM.length],[bT('ความสะอาดต่ำ','Low clean score'),hkLow?1:0],[bT('PM','PM'),pmS('hk')]]);
+  add('sec',[[bT('เหตุ รปภ.','Incident'),inc.length]],inc.some(x=>x.severity==='High'||x.severity==='Critical'));
+  add('pest',[[bT('จุดพบสูง','High activity'),pst.length]],pst.length>0);
+  add('gdn',[[bT('PM','PM'),pmS('gdn')]]);add('lin',[[bT('PM','PM'),pmS('lin')]]);
+  return{r1,r2,r3,r4,crit,bad:!!(r1.bad||r2.bad||r3.bad||r4.bad),mods,ow,as,down,warn,df,pmO,pm7,hkM,hkA,pst,inc}}
+function bcsFloorStatus(){const out={};bcsFloors().forEach(f=>out[f.id]={n:0,r1:0,r2:0,r3:0,r4:0,crit:0,bad:false,items:[],m:{}});
+  D.areas.forEach(a=>{const o=out[bcsAreaFloor(a)];if(!o)return;const rs=bcsAreaRS(a);o.n++;BR_KEY.forEach(k=>{if(rs[k].bad)o[k]++});Object.keys(rs.mods).forEach(k=>{o.m[k]=(o.m[k]||0)+1});if(rs.crit)o.crit++;o.items.push({a,rs})});
   Object.values(out).forEach(o=>o.bad=(o.r1+o.r2+o.r3+o.r4)>0);BCS.st=out;return out}
 
 /* ---------- rooms (areas) on a floor ---------- */
@@ -1511,15 +1521,18 @@ function bcsHidePanel(){BCS.sel=null;bLSset('bcs_sel_'+BIZK,'');BCS.edit=false;b
 function bcsRenderPanel(){const fid=BCS.sel,f=bcsFloorById(fid);if(!f)return;bcsSummary(fid);bcsRenderFloor(fid);
   const eb=document.getElementById('bcs-editbar');if(eb)eb.hidden=!BCS.edit;const b=document.getElementById('bcs-edit-btn');if(b)b.classList.toggle('on',BCS.edit)}
 function bcsPickRing(k){BCS.ring=k;bcsSummary(BCS.sel)}
+function bcsPickMod(k){BCS.mod=k;bcsSummary(BCS.sel)}
 function bcsSummary(fid){const el=document.getElementById('bcs-sum'),f=bcsFloorById(fid);if(!el||!f)return;
-  const o=(BCS.st||bcsFloorStatus())[fid]||{n:0,r1:0,r2:0,r3:0,r4:0,items:[],bad:false,crit:0},ri=BR_KEY.indexOf(BCS.ring);
-  const chips=BR_KEY.map((k,i)=>`<button class="bcs-rchip ${o[k]?'blink':''} ${BCS.ring===k?'on':''}" style="--rc:${BR_COL[i]}" onclick="bcsPickRing('${k}')"><i style="background:${o[k]?BR_COL[i]:'#22C55E'}"></i>${BR_NAME[i]} <b style="color:${o[k]?BR_COL[i]:'#22C55E'}">${o[k]||'OK'}</b></button>`).join('');
-  const rows=o.items.filter(it=>it.rs[BCS.ring].bad);
-  const list=!rows.length?`<div class="bcs-okrow">✅ ${bT('วง ','Ring ')}${BR_NAME[ri]} ${bT('ปกติในชั้นนี้','is normal on this floor')}</div>`:rows.map(({a,rs})=>{
-    let wrx='';if(BCS.ring==='r1')wrx=rs.ow.slice(0,6).map(w=>bcsWrRow(w)).join('');
-    return`<div class="bcs-arow blink" style="--rc:${BR_COL[ri]}" onclick="bcsArea('${a.id}')"><div class="h"><span class="tag-id">${esc(a.id)}</span><b>${esc(a.name)}</b><span class="why" style="color:${rs[BCS.ring].c}">${esc(rs[BCS.ring].n)}</span></div>${wrx}</div>`}).join('');
+  const o=(BCS.st||bcsFloorStatus())[fid]||{n:0,r1:0,r2:0,r3:0,r4:0,items:[],bad:false,crit:0,m:{}},m=o.m||{};
+  const keys=Object.keys(SVC).filter(k=>svcOn(k)&&m[k]);
+  if(!keys.includes(BCS.mod))BCS.mod=keys[0]||'';const K=BCS.mod,S=SVC[K];
+  const chips=keys.map(k=>{const crit=o.items.some(it=>it.rs.mods[k]&&it.rs.mods[k].crit);return`<button class="bcs-rchip blink ${K===k?'on':''}" style="--rc:${SVC[k].c}" onclick="bcsPickMod('${k}')" title="${esc(SVC[k].th||'')}"><i style="background:${crit?'#EF4444':SVC[k].c}"></i>${SVC[k].ic} ${esc(SVC[k].n)} <b style="color:${crit?'#EF4444':SVC[k].c}">${m[k]}</b></button>`}).join('');
+  const rows=K?o.items.filter(it=>it.rs.mods[K]):[];
+  const list=!keys.length?`<div class="bcs-okrow">✅ ${bT('ทุก Module ปกติในชั้นนี้ — ไม่มีแจ้งเตือน','All modules normal on this floor')}</div>`:rows.map(({a,rs})=>{const x=rs.mods[K];
+    return`<div class="bcs-arow blink" style="--rc:${x.crit?'#EF4444':S.c}" onclick="bcsArea('${a.id}')"><div class="h"><span class="tag-id">${esc(a.id)}</span><b>${esc(a.name)}</b><span class="why" style="color:${x.crit?'#EF4444':S.c}">${esc(x.n)}</span></div>${x.ow.slice(0,6).map(w=>bcsWrRow(w)).join('')}</div>`}).join('');
   el.innerHTML=`<div class="bcs-sh"><div class="bcs-st">${esc(f.code)} — ${esc(f.name)}</div><span class="bcs-pill" style="--pc:${bcsColor(o)}">${o.crit?bT('วิกฤต','Critical'):o.bad?bT('มีกิจกรรม','Activity'):bT('ปกติ','Normal')}</span><span class="bcs-muted">${o.n} ${bT('พื้นที่','areas')}</span><button class="bcs-btn" style="margin-left:auto" onclick="bcsHidePanel()">✕ ${bT('ปิดผัง','Close')}</button></div>
-  <div class="bcs-rchips">${chips}<button class="bcs-btn" style="margin-left:auto" onclick="bcsGo(${ri})">${bT('ไปหน้า ','Open ')}${BR_NAME[ri]} →</button></div>${list}`}
+  ${keys.length?`<div class="bcs-rchips">${chips}<button class="bcs-btn" style="margin-left:auto" onclick="bcsGoMod('${K}')">${bT('ไปหน้า ','Open ')}${esc(S.n)} →</button></div>`:''}${list}`}
+function bcsGoMod(k){bcsModalClose();BCS.host.go&&BCS.host.go(k)}
 function bcsWrRow(w){const i=FLOW.indexOf(w.status),nx=i>=0&&i<FLOW.length-1?FLOW[i+1]:null,sl=slaOf(w);
   return`<div class="bcs-wr" onclick="event.stopPropagation()"><span class="tag-id">${esc(w.id)}</span>${SVC[w.service]?SVC[w.service].ic:''}<span class="d">${esc(String(w.desc||'').substring(0,60))}</span>${badge(w.priority)} ${sl.s==='breach'?badge('Breached'):badge(w.status)}${nx?`<button class="bcs-btn bcs-ok" onclick="bcsAdvance('${w.id}')">▶ ${w.status==='New'?bT('รับงาน','Accept'):nx}</button>`:''}</div>`}
 function bcsGo(i){bcsModalClose();BCS.host.go&&BCS.host.go(BR_GO[i])}
